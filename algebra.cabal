@@ -38,5 +38,6 @@ library
     Numeric.Functional.Antilinear
     Numeric.Decidable.Zero
     Numeric.Decidable.Units
+    Numeric.Decidable.Associates
 
   ghc-options: -Wall 
