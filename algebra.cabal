@@ -1,0 +1,38 @@
+name:          algebra
+category:      Control, Comonads
+version:       0.1.0
+license:       BSD3
+cabal-version: >= 1.6
+license-file:  LICENSE
+author:        Edward A. Kmett
+maintainer:    Edward A. Kmett <ekmett@gmail.com>
+stability:     provisional
+homepage:      http://github.com/ekmett/algebra/
+copyright:     Copyright (C) 2011 Edward A. Kmett
+synopsis:      Haskell 98 abstract algebra
+description:   Haskell 98 abstract algebra
+build-type:    Simple
+
+source-repository head
+  type: git
+  location: git://github.com/ekmett/algebra.git
+
+library
+  build-depends: 
+    base >= 4 && < 4.4,
+    transformers >= 0.2.0 && < 0.3,
+    containers >= 0.3.0.0 && < 0.5,
+    semigroups >= 0.5 && < 0.6,
+    semigroupoids >= 1.2.2 && < 1.3
+
+  exposed-modules:
+    Numeric.Additive
+    Numeric.Additive.Semigroup
+    Numeric.Additive.Monoid
+    Numeric.Additive.Group
+    Numeric.Multiplicative.Semigroup
+    Numeric.Multiplicative.Monoid
+    Numeric.Functional.Linear
+    Numeric.Decidable.Zero
+
+  ghc-options: -Wall 
