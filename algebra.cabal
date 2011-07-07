@@ -6,7 +6,7 @@ cabal-version: >= 1.6
 license-file:  LICENSE
 author:        Edward A. Kmett
 maintainer:    Edward A. Kmett <ekmett@gmail.com>
-stability:     provisional
+stability:     experimental
 homepage:      http://github.com/ekmett/algebra/
 copyright:     Copyright (C) 2011 Edward A. Kmett
 synopsis:      Haskell 98 abstract algebra
@@ -33,6 +33,7 @@ library
     Numeric.Multiplicative.Semigroup
     Numeric.Multiplicative.Monoid
     Numeric.Functional.Linear
+    Numeric.Functional.Antilinear
     Numeric.Decidable.Zero
 
   ghc-options: -Wall 
