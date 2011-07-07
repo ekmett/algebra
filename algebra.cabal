@@ -30,8 +30,10 @@ library
     Numeric.Additive.Semigroup
     Numeric.Additive.Monoid
     Numeric.Additive.Group
+    Numeric.Multiplicative
     Numeric.Multiplicative.Semigroup
     Numeric.Multiplicative.Monoid
+    Numeric.Multiplicative.Group
     Numeric.Functional.Linear
     Numeric.Functional.Antilinear
     Numeric.Decidable.Zero
