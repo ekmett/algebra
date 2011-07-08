@@ -4,10 +4,13 @@ module Numeric.Rng.Zero
 
 import Numeric.Rng.Class
 import Numeric.Additive.Class
+import Numeric.Additive.Idempotent.Class
 import Numeric.Additive.Monoid.Class
 import Numeric.Additive.Group.Class
 import Numeric.Additive.Abelian.Class
 import Numeric.Multiplicative.Class
+import Numeric.Multiplicative.Band.Class
+import Numeric.Semiring.Class
 import Numeric.Multiplicative.Commutative.Class
 import Data.Foldable (toList)
 import Prelude hiding ((+),(-),negate,subtract,replicate)
@@ -25,6 +28,8 @@ instance Additive r => Additive (ZeroRng r) where
   ZeroRng a + ZeroRng b = ZeroRng (a + b)
   sumWith1 f = ZeroRng . sumWith1 (runZeroRng . f)
   replicate n (ZeroRng a) = ZeroRng (replicate n a)
+
+instance Idempotent r => Idempotent (ZeroRng r)
 
 instance Abelian r => Abelian (ZeroRng r)
 
@@ -45,6 +50,7 @@ instance AdditiveMonoid r => Multiplicative (ZeroRng r) where
     [a] -> f a
     _   -> zero
 
+instance (Abelian r, AdditiveMonoid r) => Semiring (ZeroRng r)
 instance AdditiveMonoid r => Commutative (ZeroRng r)
-
+instance AdditiveMonoid r => Band (ZeroRng r) 
 instance (AdditiveGroup r, Abelian r) => Rng (ZeroRng r)

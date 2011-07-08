@@ -14,6 +14,7 @@ import Numeric.Additive.Class
 class Additive r => Abelian r
 
 instance Abelian r => Abelian (e -> r)
+instance Abelian Bool
 instance Abelian Integer
 instance Abelian Int
 instance Abelian Int8

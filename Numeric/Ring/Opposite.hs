@@ -11,6 +11,7 @@ import Numeric.Additive
 import Numeric.Multiplicative
 import Numeric.Rng.Class
 import Numeric.Ring.Class
+import Numeric.Semiring.Class
 import Numeric.Decidable.Associates
 import Numeric.Decidable.Units
 import Numeric.Decidable.Zero
@@ -54,11 +55,14 @@ instance Multiplicative r => Multiplicative (Opposite r) where
   Opposite a * Opposite b = Opposite (b * a)
   Opposite a ^ n = Opposite (a ^ n)
 instance Commutative r => Commutative (Opposite r)
+instance Idempotent r => Idempotent (Opposite r)
+instance Band r => Band (Opposite r)
 instance MultiplicativeMonoid r => MultiplicativeMonoid (Opposite r) where
   one = Opposite one
 instance MultiplicativeGroup r => MultiplicativeGroup (Opposite r) where
   recip = Opposite . recip . runOpposite
   Opposite a / Opposite b = Opposite (b \\ a)
   Opposite a \\ Opposite b = Opposite (b / a)
+instance Semiring r => Semiring (Opposite r)
 instance Rng r => Rng (Opposite r)
 instance Ring r => Ring (Opposite r)

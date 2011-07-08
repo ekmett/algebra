@@ -39,6 +39,7 @@ powMonoid x0 y0 = case compare y0 0 of
 -- fromEnd f = f one
 -- instance MultiplicativeMonoid (r -> r) where one = id
 
+instance MultiplicativeMonoid Bool where one = True
 instance MultiplicativeMonoid Integer where one = 1
 instance MultiplicativeMonoid Int where one = 1
 instance MultiplicativeMonoid Int8 where one = 1

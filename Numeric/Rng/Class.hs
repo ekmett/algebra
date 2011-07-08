@@ -5,15 +5,13 @@ module Numeric.Rng.Class
 import Numeric.Additive.Group.Class
 import Numeric.Additive.Abelian.Class
 import Numeric.Multiplicative.Class
+import Numeric.Semiring.Class
 import Data.Int
 import Data.Word
 
 -- | A Ring without an /i/dentity.
--- 
--- > a(b + c) = ab + ac
--- > (a + b)c = ac + bc
 
-class (AdditiveGroup r, Abelian r, Multiplicative r) => Rng r where
+class (AdditiveGroup r, Semiring r) => Rng r where
 
 instance Rng Integer
 instance Rng Int

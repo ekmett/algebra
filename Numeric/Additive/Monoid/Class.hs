@@ -44,6 +44,7 @@ instance AdditiveMonoid r => AdditiveMonoid (e -> r) where
   zero = const zero
   sumWith f xs e = sumWith (`f` e) xs
 
+instance AdditiveMonoid Bool where zero = False
 instance AdditiveMonoid Integer where zero = 0
 instance AdditiveMonoid Int where zero = 0
 instance AdditiveMonoid Int8 where zero = 0

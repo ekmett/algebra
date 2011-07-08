@@ -7,6 +7,7 @@ import Numeric.Multiplicative.Class
 -- | A commutative multiplicative semigroup
 class Multiplicative r => Commutative r
 
+instance Commutative Bool
 instance Commutative Integer
 instance Commutative Int
 instance Commutative Int8

@@ -13,6 +13,7 @@ import Data.Word
 import Data.Semigroup.Foldable
 import Data.Foldable
 
+
 infixl 6 +
 
 -- | 
@@ -54,6 +55,9 @@ instance Additive r => Additive (b -> r) where
   f + g = \e -> f e + g e 
   replicate n f e = replicate n (f e)
   sumWith1 f xs e = sumWith1 (`f` e) xs
+
+instance Additive Bool where
+  (+) = (||)
 
 instance Additive Integer where 
   (+) = (Prelude.+)

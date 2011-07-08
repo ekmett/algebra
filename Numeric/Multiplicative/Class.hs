@@ -63,25 +63,11 @@ powIntegral x0 y0 = case compare y0 0 of
             | y == 1 = x Prelude.* z
             | otherwise = g (x Prelude.* x) ((y Prelude.- 1) `quot` 2) (x Prelude.* z)
 
-{-
--- requires flexible instances
-instance Multiplicative (r -> r) where
-  (*) = (.)
-  x0 ^ y0 = case compare y0 0 of
-    LT -> error "(a -> a).(^) : negative length"
-    EQ -> id
-    GT -> f x0 y0
-    where
-        f x y 
-            | even y = f (x * x) (y `quot` 2)
-            | y == 1 = x
-            | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) x
-        g x y z 
-            | even y = g (x * x) (y `quot` 2) z
-            | y == 1 = x * z
-            | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) (x * z)
--}
 
+instance Multiplicative Bool where
+  (*) = (&&)
+  _ ^ 0 = True
+  b ^ _ = b
 instance Multiplicative Integer where
   (*) = (Prelude.*)
   (^) = powIntegral

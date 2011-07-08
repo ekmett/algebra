@@ -28,6 +28,7 @@ library
   exposed-modules:
     Numeric.Additive
     Numeric.Additive.Class
+    Numeric.Additive.Idempotent.Class
     Numeric.Additive.Abelian.Class
     Numeric.Additive.Monoid.Class
     Numeric.Additive.Group.Class
@@ -37,12 +38,15 @@ library
     Numeric.Multiplicative.Commutative.Class
     Numeric.Multiplicative.Monoid.Class
     Numeric.Multiplicative.Group.Class
+    Numeric.Multiplicative.Band.Class
     Numeric.Multiplicative.Exp
     Numeric.Functional.Linear
     Numeric.Functional.Antilinear
     Numeric.Decidable.Zero
     Numeric.Decidable.Units
     Numeric.Decidable.Associates
+    Numeric.Semiring.Class
+    Numeric.Rig.Class
     Numeric.Rng.Class
     Numeric.Rng.Zero
     Numeric.Ring.Class

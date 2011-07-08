@@ -8,6 +8,7 @@ import Numeric.Additive
 import Numeric.Multiplicative
 import Numeric.Rng.Class
 import Numeric.Ring.Class
+import Numeric.Semiring.Class
 import Prelude hiding ((+),(-),(*),(/),replicate,negate,subtract)
 
 -- | The free Ring given a Rng obtained by adjoining Z, such that
@@ -42,6 +43,8 @@ instance Rng r => MultiplicativeMonoid (RngRing r) where
 
 instance (Rng r, MultiplicativeGroup r) => MultiplicativeGroup (RngRing r) where
   RngRing n a / RngRing m b = RngRing 0 $ (replicate n one + a) / (replicate m one + b)
+
+instance Rng r => Semiring (RngRing r) 
 
 instance Rng r => Rng (RngRing r)
 
