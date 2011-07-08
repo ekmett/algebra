@@ -44,5 +44,6 @@ library
     Numeric.Rng.Class
     Numeric.Rng.Zero
     Numeric.Ring.Class
+    Numeric.Ring.Commutative.Class
 
   ghc-options: -Wall 
