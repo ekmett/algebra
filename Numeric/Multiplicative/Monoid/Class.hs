@@ -1,16 +1,16 @@
-module Numeric.Multiplicative.Monoid 
+module Numeric.Multiplicative.Monoid.Class
   ( MultiplicativeMonoid(..)
   , powMonoid
   , product
   ) where
 
-import Numeric.Multiplicative.Semigroup
+import Numeric.Multiplicative.Class
 import Data.Foldable hiding (product)
 import Data.Int
 import Data.Word
 import Prelude hiding ((*), foldr, product)
 
-class MultiplicativeSemigroup r => MultiplicativeMonoid r where
+class Multiplicative r => MultiplicativeMonoid r where
   one :: r
   productWith :: Foldable f => (a -> r) -> f a -> r
   productWith f = foldl' (\b a -> b * f a) one

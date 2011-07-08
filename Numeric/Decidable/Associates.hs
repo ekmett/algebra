@@ -1,18 +1,22 @@
 module Numeric.Decidable.Associates 
-  ( DecidableAssociates
+  ( DecidableAssociates(..)
   , isAssociateIntegral
   ) where
 
 import Data.Function (on)
 import Data.Int
 import Data.Word
-import Numeric.Multiplicative.Monoid
+import Numeric.Multiplicative.Monoid.Class
 
 isAssociateIntegral :: Integral n => n -> n -> Bool
 isAssociateIntegral = (==) `on` abs
 
 class MultiplicativeMonoid r => DecidableAssociates r where
-  -- | b is an associate of a if there exists a unit u such that b = au
+  -- | b is an associate of a if there exists a unit u such that b = a*u
+  --
+  -- This relationship is symmetric because if u is a unit, u^-1 exists and is a unit, so
+  -- 
+  -- > b*u^-1 = a*u*u^-1 = a
   isAssociate :: r -> r -> Bool
 
 instance DecidableAssociates Int where isAssociate = isAssociateIntegral

@@ -27,14 +27,16 @@ library
 
   exposed-modules:
     Numeric.Additive
-    Numeric.Additive.Semigroup
-    Numeric.Additive.Monoid
-    Numeric.Additive.Group
+    Numeric.Additive.Class
+    Numeric.Additive.Abelian.Class
+    Numeric.Additive.Monoid.Class
+    Numeric.Additive.Group.Class
     Numeric.Additive.Log
     Numeric.Multiplicative
-    Numeric.Multiplicative.Semigroup
-    Numeric.Multiplicative.Monoid
-    Numeric.Multiplicative.Group
+    Numeric.Multiplicative.Class
+    Numeric.Multiplicative.Commutative.Class
+    Numeric.Multiplicative.Monoid.Class
+    Numeric.Multiplicative.Group.Class
     Numeric.Multiplicative.Exp
     Numeric.Functional.Linear
     Numeric.Functional.Antilinear
@@ -44,6 +46,7 @@ library
     Numeric.Rng.Class
     Numeric.Rng.Zero
     Numeric.Ring.Class
-    Numeric.Ring.Commutative.Class
+    Numeric.Ring.Rng
+    Numeric.Ring.Opposite
 
   ghc-options: -Wall 

@@ -7,8 +7,8 @@ module Numeric.Decidable.Units
 import Data.Maybe (isJust)
 import Data.Int
 import Data.Word
-import Numeric.Multiplicative.Semigroup
-import Numeric.Multiplicative.Monoid
+import Numeric.Multiplicative.Class
+import Numeric.Multiplicative.Monoid.Class
 import Prelude hiding ((*))
 
 class MultiplicativeMonoid r => DecidableUnits r where

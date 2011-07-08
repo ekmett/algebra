@@ -2,7 +2,7 @@ module Numeric.Decidable.Zero
   ( DecidableZero(..)
   ) where
 
-import Numeric.Additive.Monoid
+import Numeric.Additive.Monoid.Class
 import Data.Int
 import Data.Word
 

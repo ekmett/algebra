@@ -1,5 +1,5 @@
-module Numeric.Multiplicative.Semigroup 
-  ( MultiplicativeSemigroup(..)
+module Numeric.Multiplicative.Class
+  ( Multiplicative(..)
   , powSemigroup
   , powIntegral
   , product1
@@ -12,7 +12,11 @@ import Data.Semigroup.Foldable
 import qualified Prelude
 import Prelude hiding ((*), (+), negate, (-), recip, (/), foldr, sum, product)
 
-class MultiplicativeSemigroup r where
+infixr 8 ^
+infixl 7 *
+
+-- | A multiplicative semigroup
+class Multiplicative r where
   (*) :: r -> r -> r 
   (^) :: Integral n => r -> n -> r
   productWith1 :: Foldable1 f => (a -> r) -> f a -> r
@@ -20,10 +24,10 @@ class MultiplicativeSemigroup r where
      where mf Nothing y = Just $! f y
            mf (Just x) y = Just $! x * f y
 
-product1 :: (Foldable1 f, MultiplicativeSemigroup r) => f r -> r
+product1 :: (Foldable1 f, Multiplicative r) => f r -> r
 product1 = productWith1 id
 
-powSemigroup :: (MultiplicativeSemigroup r, Integral n) => r -> n -> r
+powSemigroup :: (Multiplicative r, Integral n) => r -> n -> r
 powSemigroup x0 y0 = case compare y0 0 of
     LT -> error "powSemigroup: negative length"
     EQ -> error "powSemigroup: zero length"
@@ -61,7 +65,7 @@ powIntegral x0 y0 = case compare y0 0 of
 
 {-
 -- requires flexible instances
-instance MultiplicativeSemigroup (r -> r) where
+instance Multiplicative (r -> r) where
   (*) = (.)
   x0 ^ y0 = case compare y0 0 of
     LT -> error "(a -> a).(^) : negative length"
@@ -78,36 +82,36 @@ instance MultiplicativeSemigroup (r -> r) where
             | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) (x * z)
 -}
 
-instance MultiplicativeSemigroup Integer where
+instance Multiplicative Integer where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Int where
+instance Multiplicative Int where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Int8 where
+instance Multiplicative Int8 where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Int16 where
+instance Multiplicative Int16 where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Int32 where
+instance Multiplicative Int32 where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Int64 where
+instance Multiplicative Int64 where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Word where
+instance Multiplicative Word where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Word8 where
+instance Multiplicative Word8 where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Word16 where
+instance Multiplicative Word16 where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Word32 where
+instance Multiplicative Word32 where
   (*) = (Prelude.*)
   (^) = powIntegral
-instance MultiplicativeSemigroup Word64 where
+instance Multiplicative Word64 where
   (*) = (Prelude.*)
   (^) = powIntegral

@@ -6,8 +6,8 @@ import Data.Int
 import Data.Word
 import Prelude hiding (fromInteger, replicate)
 import qualified Prelude
-import Numeric.Additive.Semigroup (replicate)
-import Numeric.Multiplicative.Monoid (MultiplicativeMonoid(one))
+import Numeric.Additive.Class (replicate)
+import Numeric.Multiplicative.Monoid.Class (MultiplicativeMonoid(one))
 import Numeric.Rng.Class
 
 class (MultiplicativeMonoid r, Rng r) => Ring r where

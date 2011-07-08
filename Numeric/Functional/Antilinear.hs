@@ -35,7 +35,7 @@ instance Monad (Antilinear s) where
   return a = Antilinear (\k -> k a)
   Antilinear m >>= f = Antilinear (\k -> m (\a -> appAntilinear (f a) k))
 
-instance AdditiveSemigroup s => Alt (Antilinear s) where
+instance Additive s => Alt (Antilinear s) where
   Antilinear m <!> Antilinear n = Antilinear (m + n)
 
 instance AdditiveMonoid s => Plus (Antilinear s) where
@@ -49,7 +49,7 @@ instance AdditiveMonoid s => MonadPlus (Antilinear s) where
   Antilinear m `mplus` Antilinear n = Antilinear (m + n)
   mzero = Antilinear zero
 
-instance AdditiveSemigroup s => AdditiveSemigroup (Antilinear s a) where
+instance Additive s => Additive (Antilinear s a) where
   Antilinear m + Antilinear n = Antilinear (m + n)
   replicate n (Antilinear m) = Antilinear (replicate n m)
 
@@ -61,7 +61,7 @@ instance AdditiveGroup s => AdditiveGroup (Antilinear s a) where
   negate (Antilinear m) = Antilinear (negate m)
   subtract (Antilinear m) (Antilinear n) = Antilinear (subtract m n)
 
-instance AdditiveAbelianGroup s => AdditiveAbelianGroup (Antilinear s a)
+instance Abelian s => Abelian (Antilinear s a)
 
 -- instance MultiplicativeSemigroup s => LeftModule s (Antilinear s a) where
 --  s .* Antilinear m = Antilinear (s .* m)

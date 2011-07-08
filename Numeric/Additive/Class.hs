@@ -1,8 +1,8 @@
-module Numeric.Additive.Semigroup
+module Numeric.Additive.Class
   ( 
   -- * Additive Semigroups
-    AdditiveSemigroup(..)
-  , replicateSemigroup 
+    Additive(..)
+  , replicateAdditive 
   , sum1
   ) where
 
@@ -13,12 +13,14 @@ import Data.Word
 import Data.Semigroup.Foldable
 import Data.Foldable
 
+infixl 6 +
+
 -- | 
 -- > (a + b) + c = a + (b + c)
 -- > replicate 1 a = a
 -- > replicate (2 * n) a = replicate n a + replicate n a
 -- > replicate (2 * n + 1) a = replicate n a + replicate n a + a
-class AdditiveSemigroup r where
+class Additive r where
   (+) :: r -> r -> r
 
   replicate :: Integral n => n -> r -> r
@@ -30,10 +32,10 @@ class AdditiveSemigroup r where
 
 -- | A suitable default definition for replicate, given only a semigroup.
 --   Not used as a default definition, because you can usually do better if you have more than a semigroup!
-replicateSemigroup :: (Integral n, AdditiveSemigroup r) => n -> r -> r
-replicateSemigroup y0 x0 = case compare y0 0 of
-  LT -> error "replicateSemigroup: negative multiplier"
-  EQ -> error "replicateSemigroup: zero multiplier"
+replicateAdditive :: (Integral n, Additive r) => n -> r -> r
+replicateAdditive y0 x0 = case compare y0 0 of
+  LT -> error "replicateAdditive: negative multiplier"
+  EQ -> error "replicateAdditive: zero multiplier"
   GT -> f x0 y0
   where
     f x y
@@ -45,55 +47,55 @@ replicateSemigroup y0 x0 = case compare y0 0 of
       | y == 1 = x + z
       | otherwise = g (x + x) ((y Prelude.- 1) `quot` 2) (x + z)
 
-sum1 :: (Foldable1 f, AdditiveSemigroup r) => f r -> r
+sum1 :: (Foldable1 f, Additive r) => f r -> r
 sum1 = sumWith1 id
 
-instance AdditiveSemigroup r => AdditiveSemigroup (b -> r) where
+instance Additive r => Additive (b -> r) where
   f + g = \e -> f e + g e 
   replicate n f e = replicate n (f e)
   sumWith1 f xs e = sumWith1 (`f` e) xs
 
-instance AdditiveSemigroup Integer where 
+instance Additive Integer where 
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Int where
+instance Additive Int where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Int8 where
+instance Additive Int8 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Int16 where
+instance Additive Int16 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Int32 where
+instance Additive Int32 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Int64 where
+instance Additive Int64 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Word where
+instance Additive Word where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Word8 where
+instance Additive Word8 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Word16 where
+instance Additive Word16 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Word32 where
+instance Additive Word32 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 
-instance AdditiveSemigroup Word64 where
+instance Additive Word64 where
   (+) = (Prelude.+)
   replicate n r = fromIntegral n * r
 

@@ -1,18 +1,18 @@
-module Numeric.Additive.Group
+module Numeric.Additive.Group.Class
   ( 
   -- * Additive Groups
     AdditiveGroup(..)
   , replicateGroup
-  -- * Additive Abelian Groups
-  , AdditiveAbelianGroup
   ) where
 
 import Data.Int
 import Data.Word
 import Prelude hiding ((+), (-), negate, subtract)
 import qualified Prelude
-import Numeric.Additive.Semigroup
-import Numeric.Additive.Monoid
+import Numeric.Additive.Class
+import Numeric.Additive.Monoid.Class
+
+infixl 6 - 
 
 class AdditiveMonoid r => AdditiveGroup r where
   (-)      :: r -> r -> r
@@ -22,8 +22,6 @@ class AdditiveMonoid r => AdditiveGroup r where
   negate a = zero - a
   a - b  = a + negate b 
   subtract a b = negate a + b
-
-class AdditiveGroup r => AdditiveAbelianGroup r
 
 replicateGroup :: (Integral n, AdditiveGroup r) => n -> r -> r
 replicateGroup y0 x0 = case compare y0 0 of
@@ -39,7 +37,6 @@ replicateGroup y0 x0 = case compare y0 0 of
       | even y = g (x + x) (y `quot` 2) z
       | y == 1 = x + z
       | otherwise = g (x + x) ((y Prelude.- 1) `quot` 2) (x + z)
-
 
 instance AdditiveGroup r => AdditiveGroup (e -> r) where
   f - g = \x -> f x - g x
@@ -100,19 +97,4 @@ instance AdditiveGroup Word64 where
   (-) = (Prelude.-)
   negate = Prelude.negate
   subtract = Prelude.subtract
-
--- *** Additive Abelian Group Instances
-
-instance AdditiveAbelianGroup r => AdditiveAbelianGroup (e -> r)
-instance AdditiveAbelianGroup Integer
-instance AdditiveAbelianGroup Int
-instance AdditiveAbelianGroup Int8
-instance AdditiveAbelianGroup Int16
-instance AdditiveAbelianGroup Int32
-instance AdditiveAbelianGroup Int64
-instance AdditiveAbelianGroup Word
-instance AdditiveAbelianGroup Word8
-instance AdditiveAbelianGroup Word16
-instance AdditiveAbelianGroup Word32
-instance AdditiveAbelianGroup Word64
 

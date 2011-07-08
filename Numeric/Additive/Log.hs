@@ -2,18 +2,20 @@ module Numeric.Additive.Log
   ( Log(..)
   ) where
 
-import Numeric.Multiplicative.Semigroup
-import Numeric.Multiplicative.Monoid
-import Numeric.Multiplicative.Group
-import Numeric.Additive.Semigroup
-import Numeric.Additive.Monoid
-import Numeric.Additive.Group
+import Numeric.Multiplicative.Class
+import Numeric.Multiplicative.Monoid.Class
+import Numeric.Multiplicative.Group.Class
+import Numeric.Multiplicative.Commutative.Class
+import Numeric.Additive.Class
+import Numeric.Additive.Monoid.Class
+import Numeric.Additive.Group.Class
+import Numeric.Additive.Abelian.Class
 
 import Prelude hiding ((*),(^),(/),recip,negate,subtract)
 
 newtype Log r = Log { runLog :: r } 
 
-instance MultiplicativeSemigroup r => AdditiveSemigroup (Log r) where
+instance Multiplicative r => Additive (Log r) where
   Log a + Log b = Log (a * b)
   sumWith1 f = Log . productWith1 (runLog . f)
   replicate n (Log m) = Log (m ^ n)
@@ -27,4 +29,4 @@ instance MultiplicativeGroup r => AdditiveGroup (Log r) where
   negate (Log a) = Log (recip a)
   subtract (Log a) (Log b) = Log (a \\ b)
 
-instance MultiplicativeAbelianGroup r => AdditiveAbelianGroup (Log r)
+instance Commutative r => Abelian (Log r)

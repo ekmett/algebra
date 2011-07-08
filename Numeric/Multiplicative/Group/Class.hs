@@ -1,12 +1,13 @@
-module Numeric.Multiplicative.Group 
+module Numeric.Multiplicative.Group.Class 
   ( MultiplicativeGroup(..)
   , powGroup
-  , MultiplicativeAbelianGroup 
   ) where
 
 import Prelude hiding ((*), recip, (/))
-import Numeric.Multiplicative.Semigroup
-import Numeric.Multiplicative.Monoid
+import Numeric.Multiplicative.Class
+import Numeric.Multiplicative.Monoid.Class
+
+infixl 7 /, \\
 
 class MultiplicativeMonoid r => MultiplicativeGroup r where
   recip  :: r -> r
@@ -15,8 +16,6 @@ class MultiplicativeMonoid r => MultiplicativeGroup r where
   recip a = one / a
   a / b = a * recip b
   a \\ b = recip a * b
-
-class MultiplicativeGroup r => MultiplicativeAbelianGroup r
 
 powGroup :: (MultiplicativeGroup r, Integral n) => r -> n -> r
 powGroup x0 y0 = case compare y0 0 of

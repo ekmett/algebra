@@ -1,11 +1,13 @@
 module Numeric.Additive 
-  ( module Numeric.Additive.Semigroup
-  , module Numeric.Additive.Monoid
-  , module Numeric.Additive.Group
+  ( module Numeric.Additive.Class
+  , module Numeric.Additive.Abelian.Class
+  , module Numeric.Additive.Monoid.Class
+  , module Numeric.Additive.Group.Class
   , module Numeric.Additive.Log
   ) where
 
-import Numeric.Additive.Semigroup
-import Numeric.Additive.Monoid
-import Numeric.Additive.Group
+import Numeric.Additive.Class
+import Numeric.Additive.Abelian.Class
+import Numeric.Additive.Monoid.Class
+import Numeric.Additive.Group.Class
 import Numeric.Additive.Log

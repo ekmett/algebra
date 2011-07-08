@@ -1,4 +1,4 @@
-module Numeric.Additive.Monoid
+module Numeric.Additive.Monoid.Class
   ( 
   -- * Additive Monoids
     AdditiveMonoid(..)
@@ -7,14 +7,16 @@ module Numeric.Additive.Monoid
   ) where
 
 import Data.Foldable hiding (sum)
-import Numeric.Additive.Semigroup
+import Numeric.Additive.Class
 import Data.Int
 import Data.Word
 
 import Prelude hiding ((+), sum)
 
--- | 
-class AdditiveSemigroup r => AdditiveMonoid r where
+-- | An additive monoid
+--
+-- > zero + a = a = a + zero
+class Additive r => AdditiveMonoid r where
   zero :: r
 
   sumWith :: Foldable f => (a -> r) -> f a -> r

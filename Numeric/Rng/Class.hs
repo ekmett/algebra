@@ -2,13 +2,18 @@ module Numeric.Rng.Class
   ( Rng
   ) where
 
-import Numeric.Additive.Group
-import Numeric.Multiplicative.Semigroup
+import Numeric.Additive.Group.Class
+import Numeric.Additive.Abelian.Class
+import Numeric.Multiplicative.Class
 import Data.Int
 import Data.Word
 
--- A Ring without (i)dentity
-class (AdditiveAbelianGroup r, MultiplicativeSemigroup r) => Rng r where
+-- | A Ring without an /i/dentity.
+-- 
+-- > a(b + c) = ab + ac
+-- > (a + b)c = ac + bc
+
+class (AdditiveGroup r, Abelian r, Multiplicative r) => Rng r where
 
 instance Rng Integer
 instance Rng Int
