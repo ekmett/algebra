@@ -3,8 +3,6 @@ module Numeric.Rng.Class
   ) where
 
 import Numeric.Additive.Group.Class
-import Numeric.Additive.Abelian.Class
-import Numeric.Multiplicative.Class
 import Numeric.Semiring.Class
 import Data.Int
 import Data.Word

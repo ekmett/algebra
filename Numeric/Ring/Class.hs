@@ -1,27 +1,26 @@
 module Numeric.Ring.Class
-  ( Ring(..) 
+  ( Ring(..)
   ) where
 
 import Data.Int
 import Data.Word
-import Prelude hiding (fromInteger, replicate)
-import qualified Prelude
-import Numeric.Additive.Class (replicate)
-import Numeric.Multiplicative.Monoid.Class (MultiplicativeMonoid(one))
+import Numeric.Rig.Class
 import Numeric.Rng.Class
+import Numeric.Additive.Group.Class
+import Numeric.Multiplicative.Monoid.Class
 
-class (MultiplicativeMonoid r, Rng r) => Ring r where
-  fromInteger :: Integer -> r
-  fromInteger n = replicate n one
+class (Rig r, Rng r) => Ring r where
+  fromIntegral :: Integer -> r
+  fromIntegral n = times n one
 
-instance Ring Int where fromInteger = Prelude.fromInteger
-instance Ring Int8 where fromInteger = Prelude.fromInteger
-instance Ring Int16 where fromInteger = Prelude.fromInteger
-instance Ring Int32 where fromInteger = Prelude.fromInteger
-instance Ring Int64 where fromInteger = Prelude.fromInteger
-instance Ring Integer where fromInteger = Prelude.fromInteger
-instance Ring Word where fromInteger = Prelude.fromInteger
-instance Ring Word8 where fromInteger = Prelude.fromInteger
-instance Ring Word16 where fromInteger = Prelude.fromInteger
-instance Ring Word32 where fromInteger = Prelude.fromInteger
-instance Ring Word64 where fromInteger = Prelude.fromInteger
+instance Ring Integer where fromIntegral = Prelude.fromIntegral
+instance Ring Int     where fromIntegral = Prelude.fromIntegral
+instance Ring Int8    where fromIntegral = Prelude.fromIntegral
+instance Ring Int16   where fromIntegral = Prelude.fromIntegral
+instance Ring Int32   where fromIntegral = Prelude.fromIntegral
+instance Ring Int64   where fromIntegral = Prelude.fromIntegral
+instance Ring Word    where fromIntegral = Prelude.fromIntegral
+instance Ring Word8   where fromIntegral = Prelude.fromIntegral
+instance Ring Word16  where fromIntegral = Prelude.fromIntegral
+instance Ring Word32  where fromIntegral = Prelude.fromIntegral
+instance Ring Word64  where fromIntegral = Prelude.fromIntegral

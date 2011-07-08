@@ -51,10 +51,11 @@ instance AdditiveMonoid s => MonadPlus (Linear s) where
 
 instance Additive s => Additive (Linear s a) where
   Linear m + Linear n = Linear (m + n)
-  replicate n (Linear m) = Linear (replicate n m)
+  replicate1p n (Linear m) = Linear (replicate1p n m)
 
 instance AdditiveMonoid s => AdditiveMonoid (Linear s a) where
   zero = Linear zero
+  replicate n (Linear m) = Linear (replicate n m)
 
 instance Abelian s => Abelian (Linear s a)
 
@@ -62,6 +63,7 @@ instance AdditiveGroup s => AdditiveGroup (Linear s a) where
   Linear m - Linear n = Linear (m - n)
   negate (Linear m) = Linear (negate m)
   subtract (Linear m) (Linear n) = Linear (subtract m n)
+  times n (Linear m) = Linear (times n m)
 
 -- instance MultiplicativeSemigroup s => LeftModule s (Linear s a) where
 --  s .* Linear m = Linear (s .* m)

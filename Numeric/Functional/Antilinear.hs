@@ -51,15 +51,17 @@ instance AdditiveMonoid s => MonadPlus (Antilinear s) where
 
 instance Additive s => Additive (Antilinear s a) where
   Antilinear m + Antilinear n = Antilinear (m + n)
-  replicate n (Antilinear m) = Antilinear (replicate n m)
+  replicate1p n (Antilinear m) = Antilinear (replicate1p n m)
 
 instance AdditiveMonoid s => AdditiveMonoid (Antilinear s a) where
   zero = Antilinear zero
+  replicate n (Antilinear m) = Antilinear (replicate n m)
 
 instance AdditiveGroup s => AdditiveGroup (Antilinear s a) where
   Antilinear m - Antilinear n = Antilinear (m - n)
   negate (Antilinear m) = Antilinear (negate m)
   subtract (Antilinear m) (Antilinear n) = Antilinear (subtract m n)
+  times n (Antilinear m) = Antilinear (times n m)
 
 instance Abelian s => Abelian (Antilinear s a)
 

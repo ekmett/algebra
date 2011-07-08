@@ -9,6 +9,7 @@ import Data.Semigroup.Traversable
 import Data.Traversable
 import Numeric.Additive
 import Numeric.Multiplicative
+import Numeric.Rig.Class
 import Numeric.Rng.Class
 import Numeric.Ring.Class
 import Numeric.Semiring.Class
@@ -35,15 +36,17 @@ instance Traversable1 Opposite where
   traverse1 f (Opposite r) = fmap Opposite (f r)
 instance Additive r => Additive (Opposite r) where
   Opposite a + Opposite b = Opposite (a + b)
-  replicate n (Opposite a) = Opposite (replicate n a)
+  replicate1p n (Opposite a) = Opposite (replicate1p n a)
   sumWith1 f = Opposite . sumWith1 (runOpposite . f)
 instance AdditiveMonoid r => AdditiveMonoid (Opposite r) where
   zero = Opposite zero
+  replicate n (Opposite a) = Opposite (replicate n a)
   sumWith f = Opposite . sumWith (runOpposite . f)
 instance AdditiveGroup r => AdditiveGroup (Opposite r) where
   negate = Opposite . negate . runOpposite
   Opposite a - Opposite b = Opposite (a - b)
   subtract (Opposite a) (Opposite b) = Opposite (subtract a b)
+  times n (Opposite a) = Opposite (times n a)
 instance Abelian r => Abelian (Opposite r)
 instance DecidableZero r => DecidableZero (Opposite r) where
   isZero = isZero . runOpposite
@@ -53,16 +56,19 @@ instance DecidableAssociates r => DecidableAssociates (Opposite r) where
   isAssociate (Opposite a) (Opposite b) = isAssociate a b
 instance Multiplicative r => Multiplicative (Opposite r) where
   Opposite a * Opposite b = Opposite (b * a)
-  Opposite a ^ n = Opposite (a ^ n)
+  pow1p (Opposite a) n = Opposite (pow1p a n)
 instance Commutative r => Commutative (Opposite r)
 instance Idempotent r => Idempotent (Opposite r)
 instance Band r => Band (Opposite r)
 instance MultiplicativeMonoid r => MultiplicativeMonoid (Opposite r) where
   one = Opposite one
+  pow (Opposite a) n = Opposite (pow a n)
 instance MultiplicativeGroup r => MultiplicativeGroup (Opposite r) where
   recip = Opposite . recip . runOpposite
   Opposite a / Opposite b = Opposite (b \\ a)
   Opposite a \\ Opposite b = Opposite (b / a)
+  Opposite a ^ n = Opposite (a ^ n)
 instance Semiring r => Semiring (Opposite r)
 instance Rng r => Rng (Opposite r)
+instance Rig r => Rig (Opposite r)
 instance Ring r => Ring (Opposite r)

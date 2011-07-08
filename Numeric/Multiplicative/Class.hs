@@ -1,103 +1,99 @@
 module Numeric.Multiplicative.Class
   ( Multiplicative(..)
-  , powSemigroup
-  , powIntegral
+  , pow1pIntegral
   , product1
   ) where
 
-import Data.Foldable
+import Data.Foldable hiding (sum)
 import Data.Int
 import Data.Word
 import Data.Semigroup.Foldable
+import Numeric.Decidable.Zero
+import Numeric.Additive.Monoid.Class
+import Numeric.Additive.Partitionable.Class
+import Numeric.Natural.Internal
 import qualified Prelude
 import Prelude hiding ((*), (+), negate, (-), recip, (/), foldr, sum, product)
 
-infixr 8 ^
+infixr 8 `pow1p`
 infixl 7 *
 
 -- | A multiplicative semigroup
 class Multiplicative r where
   (*) :: r -> r -> r 
-  (^) :: Integral n => r -> n -> r
+
+  -- pow1p x n = pow x (1 + n)
+  pow1p :: Whole n => r -> n -> r
+  pow1p x0 y0 = f x0 (y0 Prelude.+ 1) where
+    f x y 
+      | even y = f (x * x) (y `quot` 2)
+      | y == 1 = x
+      | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) x
+    g x y z 
+      | even y = g (x * x) (y `quot` 2) z
+      | y == 1 = x * z
+      | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) (x * z)
   productWith1 :: Foldable1 f => (a -> r) -> f a -> r
   productWith1 f = maybe (error "Numeric.Multiplicative.Semigroup.productWith1: empty structure") id . foldl' mf Nothing
-     where mf Nothing y = Just $! f y
-           mf (Just x) y = Just $! x * f y
+    where 
+      mf Nothing y = Just $! f y
+      mf (Just x) y = Just $! x * f y
 
 product1 :: (Foldable1 f, Multiplicative r) => f r -> r
 product1 = productWith1 id
 
-powSemigroup :: (Multiplicative r, Integral n) => r -> n -> r
-powSemigroup x0 y0 = case compare y0 0 of
-    LT -> error "powSemigroup: negative length"
-    EQ -> error "powSemigroup: zero length"
-    GT -> f x0 y0
+instance (DecidableZero a, Partitionable a, AdditiveMonoid r, Multiplicative r) => Multiplicative (a -> r) where
+  f * g = sum . partitionWith (\a b -> f a * g b)
+  pow1p x0 y0 = f x0 (1 Prelude.+ y0)
     where
-        f x y 
-            | even y = f (x * x) (y `quot` 2)
-            | y == 1 = x
-            | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) x
-        g x y z 
-            | even y = g (x * x) (y `quot` 2) z
-            | y == 1 = x * z
-            | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) (x * z)
+      f x y 
+        | even y = f (x * x) (y `quot` 2)
+        | y == 1 = x
+        | otherwise = g (x * x) (unsafePred y `quot` 2) x
+      g x y z 
+        | even y = g (x * x) (y `quot` 2) z
+        | y == 1 = x * z
+        | otherwise = g (x * x) (unsafePred y `quot` 2) (x * z)
 
--- a suitable default definition for (^) for instances of the Prelude Integral class,
--- addressing possible negative exponentiation of units 1 and -1.
-powIntegral :: (Integral r, Integral n) => r -> n -> r
-powIntegral (-1) y0 
-  | even y0 = 1
-  | otherwise = -1
-powIntegral 1 _ = 1
-powIntegral x0 y0 = case compare y0 0 of
-    LT -> error "negative non-unit recipriocal"
-    EQ -> 1
-    GT -> f x0 y0
-    where
-        f x y
-            | even y = f (x Prelude.* x) (y `quot` 2)
-            | y == 1 = x
-            | otherwise = g (x Prelude.* x) ((y Prelude.- 1) `quot` 2) x
-        g x y z
-            | even y = g (x Prelude.* x) (y `quot` 2) z
-            | y == 1 = x Prelude.* z
-            | otherwise = g (x Prelude.* x) ((y Prelude.- 1) `quot` 2) (x Prelude.* z)
-
+pow1pIntegral :: (Integral r, Integral n) => r -> n -> r
+pow1pIntegral r n = r ^ (1 Prelude.+ n)
 
 instance Multiplicative Bool where
   (*) = (&&)
-  _ ^ 0 = True
-  b ^ _ = b
+  pow1p m _ = m
+instance Multiplicative Natural where
+  (*) = (Prelude.*)
+  pow1p = pow1pIntegral
 instance Multiplicative Integer where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Int where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Int8 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Int16 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Int32 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Int64 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Word where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Word8 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Word16 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Word32 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral
 instance Multiplicative Word64 where
   (*) = (Prelude.*)
-  (^) = powIntegral
+  pow1p = pow1pIntegral

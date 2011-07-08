@@ -2,27 +2,24 @@ module Numeric.Multiplicative.Band.Class
   ( 
   -- * Multiplicative Bands
     Band
+  , pow1pBand
   , powBand
-  , powBandMonoid
   ) where
 
 import Numeric.Multiplicative.Class
 import Numeric.Multiplicative.Monoid.Class
+import Numeric.Natural
 
 -- | An multiplicative semigroup with idempotent multiplication.
 --
 -- > a * a = a
 class Multiplicative r => Band r
 
-powBand :: (Band r, Integral n) => r -> n -> r
-powBand x n
-  | n < 1 = error "powBand: positive multiplier required"
-  | otherwise = x
+pow1pBand :: (Band r, Whole n) => r -> n -> r
+pow1pBand r _ = r 
 
-powBandMonoid :: (Band r, MultiplicativeMonoid r, Integral n) => r -> n -> r
-powBandMonoid x n = case compare n 0 of
-  LT -> error "powBandMonoid: non-negative multiplier expected"
-  EQ -> one
-  GT -> x
+powBand :: (MultiplicativeMonoid r, Band r, Whole n) => r -> n -> r
+powBand _ 0 = one
+powBand r _ = r
 
 instance Band Bool

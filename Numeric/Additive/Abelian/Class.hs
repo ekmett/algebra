@@ -7,6 +7,7 @@ module Numeric.Additive.Abelian.Class
 import Data.Int
 import Data.Word
 import Numeric.Additive.Class
+import Numeric.Natural.Internal
 
 -- | an additive abelian semigroup
 --
@@ -16,6 +17,7 @@ class Additive r => Abelian r
 instance Abelian r => Abelian (e -> r)
 instance Abelian Bool
 instance Abelian Integer
+instance Abelian Natural
 instance Abelian Int
 instance Abelian Int8
 instance Abelian Int16

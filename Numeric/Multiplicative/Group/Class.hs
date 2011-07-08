@@ -1,24 +1,23 @@
 module Numeric.Multiplicative.Group.Class 
   ( MultiplicativeGroup(..)
-  , powGroup
   ) where
 
-import Prelude hiding ((*), recip, (/))
+import Prelude hiding ((*), recip, (/),(^))
 import Numeric.Multiplicative.Class
 import Numeric.Multiplicative.Monoid.Class
 
+infixr 8 ^
 infixl 7 /, \\
 
 class MultiplicativeMonoid r => MultiplicativeGroup r where
   recip  :: r -> r
   (/)    :: r -> r -> r
   (\\)   :: r -> r -> r
+  (^)    :: Integral n => r -> n -> r
   recip a = one / a
   a / b = a * recip b
   a \\ b = recip a * b
-
-powGroup :: (MultiplicativeGroup r, Integral n) => r -> n -> r
-powGroup x0 y0 = case compare y0 0 of
+  x0 ^ y0 = case compare y0 0 of
     LT -> f (recip x0) (negate y0)
     EQ -> one
     GT -> f x0 y0
