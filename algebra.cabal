@@ -1,5 +1,5 @@
 name:          algebra
-category:      Control, Comonads
+category:      Math, Algebra
 version:       0.1.0
 license:       BSD3
 cabal-version: >= 1.6
