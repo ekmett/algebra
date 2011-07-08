@@ -1,4 +1,4 @@
-module Numeric.Additive.Monoid.Class
+module Numeric.Additive.Monoid
   ( 
   -- * Additive Monoids
     AdditiveMonoid(..)

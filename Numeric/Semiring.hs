@@ -1,9 +1,9 @@
-module Numeric.Semiring.Class
+module Numeric.Semiring
   ( Semiring
   ) where
 
 import Numeric.Additive.Class
-import Numeric.Additive.Abelian.Class
+import Numeric.Additive.Abelian
 import Numeric.Multiplicative.Class
 import Numeric.Natural.Internal
 import Data.Int

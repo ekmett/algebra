@@ -8,7 +8,7 @@ import Data.Maybe (isJust)
 import Data.Int
 import Data.Word
 import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Monoid.Class
+import Numeric.Multiplicative.Monoid
 import Numeric.Natural.Internal
 import Prelude hiding ((*))
 

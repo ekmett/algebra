@@ -6,10 +6,10 @@ module Numeric.Ring.Rng
 
 import Numeric.Additive
 import Numeric.Multiplicative
-import Numeric.Rig.Class
-import Numeric.Rng.Class
-import Numeric.Ring.Class
-import Numeric.Semiring.Class
+import Numeric.Rig
+import Numeric.Rng
+import Numeric.Ring
+import Numeric.Semiring
 import Prelude hiding ((+),(-),(*),(/),replicate,negate,subtract,fromIntegral)
 
 -- | The free Ring given a Rng obtained by adjoining Z, such that

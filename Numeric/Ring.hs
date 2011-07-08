@@ -1,13 +1,13 @@
-module Numeric.Ring.Class
+module Numeric.Ring
   ( Ring(..)
   ) where
 
 import Data.Int
 import Data.Word
-import Numeric.Rig.Class
-import Numeric.Rng.Class
-import Numeric.Additive.Group.Class
-import Numeric.Multiplicative.Monoid.Class
+import Numeric.Rig
+import Numeric.Rng
+import Numeric.Additive.Group
+import Numeric.Multiplicative.Monoid
 
 class (Rig r, Rng r) => Ring r where
   fromIntegral :: Integer -> r

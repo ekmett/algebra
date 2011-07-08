@@ -1,4 +1,4 @@
-module Numeric.Multiplicative.Monoid.Class
+module Numeric.Multiplicative.Monoid
   ( MultiplicativeMonoid(..)
   , product
   ) where

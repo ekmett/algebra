@@ -29,17 +29,18 @@ library
   exposed-modules:
     Numeric.Additive
     Numeric.Additive.Class
-    Numeric.Additive.Idempotent.Class
-    Numeric.Additive.Abelian.Class
-    Numeric.Additive.Partitionable.Class
-    Numeric.Additive.Monoid.Class
-    Numeric.Additive.Group.Class
+    Numeric.Additive.Idempotent
+    Numeric.Additive.Abelian
+    Numeric.Additive.Partitionable
+    Numeric.Additive.Monoid
+    Numeric.Additive.Group
     Numeric.Multiplicative
     Numeric.Multiplicative.Class
-    Numeric.Multiplicative.Commutative.Class
-    Numeric.Multiplicative.Monoid.Class
-    Numeric.Multiplicative.Group.Class
-    Numeric.Multiplicative.Band.Class
+    Numeric.Multiplicative.Commutative
+    Numeric.Multiplicative.Monoid
+    Numeric.Multiplicative.Group
+    Numeric.Multiplicative.Band
+    Numeric.Multiplicative.Involution
     Numeric.Natural
     Numeric.Exp
     Numeric.Log
@@ -48,14 +49,15 @@ library
     Numeric.Decidable.Associates
     Numeric.Functional.Linear
     Numeric.Functional.Antilinear
-    Numeric.Semiring.Class
-    Numeric.Rig.Class
-    Numeric.Rng.Class
+    Numeric.Semiring
+    Numeric.Rig
+    Numeric.Rig.Involutive
+    Numeric.Rng
     Numeric.Rng.Zero
-    Numeric.Ring.Class
+    Numeric.Ring
     Numeric.Ring.Rng
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
-    Numeric.Characteristic.Class
+    Numeric.Characteristic
 
   ghc-options: -Wall 

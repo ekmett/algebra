@@ -1,11 +1,10 @@
-module Numeric.Additive.Partitionable.Class
+module Numeric.Additive.Partitionable
   ( -- * Partitionable Additive Semigroups
     Partitionable(..)
   ) where
 
-import qualified Prelude
 import Prelude (Integer,(-))
-import Numeric.Additive.Monoid.Class
+import Numeric.Additive.Monoid
 
 class AdditiveMonoid m => Partitionable m where
   -- | partitionWith f c returns a list containing f a b for each a b such that a + b = c, 

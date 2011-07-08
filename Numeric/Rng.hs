@@ -1,9 +1,9 @@
-module Numeric.Rng.Class
+module Numeric.Rng
   ( Rng
   ) where
 
-import Numeric.Additive.Group.Class
-import Numeric.Semiring.Class
+import Numeric.Additive.Group
+import Numeric.Semiring
 import Data.Int
 import Data.Word
 

@@ -1,4 +1,4 @@
-module Numeric.Characteristic.Class 
+module Numeric.Characteristic
   ( Characteristic(..)
   , charInt
   , charWord
@@ -8,10 +8,10 @@ module Numeric.Characteristic.Class
 import Data.Int
 import Data.Word
 import Data.Proxy
-import Numeric.Rig.Class
+import Numeric.Rig
 import Numeric.Ring.Endomorphism
 import Numeric.Natural.Internal
-import Numeric.Multiplicative.Monoid.Class
+import Numeric.Multiplicative.Monoid
 import Prelude hiding ((^))
 
 class Rig r => Characteristic r where

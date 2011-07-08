@@ -9,8 +9,8 @@ import Data.Int
 import Data.Word
 import Data.Semigroup.Foldable
 import Numeric.Decidable.Zero
-import Numeric.Additive.Monoid.Class
-import Numeric.Additive.Partitionable.Class
+import Numeric.Additive.Monoid
+import Numeric.Additive.Partitionable
 import Numeric.Natural.Internal
 import qualified Prelude
 import Prelude hiding ((*), (+), negate, (-), recip, (/), foldr, sum, product)

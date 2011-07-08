@@ -3,15 +3,15 @@ module Numeric.Log
   ) where
 
 import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Monoid.Class
-import Numeric.Multiplicative.Group.Class
-import Numeric.Multiplicative.Commutative.Class
-import Numeric.Multiplicative.Band.Class
+import Numeric.Multiplicative.Monoid
+import Numeric.Multiplicative.Group
+import Numeric.Multiplicative.Commutative
+import Numeric.Multiplicative.Band
 import Numeric.Additive.Class
-import Numeric.Additive.Monoid.Class
-import Numeric.Additive.Group.Class
-import Numeric.Additive.Abelian.Class
-import Numeric.Additive.Idempotent.Class
+import Numeric.Additive.Monoid
+import Numeric.Additive.Group
+import Numeric.Additive.Abelian
+import Numeric.Additive.Idempotent
 
 import Prelude hiding ((*),(^),(/),recip,negate,subtract)
 

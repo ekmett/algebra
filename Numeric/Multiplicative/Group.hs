@@ -1,10 +1,10 @@
-module Numeric.Multiplicative.Group.Class 
+module Numeric.Multiplicative.Group
   ( MultiplicativeGroup(..)
   ) where
 
 import Prelude hiding ((*), recip, (/),(^))
 import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Monoid.Class
+import Numeric.Multiplicative.Monoid
 
 infixr 8 ^
 infixl 7 /, \\

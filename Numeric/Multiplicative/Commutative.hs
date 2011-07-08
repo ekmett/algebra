@@ -1,4 +1,4 @@
-module Numeric.Multiplicative.Commutative.Class where
+module Numeric.Multiplicative.Commutative where
 
 import Data.Int
 import Data.Word

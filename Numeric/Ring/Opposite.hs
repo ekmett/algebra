@@ -9,10 +9,10 @@ import Data.Semigroup.Traversable
 import Data.Traversable
 import Numeric.Additive
 import Numeric.Multiplicative
-import Numeric.Rig.Class
-import Numeric.Rng.Class
-import Numeric.Ring.Class
-import Numeric.Semiring.Class
+import Numeric.Semiring
+import Numeric.Rig
+import Numeric.Rng
+import Numeric.Ring
 import Numeric.Decidable.Associates
 import Numeric.Decidable.Units
 import Numeric.Decidable.Zero

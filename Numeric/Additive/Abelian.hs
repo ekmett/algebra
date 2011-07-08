@@ -1,4 +1,4 @@
-module Numeric.Additive.Abelian.Class
+module Numeric.Additive.Abelian
   ( 
   -- * An Additive Abelian Semigroup
     Abelian

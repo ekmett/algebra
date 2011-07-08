@@ -1,11 +1,11 @@
-module Numeric.Rig.Class
+module Numeric.Rig
   ( Rig(..)
   , fromNaturalNum
   ) where
 
-import Numeric.Additive.Monoid.Class
-import Numeric.Multiplicative.Monoid.Class
-import Numeric.Semiring.Class
+import Numeric.Additive.Monoid
+import Numeric.Multiplicative.Monoid
+import Numeric.Semiring
 import Data.Int
 import Data.Word
 import Prelude (Integer, Bool, Num(fromInteger),(/=),id)

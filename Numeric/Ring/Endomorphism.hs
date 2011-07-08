@@ -7,10 +7,10 @@ module Numeric.Ring.Endomorphism
 import Data.Monoid
 import Numeric.Additive
 import Numeric.Multiplicative
-import Numeric.Semiring.Class
-import Numeric.Rng.Class
-import Numeric.Rig.Class
-import Numeric.Ring.Class
+import Numeric.Semiring
+import Numeric.Rng
+import Numeric.Rig
+import Numeric.Ring
 import Prelude hiding ((*),(+),(-),negate,subtract)
 
 -- | The endomorphism ring of an abelian group or the endomorphism semiring of an abelian monoid

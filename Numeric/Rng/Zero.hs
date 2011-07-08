@@ -2,16 +2,16 @@ module Numeric.Rng.Zero
   ( ZeroRng(..)
   ) where
 
-import Numeric.Rng.Class
+import Numeric.Rng
 import Numeric.Additive.Class
-import Numeric.Additive.Idempotent.Class
-import Numeric.Additive.Monoid.Class
-import Numeric.Additive.Group.Class
-import Numeric.Additive.Abelian.Class
+import Numeric.Additive.Idempotent
+import Numeric.Additive.Monoid
+import Numeric.Additive.Group
+import Numeric.Additive.Abelian
 import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Band.Class
-import Numeric.Semiring.Class
-import Numeric.Multiplicative.Commutative.Class
+import Numeric.Multiplicative.Band
+import Numeric.Semiring
+import Numeric.Multiplicative.Commutative
 import Data.Foldable (toList)
 import Prelude hiding ((+),(-),negate,subtract,replicate)
 

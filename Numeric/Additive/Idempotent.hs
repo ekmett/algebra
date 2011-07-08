@@ -1,4 +1,4 @@
-module Numeric.Additive.Idempotent.Class
+module Numeric.Additive.Idempotent
   ( 
   -- * Additive Monoids
     Idempotent
@@ -7,7 +7,7 @@ module Numeric.Additive.Idempotent.Class
   ) where
 
 import Numeric.Additive.Class
-import Numeric.Additive.Monoid.Class
+import Numeric.Additive.Monoid
 import Numeric.Natural.Internal
 
 -- | An additive semigroup with idempotent addition.

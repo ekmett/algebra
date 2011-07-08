@@ -1,4 +1,4 @@
-module Numeric.Additive.Group.Class
+module Numeric.Additive.Group
   ( 
   -- * Additive Groups
     AdditiveGroup(..)
@@ -9,7 +9,7 @@ import Data.Word
 import Prelude hiding ((+), (-), negate, subtract)
 import qualified Prelude
 import Numeric.Additive.Class
-import Numeric.Additive.Monoid.Class
+import Numeric.Additive.Monoid
 
 infixl 6 - 
 infixl 7 `times`

@@ -1,4 +1,4 @@
-module Numeric.Multiplicative.Band.Class
+module Numeric.Multiplicative.Band
   ( 
   -- * Multiplicative Bands
     Band
@@ -7,7 +7,7 @@ module Numeric.Multiplicative.Band.Class
   ) where
 
 import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Monoid.Class
+import Numeric.Multiplicative.Monoid
 import Numeric.Natural
 
 -- | An multiplicative semigroup with idempotent multiplication.

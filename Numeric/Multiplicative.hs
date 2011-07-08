@@ -1,13 +1,13 @@
 module Numeric.Multiplicative 
   ( module Numeric.Multiplicative.Class
-  , module Numeric.Multiplicative.Commutative.Class
-  , module Numeric.Multiplicative.Monoid.Class
-  , module Numeric.Multiplicative.Group.Class
-  , module Numeric.Multiplicative.Band.Class
+  , module Numeric.Multiplicative.Commutative
+  , module Numeric.Multiplicative.Monoid
+  , module Numeric.Multiplicative.Group
+  , module Numeric.Multiplicative.Band
   ) where
 
 import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Commutative.Class
-import Numeric.Multiplicative.Monoid.Class
-import Numeric.Multiplicative.Group.Class
-import Numeric.Multiplicative.Band.Class
+import Numeric.Multiplicative.Commutative
+import Numeric.Multiplicative.Monoid
+import Numeric.Multiplicative.Group
+import Numeric.Multiplicative.Band
