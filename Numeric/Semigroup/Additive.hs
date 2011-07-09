@@ -1,4 +1,4 @@
-module Numeric.Additive.Class
+module Numeric.Semigroup.Additive
   ( 
   -- * Additive Semigroups
     Additive(..)
@@ -23,7 +23,7 @@ infixl 6 +
 class Additive r where
   (+) :: r -> r -> r
 
-  -- | replicate1p n r = replicate (1 Prelude.+ n) r
+  -- | replicate1p n r = replicate (1 + n) r
   replicate1p :: Whole n => n -> r -> r
   replicate1p y0 x0 = f x0 (1 Prelude.+ y0)
     where
@@ -100,3 +100,24 @@ instance Additive Word32 where
 instance Additive Word64 where
   (+) = (Prelude.+)
   replicate1p n r = fromIntegral (1 Prelude.+ n) * r
+
+instance Additive () where
+  _ + _ = ()
+  replicate1p _ _ = () 
+  sumWith1 _ _ = ()
+
+instance (Additive a, Additive b) => Additive (a,b) where
+  (a,b) + (i,j) = (a + i, b + j)
+  replicate1p n (a,b) = (replicate1p n a, replicate1p n b)
+
+instance (Additive a, Additive b, Additive c) => Additive (a,b,c) where
+  (a,b,c) + (i,j,k) = (a + i, b + j, c + k)
+  replicate1p n (a,b,c) = (replicate1p n a, replicate1p n b, replicate1p n c)
+
+instance (Additive a, Additive b, Additive c, Additive d) => Additive (a,b,c,d) where
+  (a,b,c,d) + (i,j,k,l) = (a + i, b + j, c + k, d + l)
+  replicate1p n (a,b,c,d) = (replicate1p n a, replicate1p n b, replicate1p n c, replicate1p n d)
+
+instance (Additive a, Additive b, Additive c, Additive d, Additive e) => Additive (a,b,c,d,e) where
+  (a,b,c,d,e) + (i,j,k,l,m) = (a + i, b + j, c + k, d + l, e + m)
+  replicate1p n (a,b,c,d,e) = (replicate1p n a, replicate1p n b, replicate1p n c, replicate1p n d, replicate1p n e)

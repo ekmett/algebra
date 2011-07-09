@@ -1,9 +1,9 @@
-module Numeric.Multiplicative.Monoid
+module Numeric.Monoid.Multiplicative
   ( MultiplicativeMonoid(..)
   , product
   ) where
 
-import Numeric.Multiplicative.Class
+import Numeric.Semigroup.Multiplicative
 import Data.Foldable hiding (product)
 import Data.Int
 import Data.Word
@@ -44,3 +44,16 @@ instance MultiplicativeMonoid Word8 where one = 1
 instance MultiplicativeMonoid Word16 where one = 1
 instance MultiplicativeMonoid Word32 where one = 1
 instance MultiplicativeMonoid Word64 where one = 1
+instance MultiplicativeMonoid () where one = ()
+instance (MultiplicativeMonoid a, MultiplicativeMonoid b) => MultiplicativeMonoid (a,b) where
+  one = (one,one)
+
+instance (MultiplicativeMonoid a, MultiplicativeMonoid b, MultiplicativeMonoid c) => MultiplicativeMonoid (a,b,c) where
+  one = (one,one,one)
+
+instance (MultiplicativeMonoid a, MultiplicativeMonoid b, MultiplicativeMonoid c, MultiplicativeMonoid d) => MultiplicativeMonoid (a,b,c,d) where
+  one = (one,one,one,one)
+
+instance (MultiplicativeMonoid a, MultiplicativeMonoid b, MultiplicativeMonoid c, MultiplicativeMonoid d, MultiplicativeMonoid e) => MultiplicativeMonoid (a,b,c,d,e) where
+  one = (one,one,one,one,one)
+

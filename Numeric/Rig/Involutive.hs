@@ -5,11 +5,11 @@ module Numeric.Rig.Involutive
 import Data.Int
 import Data.Word
 import Numeric.Natural
-import Numeric.Multiplicative.Involution
-import Numeric.Rig
+import Numeric.Multiplication.Involutive
+import Numeric.Rig.Class
 
 -- | adjoint (x + y) = adjoint x + adjoint y
-class (Rig r, Involution r) => InvolutiveRig r
+class (Rig r, Involutive r) => InvolutiveRig r
 
 instance InvolutiveRig Integer
 instance InvolutiveRig Int

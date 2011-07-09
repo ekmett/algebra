@@ -5,12 +5,12 @@ module Numeric.Ring.Endomorphism
   ) where
 
 import Data.Monoid
-import Numeric.Additive
-import Numeric.Multiplicative
-import Numeric.Semiring
-import Numeric.Rng
-import Numeric.Rig
-import Numeric.Ring
+import Numeric.Addition
+import Numeric.Multiplication
+import Numeric.Semiring.Class
+import Numeric.Rng.Class
+import Numeric.Rig.Class
+import Numeric.Ring.Class
 import Prelude hiding ((*),(+),(-),negate,subtract)
 
 -- | The endomorphism ring of an abelian group or the endomorphism semiring of an abelian monoid
@@ -21,14 +21,14 @@ instance Monoid (End r) where
   mappend (End a) (End b) = End (a . b)
   mempty = End id
 instance Additive r => Additive (End r) where
-  End f + End g = End (\x -> f x + g x)
+  End f + End g = End (f + g)
 instance Abelian r => Abelian (End r)
 instance AdditiveMonoid r => AdditiveMonoid (End r) where
   zero = End (const zero)
 instance AdditiveGroup r => AdditiveGroup (End r) where
-  End f - End g = End (\x -> f x - g x)
-  negate (End f) = End (negate . f)
-  subtract (End f) (End g) = End (\x -> subtract (f x) (g x))
+  End f - End g = End (f - g)
+  negate (End f) = End (negate f)
+  subtract (End f) (End g) = End (subtract f g)
 instance Multiplicative (End r) where
   End f * End g = End (f . g)
 instance MultiplicativeMonoid (End r) where

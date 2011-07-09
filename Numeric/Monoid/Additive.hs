@@ -1,4 +1,4 @@
-module Numeric.Additive.Monoid
+module Numeric.Monoid.Additive
   ( 
   -- * Additive Monoids
     AdditiveMonoid(..)
@@ -6,7 +6,7 @@ module Numeric.Additive.Monoid
   ) where
 
 import Data.Foldable hiding (sum)
-import Numeric.Additive.Class
+import Numeric.Semigroup.Additive
 import Data.Int
 import Data.Word
 import Numeric.Natural.Internal
@@ -43,43 +43,78 @@ instance AdditiveMonoid r => AdditiveMonoid (e -> r) where
   sumWith f xs e = sumWith (`f` e) xs
   replicate n r e = replicate n (r e)
 
+instance AdditiveMonoid () where 
+  zero = ()
+  replicate _ () = ()
+  sumWith f _ = ()
+
 instance AdditiveMonoid Bool where 
   zero = False
   replicate 0 _ = False
   replicate _ r = r
+
 instance AdditiveMonoid Natural where
   zero = 0
   replicate n r = toNatural n * r
+
 instance AdditiveMonoid Integer where 
   zero = 0
   replicate n r = toInteger n * r
+
 instance AdditiveMonoid Int where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Int8 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Int16 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Int32 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Int64 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Word where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Word8 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Word16 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Word32 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
 instance AdditiveMonoid Word64 where 
   zero = 0
   replicate n r = fromIntegral n * r
+
+instance (AdditiveMonoid a, AdditiveMonoid b) => AdditiveMonoid (a,b) where
+  zero = (zero,zero)
+  replicate n (a,b) = (replicate n a, replicate n b)
+
+instance (AdditiveMonoid a, AdditiveMonoid b, AdditiveMonoid c) => AdditiveMonoid (a,b,c) where
+  zero = (zero,zero,zero)
+  replicate n (a,b,c) = (replicate n a, replicate n b, replicate n c)
+
+instance (AdditiveMonoid a, AdditiveMonoid b, AdditiveMonoid c, AdditiveMonoid d) => AdditiveMonoid (a,b,c,d) where
+  zero = (zero,zero,zero,zero)
+  replicate n (a,b,c,d) = (replicate n a, replicate n b, replicate n c, replicate n d)
+
+instance (AdditiveMonoid a, AdditiveMonoid b, AdditiveMonoid c, AdditiveMonoid d, AdditiveMonoid e) => AdditiveMonoid (a,b,c,d,e) where
+  zero = (zero,zero,zero,zero,zero)
+  replicate n (a,b,c,d,e) = (replicate n a, replicate n b, replicate n c, replicate n d, replicate n e)
+
+

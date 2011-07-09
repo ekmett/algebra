@@ -27,20 +27,28 @@ library
     semigroupoids >= 1.2.2 && < 1.3
 
   exposed-modules:
-    Numeric.Additive
-    Numeric.Additive.Class
-    Numeric.Additive.Idempotent
-    Numeric.Additive.Abelian
-    Numeric.Additive.Partitionable
-    Numeric.Additive.Monoid
-    Numeric.Additive.Group
-    Numeric.Multiplicative
-    Numeric.Multiplicative.Class
-    Numeric.Multiplicative.Commutative
-    Numeric.Multiplicative.Monoid
-    Numeric.Multiplicative.Group
-    Numeric.Multiplicative.Band
-    Numeric.Multiplicative.Involution
+    Numeric.Addition
+    Numeric.Addition.Abelian
+    Numeric.Addition.Partitionable
+    Numeric.Addition.Idempotent
+    Numeric.Multiplication
+    Numeric.Multiplication.Commutative
+    Numeric.Multiplication.Involutive
+    Numeric.Semigroup
+    Numeric.Semigroup.Additive
+    Numeric.Semigroup.Multiplicative
+    Numeric.Band
+    Numeric.Band.Rectangular
+    Numeric.Band.Class
+    Numeric.Monoid
+    Numeric.Monoid.Additive
+    Numeric.Monoid.Multiplicative
+    Numeric.Group
+    Numeric.Group.Additive
+    Numeric.Group.Multiplicative
+    Numeric.Order
+    Numeric.Order.Additive
+    Numeric.Order.Class
     Numeric.Natural
     Numeric.Exp
     Numeric.Log
@@ -50,14 +58,20 @@ library
     Numeric.Functional.Linear
     Numeric.Functional.Antilinear
     Numeric.Semiring
+    Numeric.Semiring.Class
+    Numeric.Semiring.Integral
     Numeric.Rig
+    Numeric.Rig.Class
     Numeric.Rig.Involutive
+    Numeric.Rig.Ordered
+    Numeric.Rig.Characteristic
     Numeric.Rng
+    Numeric.Rng.Class
     Numeric.Rng.Zero
     Numeric.Ring
+    Numeric.Ring.Class
     Numeric.Ring.Rng
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
-    Numeric.Characteristic
 
   ghc-options: -Wall 

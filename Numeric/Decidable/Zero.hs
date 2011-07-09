@@ -2,7 +2,7 @@ module Numeric.Decidable.Zero
   ( DecidableZero(..)
   ) where
 
-import Numeric.Additive.Monoid
+import Numeric.Monoid.Additive
 import Data.Int
 import Data.Word
 import Numeric.Natural
@@ -10,6 +10,7 @@ import Numeric.Natural
 class AdditiveMonoid r => DecidableZero r where
   isZero :: r -> Bool
 
+instance DecidableZero Bool where isZero = not
 instance DecidableZero Integer where isZero = (0==)
 instance DecidableZero Int where isZero = (0==)
 instance DecidableZero Int8 where isZero = (0==)

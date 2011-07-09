@@ -4,12 +4,12 @@ module Numeric.Ring.Rng
   , liftRngHom
   ) where
 
-import Numeric.Additive
-import Numeric.Multiplicative
-import Numeric.Rig
-import Numeric.Rng
-import Numeric.Ring
-import Numeric.Semiring
+import Numeric.Addition
+import Numeric.Multiplication
+import Numeric.Rig.Class
+import Numeric.Rng.Class
+import Numeric.Ring.Class
+import Numeric.Semiring.Class
 import Prelude hiding ((+),(-),(*),(/),replicate,negate,subtract,fromIntegral)
 
 -- | The free Ring given a Rng obtained by adjoining Z, such that

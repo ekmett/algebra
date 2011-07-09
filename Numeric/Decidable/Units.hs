@@ -7,8 +7,8 @@ module Numeric.Decidable.Units
 import Data.Maybe (isJust)
 import Data.Int
 import Data.Word
-import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Monoid
+import Numeric.Semigroup.Multiplicative
+import Numeric.Monoid.Multiplicative
 import Numeric.Natural.Internal
 import Prelude hiding ((*))
 
@@ -18,7 +18,7 @@ class MultiplicativeMonoid r => DecidableUnits r where
   isUnit :: DecidableUnits r => r -> Bool
   isUnit = isJust . recipUnit
 
-  (^?) :: Integral n => r -> n -> Maybe r 
+  (^?) :: Integral n => r -> n -> Maybe r
   x0 ^? y0 = case compare y0 0 of
     LT -> fmap (`f` negate y0) (recipUnit x0)
     EQ -> Just one
@@ -42,6 +42,9 @@ recipUnitWhole :: Integral r => r -> Maybe r
 recipUnitWhole a@1 = Just a
 recipUnitWhole _ = Nothing
 
+instance DecidableUnits Bool where 
+  recipUnit False = Nothing
+  recipUnit True = Just True
 instance DecidableUnits Integer where recipUnit = recipUnitIntegral
 instance DecidableUnits Int where recipUnit = recipUnitIntegral
 instance DecidableUnits Int8 where recipUnit = recipUnitIntegral

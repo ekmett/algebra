@@ -2,7 +2,7 @@ module Numeric.Functional.Linear
   ( Linear(..)
   ) where
 
-import Numeric.Additive
+import Numeric.Addition
 import Control.Applicative
 import Control.Monad
 import Data.Functor.Plus hiding (zero)

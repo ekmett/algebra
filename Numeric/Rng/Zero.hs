@@ -2,16 +2,10 @@ module Numeric.Rng.Zero
   ( ZeroRng(..)
   ) where
 
-import Numeric.Rng
-import Numeric.Additive.Class
-import Numeric.Additive.Idempotent
-import Numeric.Additive.Monoid
-import Numeric.Additive.Group
-import Numeric.Additive.Abelian
-import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Band
-import Numeric.Semiring
-import Numeric.Multiplicative.Commutative
+import Numeric.Addition
+import Numeric.Multiplication
+import Numeric.Semiring.Class
+import Numeric.Rng.Class
 import Data.Foldable (toList)
 import Prelude hiding ((+),(-),negate,subtract,replicate)
 
@@ -50,7 +44,6 @@ instance AdditiveMonoid r => Multiplicative (ZeroRng r) where
     [a] -> f a
     _   -> zero
 
-instance (Abelian r, AdditiveMonoid r) => Semiring (ZeroRng r)
+instance (AdditiveMonoid r, Abelian r) => Semiring (ZeroRng r)
 instance AdditiveMonoid r => Commutative (ZeroRng r)
-instance AdditiveMonoid r => Band (ZeroRng r) 
 instance (AdditiveGroup r, Abelian r) => Rng (ZeroRng r)

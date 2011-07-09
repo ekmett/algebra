@@ -2,16 +2,9 @@ module Numeric.Exp
   ( Exp(..)
   ) where
 
-import Numeric.Multiplicative.Class
-import Numeric.Multiplicative.Monoid
-import Numeric.Multiplicative.Group
-import Numeric.Multiplicative.Commutative
-import Numeric.Multiplicative.Band
-import Numeric.Additive.Class
-import Numeric.Additive.Monoid
-import Numeric.Additive.Group
-import Numeric.Additive.Abelian
-import Numeric.Additive.Idempotent
+import Numeric.Addition
+import Numeric.Multiplication
+import Numeric.Band.Class
 
 import Prelude hiding ((+),(-),negate,replicate,subtract)
 

@@ -1,13 +1,14 @@
-module Numeric.Multiplicative.Commutative where
+module Numeric.Multiplication.Commutative where
 
 import Data.Int
 import Data.Word
-import Numeric.Multiplicative.Class
+import Numeric.Semigroup.Multiplicative
 import Numeric.Natural
 
 -- | A commutative multiplicative semigroup
 class Multiplicative r => Commutative r
 
+instance Commutative () 
 instance Commutative Bool
 instance Commutative Integer
 instance Commutative Int
@@ -21,3 +22,7 @@ instance Commutative Word8
 instance Commutative Word16
 instance Commutative Word32
 instance Commutative Word64
+instance (Commutative a, Commutative b) => Commutative (a,b) 
+instance (Commutative a, Commutative b, Commutative c) => Commutative (a,b,c) 
+instance (Commutative a, Commutative b, Commutative c, Commutative d) => Commutative (a,b,c,d) 
+instance (Commutative a, Commutative b, Commutative c, Commutative d, Commutative e) => Commutative (a,b,c,d,e) 

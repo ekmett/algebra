@@ -2,7 +2,7 @@ module Numeric.Functional.Antilinear
   ( Antilinear(..)
   ) where
 
-import Numeric.Additive
+import Numeric.Addition
 import Control.Applicative
 import Control.Monad
 import Data.Functor.Plus hiding (zero)
@@ -14,7 +14,7 @@ import Prelude hiding ((+),(-),negate,subtract,replicate)
 -- | Antilinear functionals from elements of a free module to a scalar
 
 -- appAntilinear f (x + y) = appAntilinear f x + appAntilinear f y
--- appAntilinear f (a .* x) = conjugate a * appAntilinear f x
+-- appAntilinear f (a .* x) = adjoint a * appAntilinear f x
 
 newtype Antilinear s a = Antilinear { appAntilinear :: (a -> s) -> s }
 

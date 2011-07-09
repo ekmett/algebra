@@ -1,12 +1,13 @@
 module Numeric.Decidable.Associates 
   ( DecidableAssociates(..)
   , isAssociateIntegral
+  , isAssociateWhole
   ) where
 
 import Data.Function (on)
 import Data.Int
 import Data.Word
-import Numeric.Multiplicative.Monoid
+import Numeric.Monoid.Multiplicative
 import Numeric.Natural
 
 isAssociateIntegral :: Num n => n -> n -> Bool
@@ -23,6 +24,7 @@ class MultiplicativeMonoid r => DecidableAssociates r where
   -- > b*u^-1 = a*u*u^-1 = a
   isAssociate :: r -> r -> Bool
 
+instance DecidableAssociates Bool where isAssociate = (==)
 instance DecidableAssociates Integer where isAssociate = isAssociateIntegral
 instance DecidableAssociates Int where isAssociate = isAssociateIntegral
 instance DecidableAssociates Int8 where isAssociate = isAssociateIntegral
