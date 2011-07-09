@@ -1,15 +1,22 @@
+{-# LANGUAGE ImplicitParams #-}
 module Numeric.Functional.Linear 
   ( Linear(..)
+  , (.*)
   ) where
 
 import Numeric.Addition
+import Numeric.Multiplication
+import Numeric.Semiring.Class
+import Numeric.Rig.Class
+import Numeric.Rng.Class
+import Numeric.Ring.Class
 import Control.Applicative
 import Control.Monad
 import Data.Functor.Plus hiding (zero)
 import qualified Data.Functor.Plus as Plus
 import Data.Functor.Bind
 import qualified Prelude
-import Prelude hiding ((+),(-),negate,subtract,replicate)
+import Prelude hiding ((+),(-),negate,subtract,replicate,(*))
 
 -- | Linear functionals from elements of a free module to a scalar
 
@@ -52,6 +59,22 @@ instance AdditiveMonoid s => MonadPlus (Linear s) where
 instance Additive s => Additive (Linear s a) where
   Linear m + Linear n = Linear (m + n)
   replicate1p n (Linear m) = Linear (replicate1p n m)
+
+-- TODO: check if this the monoid ring? 
+instance (Semiring s, Multiplicative a) => Multiplicative (Linear s a) where
+  Linear m * Linear n = Linear (\k -> m (\a -> n (\b -> k (a * b))))
+instance (Commutative s, Ring s, Commutative a) => Commutative (Linear s a)
+instance (Semiring s, Multiplicative a) => Semiring (Linear s a)
+instance (Rig r, MultiplicativeMonoid a, Eq a) => MultiplicativeMonoid (Linear r a) where
+  one = return one
+instance (Rig s, MultiplicativeMonoid a, Eq a) => Rig (Linear s a)
+instance (Rng s, MultiplicativeMonoid a, Eq a) => Rng (Linear s a)
+instance (Ring s, MultiplicativeMonoid a, Eq a) => Ring (Linear s a)
+
+infixl 7 .*
+-- scalar multiplication is tricky because we don't have MPTCs in this package, so we provide a one-off combinator
+(.*) :: Multiplicative s => s -> Linear s a -> Linear s a
+s .* Linear m = Linear (\k -> s * m k)
 
 instance AdditiveMonoid s => AdditiveMonoid (Linear s a) where
   zero = Linear zero
