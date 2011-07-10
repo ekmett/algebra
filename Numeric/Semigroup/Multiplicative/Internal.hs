@@ -170,6 +170,8 @@ instance (Factorable a, Factorable b, Factorable c,Factorable d, Factorable e) =
 -- analogous to Semigroup and Group, and with the sheer number of classes we're tossing around
 -- we can use all the mnemonic devices we can get!
 
+-- Ideally we'd use the cyclic definition:
+-- class (LeftModule r r, RightModule r r, Additive r, Abelian r, Multiplicative r) => Semiring r
 class (Additive r, Abelian r, Multiplicative r) => Semiring r
 
 -- | Much needed to be moved around to keep this instance from being an orphan!
@@ -186,7 +188,6 @@ instance (Factorable a, Semiring r) => Multiplicative (a -> r) where
         | y == 1 = x * z
         | otherwise = g (x * x) (unsafePred y `quot` 2) (x * z)
 
-instance (Factorable m, Semiring r) => Semiring (m -> r)
 instance Semiring Integer
 instance Semiring Natural
 instance Semiring Bool
@@ -201,8 +202,7 @@ instance Semiring Word16
 instance Semiring Word32
 instance Semiring Word64
 instance Semiring ()
-
--- direct product of semirings
+instance (Factorable m, Semiring r) => Semiring (m -> r)
 instance (Semiring a, Semiring b) => Semiring (a, b)
 instance (Semiring a, Semiring b, Semiring c) => Semiring (a, b, c)
 instance (Semiring a, Semiring b, Semiring c, Semiring d) => Semiring (a, b, c, d)
