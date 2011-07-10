@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
 module Numeric.Ring.Opposite 
   ( Opposite(..)
   ) where
@@ -9,6 +10,7 @@ import Data.Semigroup.Traversable
 import Data.Traversable
 import Numeric.Addition
 import Numeric.Multiplication
+import Numeric.Module
 import Numeric.Band.Class
 import Numeric.Semiring.Class
 import Numeric.Rig.Class
@@ -43,6 +45,14 @@ instance AdditiveMonoid r => AdditiveMonoid (Opposite r) where
   zero = Opposite zero
   replicate n (Opposite a) = Opposite (replicate n a)
   sumWith f = Opposite . sumWith (runOpposite . f)
+instance Semiring r => LeftModule (Opposite r) (Opposite r) where
+  (.*) = (*)
+instance RightModule r s => LeftModule r (Opposite s) where
+  r .* Opposite s = Opposite (s *. r)
+instance LeftModule r s => RightModule r (Opposite s) where
+  Opposite s *. r = Opposite (r .* s)
+instance Semiring r => RightModule (Opposite r) (Opposite r) where
+  (*.) = (*)
 instance AdditiveGroup r => AdditiveGroup (Opposite r) where
   negate = Opposite . negate . runOpposite
   Opposite a - Opposite b = Opposite (a - b)

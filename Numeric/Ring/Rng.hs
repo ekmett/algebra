@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 module Numeric.Ring.Rng
   ( RngRing(..)
   , rngRingHom
@@ -5,6 +6,8 @@ module Numeric.Ring.Rng
   ) where
 
 import Numeric.Addition
+import Numeric.Module
+import Numeric.Natural.Internal
 import Numeric.Multiplication
 import Numeric.Rig.Class
 import Numeric.Rng.Class
@@ -25,9 +28,21 @@ instance Abelian r => Additive (RngRing r) where
 
 instance Abelian r => Abelian (RngRing r)
 
+instance (Abelian r, AdditiveMonoid r) => LeftModule Natural (RngRing r) where
+  n .* RngRing m a = RngRing (toInteger n * m) (replicate n a)
+
+instance (Abelian r, AdditiveMonoid r) => RightModule Natural (RngRing r) where
+  RngRing m a *. n = RngRing (toInteger n * m) (replicate n a)
+
 instance (Abelian r, AdditiveMonoid r) => AdditiveMonoid (RngRing r) where
   zero = RngRing 0 zero
   replicate n (RngRing m a) = RngRing (toInteger n * m) (replicate n a)
+
+instance (Abelian r, AdditiveGroup r) => LeftModule Integer (RngRing r) where
+  n .* RngRing m a = RngRing (toInteger n * m) (times n a)
+
+instance (Abelian r, AdditiveGroup r) => RightModule Integer (RngRing r) where
+  RngRing m a *. n = RngRing (toInteger n * m) (times n a)
 
 instance (Abelian r, AdditiveGroup r) => AdditiveGroup (RngRing r) where
   RngRing n a - RngRing m b = RngRing (n - m) (a - b)
@@ -39,6 +54,12 @@ instance Rng r => Multiplicative (RngRing r) where
   RngRing n a * RngRing m b = RngRing (n*m) (times n b + times m a + a * b)
 
 instance (Commutative r, Rng r) => Commutative (RngRing r)
+
+instance Rng s => LeftModule (RngRing s) (RngRing s) where
+  (.*) = (*) 
+
+instance Rng s => RightModule (RngRing s) (RngRing s) where
+  (*.) = (*) 
 
 instance Rng r => MultiplicativeMonoid (RngRing r) where
   one = RngRing 1 zero

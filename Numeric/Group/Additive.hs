@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
 module Numeric.Group.Additive
   ( 
   -- * Additive Groups
@@ -9,12 +10,12 @@ import Data.Word
 import Prelude hiding ((+), (-), negate, subtract)
 import qualified Prelude
 import Numeric.Semigroup.Additive
-import Numeric.Monoid.Additive
+import Numeric.Monoid.Additive.Internal
 
 infixl 6 - 
 infixl 7 `times`
 
-class AdditiveMonoid r => AdditiveGroup r where
+class (LeftModule Integer r, RightModule Integer r, AdditiveMonoid r) => AdditiveGroup r where
   (-)      :: r -> r -> r
   negate   :: r -> r
   subtract :: r -> r -> r

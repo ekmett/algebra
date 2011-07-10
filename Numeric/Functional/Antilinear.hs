@@ -1,8 +1,11 @@
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
 module Numeric.Functional.Antilinear 
   ( Antilinear(..)
   ) where
 
+import Numeric.Module
 import Numeric.Addition
+import Numeric.Multiplication
 import Control.Applicative
 import Control.Monad
 import Data.Functor.Plus hiding (zero)
@@ -65,9 +68,13 @@ instance AdditiveGroup s => AdditiveGroup (Antilinear s a) where
 
 instance Abelian s => Abelian (Antilinear s a)
 
--- instance MultiplicativeSemigroup s => LeftModule s (Antilinear s a) where
---  s .* Antilinear m = Antilinear (s .* m)
+-- instance (Multiplicative m, Semiring s) => LeftModule (Antilinear s m) (Antilinear s m) where (.*) = (*)
 
--- instance MultiplicativeSemigroup s => RightModule s (Antilinear s a) where
---  Antilinear m *. s = Antilinear (m *. s)
+instance LeftModule r s => LeftModule r (Antilinear s m) where
+  s .* Antilinear m = Antilinear (\k -> s .* m k)
+
+-- instance (Multiplicative m, Semiring s) => RightModule (Antilinear s m) (Antilinear s m) where (*.) = (*)
+
+instance RightModule r s => RightModule r (Antilinear s m) where
+  Antilinear m *. s = Antilinear (\k -> m k *. s)
 

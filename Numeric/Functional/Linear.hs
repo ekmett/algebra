@@ -1,4 +1,4 @@
-{-# LANGUAGE ImplicitParams #-}
+{-# LANGUAGE ImplicitParams, MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
 module Numeric.Functional.Linear 
   ( Linear(..)
   , (.*), (*.)
@@ -8,6 +8,7 @@ module Numeric.Functional.Linear
 
 import Numeric.Addition
 import Numeric.Multiplication
+import Numeric.Module
 import Numeric.Semiring.Class
 import Numeric.Rig.Class
 import Numeric.Rng.Class
@@ -90,6 +91,7 @@ instance AdditiveMonoid s => AdditiveMonoid (Linear s a) where
   zero = Linear zero
   replicate n (Linear m) = Linear (replicate n m)
 
+
 instance Abelian s => Abelian (Linear s a)
 
 instance AdditiveGroup s => AdditiveGroup (Linear s a) where
@@ -98,17 +100,13 @@ instance AdditiveGroup s => AdditiveGroup (Linear s a) where
   subtract (Linear m) (Linear n) = Linear (subtract m n)
   times n (Linear m) = Linear (times n m)
 
-infixl 7 .*, *.
--- scalar multiplication is tricky because we don't have MPTCs in this package, so we provide the one-off combinator
-(.*) :: Multiplicative s => s -> Linear s a -> Linear s a
-s .* Linear m = Linear (\k -> s * m k)
+instance (Multiplicative m, Semiring s) => LeftModule (Linear s m) (Linear s m) where (.*) = (*)
 
-(*.) :: Multiplicative s => Linear s a -> s -> Linear s a
-Linear m *. s = Linear (\k -> m k * s)
+instance LeftModule r s => LeftModule r (Linear s m) where
+  s .* Linear m = Linear (\k -> s .* m k)
 
--- instance MultiplicativeSemigroup s => LeftModule s (Linear s a) where
---  s .* Linear m = Linear (s .* m)
+instance (Multiplicative m, Semiring s) => RightModule (Linear s m) (Linear s m) where (*.) = (*)
 
--- instance MultiplicativeSemigroup s => RightModule s (Linear s a) where
---  Linear m *. s = Linear (m *. s)
+instance RightModule r s => RightModule r (Linear s m) where
+  Linear m *. s = Linear (\k -> m k *. s)
 

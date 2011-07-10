@@ -43,8 +43,10 @@ library
     Numeric.Group
     Numeric.Group.Additive
     Numeric.Group.Multiplicative
+    Numeric.Module
     Numeric.Monoid
     Numeric.Monoid.Additive
+    Numeric.Monoid.Additive.Internal
     Numeric.Monoid.Multiplicative
     Numeric.Log
     Numeric.Multiplication
@@ -53,12 +55,12 @@ library
     Numeric.Multiplication.Factorable
     Numeric.Map.Linear
     Numeric.Natural
+    Numeric.Natural.Internal
     Numeric.Order
     Numeric.Order.Additive
     Numeric.Order.Class
     Numeric.Rig
     Numeric.Rig.Class
-    Numeric.Rig.Involutive
     Numeric.Rig.Ordered
     Numeric.Rig.Characteristic
     Numeric.Rng
@@ -76,5 +78,6 @@ library
     Numeric.Semiring
     Numeric.Semiring.Class
     Numeric.Semiring.Integral
+    Numeric.Semiring.Involutive
 
   ghc-options: -Wall 

@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
 module Numeric.Map.Linear
   ( Linear(..)
   , (.*), (*.)
@@ -7,6 +8,7 @@ module Numeric.Map.Linear
 
 import Numeric.Addition
 import Numeric.Multiplication
+import Numeric.Module
 import Numeric.Semiring.Class
 import Numeric.Rig.Class
 import Numeric.Rng.Class
@@ -25,14 +27,7 @@ import Prelude hiding ((+),(-),negate,subtract,replicate,(*),(.),id)
 -- > appLinear f (x + y) = appLinear f x + appLinear f y
 -- > appLinear f (r .* x) = r .* appLinear f x
 --
--- > (a -> r) --Linear-> (b -> r)
--- m * n . n * k = m * k
--- n * k . m * n = 
---
 newtype Linear r b a = Linear { appLinear :: (a -> r) -> b -> r }
-
--- Linear r b a -> (a -> b -> r) -> r
--- 
 
 instance Category (Linear r) where
   id = Linear id
@@ -110,19 +105,13 @@ instance AdditiveGroup s => AdditiveGroup (Linear s b a) where
   subtract (Linear m) (Linear n) = Linear (subtract m n)
   times n (Linear m) = Linear (times n m)
 
-infixl 7 .*, *.
--- scalar multiplication is tricky because we don't have MPTCs in this package, so we provide the one-off combinator
-(.*) :: Multiplicative s => s -> Linear s b a -> Linear s b a
-s .* Linear m = Linear (\k b -> s * m k b)
+instance (Multiplicative m, Semiring s) => LeftModule (Linear s b m) (Linear s b m) where (.*) = (*)
 
-(*.) :: Multiplicative s => Linear s b a -> s -> Linear s b a
-Linear m *. s = Linear (\k b -> m k b * s)
+instance LeftModule r s => LeftModule r (Linear s b m) where
+  s .* Linear m = Linear (\k b -> s .* m k b)
 
-{-
--- instance MultiplicativeSemigroup s => LeftModule s (Linear s a) where
---  s .* Linear m = Linear (s .* m)
+instance (Multiplicative m, Semiring s) => RightModule (Linear s b m) (Linear s b m) where (*.) = (*)
 
--- instance MultiplicativeSemigroup s => RightModule s (Linear s a) where
---  Linear m *. s = Linear (m *. s)
+instance RightModule r s => RightModule r (Linear s b m) where
+  Linear m *. s = Linear (\k b -> m k b *. s)
 
--}

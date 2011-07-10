@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 module Numeric.Ring.Endomorphism 
   ( End(..)
   , toEnd
@@ -6,6 +7,7 @@ module Numeric.Ring.Endomorphism
 
 import Data.Monoid
 import Numeric.Addition
+import Numeric.Module
 import Numeric.Multiplication
 import Numeric.Semiring.Class
 import Numeric.Rng.Class
@@ -38,6 +40,14 @@ instance (Abelian r, AdditiveMonoid r) => Semiring (End r)
 instance (Abelian r, AdditiveMonoid r) => Rig (End r)
 instance (Abelian r, AdditiveGroup r) => Rng (End r)
 instance (Abelian r, AdditiveGroup r) => Ring (End r)
+instance (AdditiveMonoid m, Abelian m) => LeftModule (End m) (End m) where
+  End f .* End g = End (f . g)
+instance (AdditiveMonoid m, Abelian m) => RightModule (End m) (End m) where
+  End f *. End g = End (f . g)
+instance LeftModule r m => LeftModule r (End m) where
+  r .* End f = End (\e -> r .* f e)
+instance RightModule r m => RightModule r (End m) where
+  End f *. r = End (\e -> f e *. r)
 
 -- instance SimpleAdditiveAbelianGroup r => DivisionRing (End r) where
 

@@ -1,11 +1,14 @@
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
 module Numeric.Rng.Zero
   ( ZeroRng(..)
   ) where
 
 import Numeric.Addition
 import Numeric.Multiplication
+import Numeric.Module
 import Numeric.Semiring.Class
 import Numeric.Rng.Class
+import Numeric.Natural.Internal
 import Data.Foldable (toList)
 import Prelude hiding ((+),(-),negate,subtract,replicate)
 
@@ -47,3 +50,11 @@ instance AdditiveMonoid r => Multiplicative (ZeroRng r) where
 instance (AdditiveMonoid r, Abelian r) => Semiring (ZeroRng r)
 instance AdditiveMonoid r => Commutative (ZeroRng r)
 instance (AdditiveGroup r, Abelian r) => Rng (ZeroRng r)
+instance AdditiveMonoid r => LeftModule Natural (ZeroRng r) where
+  (.*) = replicate
+instance AdditiveMonoid r => RightModule Natural (ZeroRng r) where
+  m *. n = replicate n m
+instance AdditiveGroup r => LeftModule Integer (ZeroRng r) where
+  (.*) = times
+instance AdditiveGroup r => RightModule Integer (ZeroRng r) where
+  m *. n = times n m

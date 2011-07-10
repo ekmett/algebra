@@ -14,3 +14,8 @@ class (AdditiveOrder r, Rig r) => OrderedRig r
 instance OrderedRig Integer
 instance OrderedRig Natural
 instance OrderedRig Bool
+instance OrderedRig ()
+instance (OrderedRig a, OrderedRig b) => OrderedRig (a, b) 
+instance (OrderedRig a, OrderedRig b, OrderedRig c) => OrderedRig (a, b, c) 
+instance (OrderedRig a, OrderedRig b, OrderedRig c, OrderedRig d) => OrderedRig (a, b, c, d) 
+instance (OrderedRig a, OrderedRig b, OrderedRig c, OrderedRig d, OrderedRig e) => OrderedRig (a, b, c, d, e) 
