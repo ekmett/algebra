@@ -2,6 +2,7 @@ module Numeric.Log
   ( Log(..)
   ) where
 
+import Data.Function (on)
 import Numeric.Addition
 import Numeric.Multiplication
 import Numeric.Band.Class
@@ -29,3 +30,6 @@ instance MultiplicativeGroup r => AdditiveGroup (Log r) where
 instance Commutative r => Abelian (Log r)
 
 instance Band r => Idempotent (Log r)
+
+instance Factorable r => Partitionable (Log r) where
+  partitionWith f = factorWith (f `on` Log) . runLog

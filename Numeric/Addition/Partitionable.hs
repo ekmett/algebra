@@ -3,23 +3,27 @@ module Numeric.Addition.Partitionable
     Partitionable(..)
   ) where
 
-import Prelude ((-),Bool(..),concat,($))
-import Numeric.Monoid.Additive
+import Prelude ((-),Bool(..),($),id,(>>=))
+import Numeric.Semigroup.Additive
 import Numeric.Natural
+import Data.List.NonEmpty (NonEmpty(..), fromList)
 
-class AdditiveMonoid m => Partitionable m where
+concat :: NonEmpty (NonEmpty a) -> NonEmpty a
+concat m = m >>= id
+
+class Additive m => Partitionable m where
   -- | partitionWith f c returns a list containing f a b for each a b such that a + b = c, 
-  partitionWith :: (m -> m -> r) -> m -> [r]
+  partitionWith :: (m -> m -> r) -> m -> NonEmpty r
 
 instance Partitionable Bool where
-  partitionWith f False = [f False False]
-  partitionWith f True  = [f False True, f True False, f True True]  
+  partitionWith f False = f False False :| []
+  partitionWith f True  = f False True :| [f True False, f True True]
 
 instance Partitionable Natural where
-  partitionWith f n = [ f k (n - k) | k <- [0..n] ]
+  partitionWith f n = fromList [ f k (n - k) | k <- [0..n] ]
 
 instance Partitionable () where
-  partitionWith f () = [f () ()]
+  partitionWith f () = f () () :| []
 
 instance (Partitionable a, Partitionable b) => Partitionable (a,b) where
   partitionWith f (a,b) = concat $ partitionWith (\ax ay -> 

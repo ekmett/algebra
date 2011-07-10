@@ -9,8 +9,8 @@ maintainer:    Edward A. Kmett <ekmett@gmail.com>
 stability:     experimental
 homepage:      http://github.com/ekmett/algebra/
 copyright:     Copyright (C) 2011 Edward A. Kmett
-synopsis:      Haskell 98 abstract algebra
-description:   Haskell 98 abstract algebra
+synopsis:      Constructive abstract algebra
+description:   Constructive abstract algebra
 build-type:    Simple
 
 source-repository head
@@ -31,35 +31,31 @@ library
     Numeric.Addition.Abelian
     Numeric.Addition.Partitionable
     Numeric.Addition.Idempotent
-    Numeric.Multiplication
-    Numeric.Multiplication.Commutative
-    Numeric.Multiplication.Involutive
-    Numeric.Semigroup
-    Numeric.Semigroup.Additive
-    Numeric.Semigroup.Multiplicative
     Numeric.Band
     Numeric.Band.Rectangular
     Numeric.Band.Class
-    Numeric.Monoid
-    Numeric.Monoid.Additive
-    Numeric.Monoid.Multiplicative
-    Numeric.Group
-    Numeric.Group.Additive
-    Numeric.Group.Multiplicative
-    Numeric.Order
-    Numeric.Order.Additive
-    Numeric.Order.Class
-    Numeric.Natural
-    Numeric.Exp
-    Numeric.Log
     Numeric.Decidable.Zero
     Numeric.Decidable.Units
     Numeric.Decidable.Associates
+    Numeric.Exp
     Numeric.Functional.Linear
     Numeric.Functional.Antilinear
-    Numeric.Semiring
-    Numeric.Semiring.Class
-    Numeric.Semiring.Integral
+    Numeric.Group
+    Numeric.Group.Additive
+    Numeric.Group.Multiplicative
+    Numeric.Monoid
+    Numeric.Monoid.Additive
+    Numeric.Monoid.Multiplicative
+    Numeric.Log
+    Numeric.Multiplication
+    Numeric.Multiplication.Commutative
+    Numeric.Multiplication.Involutive
+    Numeric.Multiplication.Factorable
+    Numeric.Map.Linear
+    Numeric.Natural
+    Numeric.Order
+    Numeric.Order.Additive
+    Numeric.Order.Class
     Numeric.Rig
     Numeric.Rig.Class
     Numeric.Rig.Involutive
@@ -73,5 +69,12 @@ library
     Numeric.Ring.Rng
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
+    Numeric.Semigroup
+    Numeric.Semigroup.Additive
+    Numeric.Semigroup.Multiplicative
+    Numeric.Semigroup.Multiplicative.Internal
+    Numeric.Semiring
+    Numeric.Semiring.Class
+    Numeric.Semiring.Integral
 
   ghc-options: -Wall 

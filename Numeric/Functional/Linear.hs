@@ -1,7 +1,9 @@
 {-# LANGUAGE ImplicitParams #-}
 module Numeric.Functional.Linear 
   ( Linear(..)
-  , (.*)
+  , (.*), (*.)
+  , embedHom
+  , augmentHom
   ) where
 
 import Numeric.Addition
@@ -23,58 +25,66 @@ import Prelude hiding ((+),(-),negate,subtract,replicate,(*))
 -- appLinear f (x + y) = appLinear f x + appLinear f y
 -- appLinear f (a .* x) = a * appLinear f x
 
-newtype Linear s a = Linear { appLinear :: (a -> s) -> s }
+newtype Linear r a = Linear { appLinear :: (a -> r) -> r }
 
-instance Functor (Linear s) where
+instance Functor (Linear r) where
   fmap f (Linear m) = Linear (\k -> m (k . f))
 
-instance Apply (Linear s) where
+instance Apply (Linear r) where
   Linear mf <.> Linear ma = Linear (\k -> mf (\f -> ma (k . f)))
 
-instance Applicative (Linear s) where
+instance Applicative (Linear r) where
   pure a = Linear (\k -> k a)
   Linear mf <*> Linear ma = Linear (\k -> mf (\f -> ma (k . f)))
 
-instance Bind (Linear s) where
+instance Bind (Linear r) where
   Linear m >>- f = Linear (\k -> m (\a -> appLinear (f a) k))
   
-instance Monad (Linear s) where
+instance Monad (Linear r) where
   return a = Linear (\k -> k a)
   Linear m >>= f = Linear (\k -> m (\a -> appLinear (f a) k))
 
-instance Additive s => Alt (Linear s) where
+instance Additive r => Alt (Linear r) where
   Linear m <!> Linear n = Linear (m + n)
 
-instance AdditiveMonoid s => Plus (Linear s) where
+instance AdditiveMonoid r => Plus (Linear r) where
   zero = Linear zero 
 
-instance AdditiveMonoid s => Alternative (Linear s) where
+instance AdditiveMonoid r => Alternative (Linear r) where
   Linear m <|> Linear n = Linear (m + n)
   empty = Linear zero
 
-instance AdditiveMonoid s => MonadPlus (Linear s) where
+instance AdditiveMonoid r => MonadPlus (Linear r) where
   Linear m `mplus` Linear n = Linear (m + n)
   mzero = Linear zero
 
-instance Additive s => Additive (Linear s a) where
+instance Additive r => Additive (Linear r a) where
   Linear m + Linear n = Linear (m + n)
   replicate1p n (Linear m) = Linear (replicate1p n m)
 
 -- TODO: check if this the monoid ring? 
-instance (Semiring s, Multiplicative a) => Multiplicative (Linear s a) where
+instance (Semiring r, Multiplicative a) => Multiplicative (Linear r a) where
   Linear m * Linear n = Linear (\k -> m (\a -> n (\b -> k (a * b))))
-instance (Commutative s, Ring s, Commutative a) => Commutative (Linear s a)
-instance (Semiring s, Multiplicative a) => Semiring (Linear s a)
-instance (Rig r, MultiplicativeMonoid a, Eq a) => MultiplicativeMonoid (Linear r a) where
+instance (Commutative r, Ring r, Commutative a) => Commutative (Linear r a)
+instance (Semiring r, Multiplicative a) => Semiring (Linear r a)
+instance (Semiring r, MultiplicativeMonoid a) => MultiplicativeMonoid (Linear r a) where
   one = return one
-instance (Rig s, MultiplicativeMonoid a, Eq a) => Rig (Linear s a)
-instance (Rng s, MultiplicativeMonoid a, Eq a) => Rng (Linear s a)
-instance (Ring s, MultiplicativeMonoid a, Eq a) => Ring (Linear s a)
+instance (Rig r, MultiplicativeMonoid a) => Rig (Linear r a)
+instance (Rng r, MultiplicativeMonoid a) => Rng (Linear r a)
+instance (Ring r, MultiplicativeMonoid a) => Ring (Linear r a)
 
-infixl 7 .*
--- scalar multiplication is tricky because we don't have MPTCs in this package, so we provide a one-off combinator
-(.*) :: Multiplicative s => s -> Linear s a -> Linear s a
-s .* Linear m = Linear (\k -> s * m k)
+-- ring homomorphism from r -> r[a]
+embedHom :: (Multiplicative s, MultiplicativeMonoid a) => s -> Linear s a 
+embedHom r = Linear (\k -> r * k one)
+
+-- if the characteristic of s does not divide the order of a, then s[a] is semisimple
+-- and if a has a length function, we can build a filtered algebra
+
+-- | The augmentation ring homomorphism from r[a] -> r
+augmentHom :: MultiplicativeMonoid s => Linear s a -> s
+augmentHom (Linear m) = m (const one)
+
+-- TODO: we can also build up the augmentation ideal
 
 instance AdditiveMonoid s => AdditiveMonoid (Linear s a) where
   zero = Linear zero
@@ -87,6 +97,14 @@ instance AdditiveGroup s => AdditiveGroup (Linear s a) where
   negate (Linear m) = Linear (negate m)
   subtract (Linear m) (Linear n) = Linear (subtract m n)
   times n (Linear m) = Linear (times n m)
+
+infixl 7 .*, *.
+-- scalar multiplication is tricky because we don't have MPTCs in this package, so we provide the one-off combinator
+(.*) :: Multiplicative s => s -> Linear s a -> Linear s a
+s .* Linear m = Linear (\k -> s * m k)
+
+(*.) :: Multiplicative s => Linear s a -> s -> Linear s a
+Linear m *. s = Linear (\k -> m k * s)
 
 -- instance MultiplicativeSemigroup s => LeftModule s (Linear s a) where
 --  s .* Linear m = Linear (s .* m)

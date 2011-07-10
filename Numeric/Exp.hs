@@ -2,6 +2,7 @@ module Numeric.Exp
   ( Exp(..)
   ) where
 
+import Data.Function (on)
 import Numeric.Addition
 import Numeric.Multiplication
 import Numeric.Band.Class
@@ -29,3 +30,6 @@ instance AdditiveGroup r => MultiplicativeGroup (Exp r) where
 instance Abelian r => Commutative (Exp r)
 
 instance Idempotent r => Band (Exp r)
+
+instance Partitionable r => Factorable (Exp r) where
+  factorWith f = partitionWith (f `on` Exp) . runExp
