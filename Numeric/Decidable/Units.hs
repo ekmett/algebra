@@ -10,6 +10,7 @@ import Data.Word
 import Numeric.Semigroup.Multiplicative
 import Numeric.Monoid.Multiplicative
 import Numeric.Natural.Internal
+import Control.Applicative
 import Prelude hiding ((*))
 
 class MultiplicativeMonoid r => DecidableUnits r where
@@ -57,3 +58,16 @@ instance DecidableUnits Word8 where recipUnit = recipUnitWhole
 instance DecidableUnits Word16 where recipUnit = recipUnitWhole
 instance DecidableUnits Word32 where recipUnit = recipUnitWhole
 instance DecidableUnits Word64 where recipUnit = recipUnitWhole
+instance DecidableUnits () where recipUnit _ = Just ()
+
+instance (DecidableUnits a, DecidableUnits b) => DecidableUnits (a, b) where
+  recipUnit (a,b) = (,) <$> recipUnit a <*> recipUnit b
+
+instance (DecidableUnits a, DecidableUnits b, DecidableUnits c) => DecidableUnits (a, b, c) where
+  recipUnit (a,b,c) = (,,) <$> recipUnit a <*> recipUnit b <*> recipUnit c
+
+instance (DecidableUnits a, DecidableUnits b, DecidableUnits c, DecidableUnits d) => DecidableUnits (a, b, c, d) where
+  recipUnit (a,b,c,d) = (,,,) <$> recipUnit a <*> recipUnit b <*> recipUnit c <*> recipUnit d
+
+instance (DecidableUnits a, DecidableUnits b, DecidableUnits c, DecidableUnits d, DecidableUnits e) => DecidableUnits (a, b, c, d, e) where
+  recipUnit (a,b,c,d,e) = (,,,,) <$> recipUnit a <*> recipUnit b <*> recipUnit c <*> recipUnit d <*> recipUnit e

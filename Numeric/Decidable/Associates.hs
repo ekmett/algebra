@@ -38,3 +38,17 @@ instance DecidableAssociates Word8 where isAssociate = isAssociateWhole
 instance DecidableAssociates Word16 where isAssociate = isAssociateWhole
 instance DecidableAssociates Word32 where isAssociate = isAssociateWhole
 instance DecidableAssociates Word64 where isAssociate = isAssociateWhole
+
+instance DecidableAssociates () where isAssociate _ _ = True
+
+instance (DecidableAssociates a, DecidableAssociates b) => DecidableAssociates (a, b) where
+  isAssociate (a,b) (i,j) = isAssociate a i && isAssociate b j
+
+instance (DecidableAssociates a, DecidableAssociates b, DecidableAssociates c) => DecidableAssociates (a, b, c) where
+  isAssociate (a,b,c) (i,j,k) = isAssociate a i && isAssociate b j && isAssociate c k
+
+instance (DecidableAssociates a, DecidableAssociates b, DecidableAssociates c, DecidableAssociates d) => DecidableAssociates (a, b, c, d) where
+  isAssociate (a,b,c,d) (i,j,k,l) = isAssociate a i && isAssociate b j && isAssociate c k && isAssociate d l
+
+instance (DecidableAssociates a, DecidableAssociates b, DecidableAssociates c, DecidableAssociates d, DecidableAssociates e) => DecidableAssociates (a, b, c, d, e) where
+  isAssociate (a,b,c,d,e) (i,j,k,l,m) = isAssociate a i && isAssociate b j && isAssociate c k && isAssociate d l && isAssociate e m
