@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeOperators, FlexibleInstances, MultiParamTypeClasses, UndecidableInstances #-}
+{-# LANGUAGE TypeOperators, FlexibleInstances, MultiParamTypeClasses, UndecidableInstances, TypeFamilies #-}
 module Numeric.Polynomial.Basis.Power 
   ( 
   -- * Power basis
