@@ -61,7 +61,7 @@ instance Rng s => LeftModule (RngRing s) (RngRing s) where
 instance Rng s => RightModule (RngRing s) (RngRing s) where
   (*.) = (*) 
 
-instance Rng r => MultiplicativeMonoid (RngRing r) where
+instance Rng r => Unital (RngRing r) where
   one = RngRing 1 zero
 
 instance (Rng r, MultiplicativeGroup r) => MultiplicativeGroup (RngRing r) where

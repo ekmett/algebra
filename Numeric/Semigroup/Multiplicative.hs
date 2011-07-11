@@ -4,4 +4,4 @@ module Numeric.Semigroup.Multiplicative
   , product1
   ) where
 
-import Numeric.Semigroup.Multiplicative.Internal
+import Numeric.Semiring.Internal

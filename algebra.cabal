@@ -22,15 +22,21 @@ library
     base >= 4 && < 4.4,
     transformers >= 0.2.0 && < 0.3,
     tagged >= 0.2.2 && < 0.3,
+    categories >= 0.57.0 && < 0.58,
     containers >= 0.3.0.0 && < 0.5,
+    mtl >= 2.0 && < 2.1,
     semigroups >= 0.5 && < 0.6,
-    semigroupoids >= 1.2.2 && < 1.3
+    semigroupoids >= 1.2.2 && < 1.3,
+    representable-tries >= 1.8 && < 1.9
 
   exposed-modules:
     Numeric.Addition
     Numeric.Addition.Abelian
     Numeric.Addition.Partitionable
     Numeric.Addition.Idempotent
+    Numeric.Algebra.Free.Class
+    Numeric.Algebra.Free.Unital
+    Numeric.Algebra.Free.Hopf
     Numeric.Band
     Numeric.Band.Rectangular
     Numeric.Band.Class
@@ -46,7 +52,6 @@ library
     Numeric.Module
     Numeric.Monoid
     Numeric.Monoid.Additive
-    Numeric.Monoid.Additive.Internal
     Numeric.Monoid.Multiplicative
     Numeric.Log
     Numeric.Multiplication
@@ -74,10 +79,13 @@ library
     Numeric.Semigroup
     Numeric.Semigroup.Additive
     Numeric.Semigroup.Multiplicative
-    Numeric.Semigroup.Multiplicative.Internal
     Numeric.Semiring
     Numeric.Semiring.Class
     Numeric.Semiring.Integral
     Numeric.Semiring.Involutive
+
+  other-modules:
+    Numeric.Semiring.Internal
+    Numeric.Monoid.Multiplicative.Internal
 
   ghc-options: -Wall 

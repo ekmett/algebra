@@ -17,7 +17,7 @@ fromNaturalNum (Natural n) = fromInteger n
 
 -- | A Ring without (n)egation
 
-class (Semiring r, AdditiveMonoid r, MultiplicativeMonoid r) => Rig r where
+class (Semiring r, AdditiveMonoid r, Unital r) => Rig r where
   fromNatural :: Natural -> r
   fromNatural n = replicate n one
 

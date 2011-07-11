@@ -9,7 +9,7 @@ import Numeric.Monoid.Multiplicative
 infixr 8 ^
 infixl 7 /, \\
 
-class MultiplicativeMonoid r => MultiplicativeGroup r where
+class Unital r => MultiplicativeGroup r where
   recip  :: r -> r
   (/)    :: r -> r -> r
   (\\)   :: r -> r -> r

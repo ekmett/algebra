@@ -5,7 +5,6 @@ module Numeric.Functional.Antilinear
 
 import Numeric.Module
 import Numeric.Addition
-import Numeric.Multiplication
 import Control.Applicative
 import Control.Monad
 import Data.Functor.Plus hiding (zero)

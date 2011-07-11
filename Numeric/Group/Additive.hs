@@ -10,7 +10,8 @@ import Data.Word
 import Prelude hiding ((+), (-), negate, subtract)
 import qualified Prelude
 import Numeric.Semigroup.Additive
-import Numeric.Monoid.Additive.Internal
+import Numeric.Monoid.Additive
+import Numeric.Module.Class
 
 infixl 6 - 
 infixl 7 `times`

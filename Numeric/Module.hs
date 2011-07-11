@@ -1,6 +1,5 @@
 module Numeric.Module 
-  ( LeftModule(..)
-  , RightModule(..)
+  ( module Numeric.Module.Class
   ) where
 
-import Numeric.Monoid.Additive.Internal
+import Numeric.Module.Class

@@ -33,7 +33,7 @@ instance AdditiveGroup r => AdditiveGroup (End r) where
   subtract (End f) (End g) = End (subtract f g)
 instance Multiplicative (End r) where
   End f * End g = End (f . g)
-instance MultiplicativeMonoid (End r) where
+instance Unital (End r) where
   one = End id
 instance (Abelian r, Commutative r) => Commutative (End r) 
 instance (Abelian r, AdditiveMonoid r) => Semiring (End r)
@@ -56,5 +56,5 @@ toEnd :: Multiplicative r => r -> End r
 toEnd r = End (*r)
 
 -- ring isomorphism from the endormorphism ring of r to r.
-fromEnd :: MultiplicativeMonoid r => End r -> r
+fromEnd :: Unital r => End r -> r
 fromEnd (End f) = f one

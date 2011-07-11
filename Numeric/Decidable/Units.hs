@@ -13,7 +13,7 @@ import Numeric.Natural.Internal
 import Control.Applicative
 import Prelude hiding ((*))
 
-class MultiplicativeMonoid r => DecidableUnits r where
+class Unital r => DecidableUnits r where
   recipUnit :: r -> Maybe r
 
   isUnit :: DecidableUnits r => r -> Bool

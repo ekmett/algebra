@@ -2,4 +2,4 @@ module Numeric.Semiring.Class
   ( Semiring
   ) where
 
-import Numeric.Semigroup.Multiplicative.Internal
+import Numeric.Semiring.Internal

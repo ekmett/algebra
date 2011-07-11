@@ -16,7 +16,7 @@ isAssociateIntegral = (==) `on` abs
 isAssociateWhole :: Eq n => n -> n -> Bool
 isAssociateWhole = (==)
 
-class MultiplicativeMonoid r => DecidableAssociates r where
+class Unital r => DecidableAssociates r where
   -- | b is an associate of a if there exists a unit u such that b = a*u
   --
   -- This relationship is symmetric because if u is a unit, u^-1 exists and is a unit, so

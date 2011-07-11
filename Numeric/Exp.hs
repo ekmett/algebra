@@ -16,7 +16,7 @@ instance Additive r => Multiplicative (Exp r) where
   productWith1 f = Exp . sumWith1 (runExp . f)
   pow1p (Exp m) n = Exp (replicate1p n m)
 
-instance AdditiveMonoid r => MultiplicativeMonoid (Exp r) where
+instance AdditiveMonoid r => Unital (Exp r) where
   one = Exp zero
   pow (Exp m) n = Exp (replicate n m)
   productWith f = Exp . sumWith (runExp . f)

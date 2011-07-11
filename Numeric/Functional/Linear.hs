@@ -7,6 +7,7 @@ module Numeric.Functional.Linear
   ) where
 
 import Numeric.Addition
+import Numeric.Algebra.Free
 import Numeric.Multiplication
 import Numeric.Module
 import Numeric.Semiring.Class
@@ -63,26 +64,25 @@ instance Additive r => Additive (Linear r a) where
   Linear m + Linear n = Linear (m + n)
   replicate1p n (Linear m) = Linear (replicate1p n m)
 
--- TODO: check if this the monoid ring? 
-instance (Semiring r, Multiplicative a) => Multiplicative (Linear r a) where
-  Linear m * Linear n = Linear (\k -> m (\a -> n (\b -> k (a * b))))
-instance (Commutative r, Ring r, Commutative a) => Commutative (Linear r a)
-instance (Semiring r, Multiplicative a) => Semiring (Linear r a)
-instance (Semiring r, MultiplicativeMonoid a) => MultiplicativeMonoid (Linear r a) where
-  one = return one
-instance (Rig r, MultiplicativeMonoid a) => Rig (Linear r a)
-instance (Rng r, MultiplicativeMonoid a) => Rng (Linear r a)
-instance (Ring r, MultiplicativeMonoid a) => Ring (Linear r a)
+instance FreeCoalgebra r m => Multiplicative (Linear r m) where
+  Linear f * Linear g = Linear (\k -> f (g . cojoin k))
+instance (Commutative m, FreeCoalgebra r m) => Commutative (Linear r m)
+instance FreeCoalgebra r m => Semiring (Linear r m)
+instance FreeCounitalCoalgebra r m => Unital (Linear r m) where
+  one = Linear counit
+instance (Rig r, FreeCounitalCoalgebra r m) => Rig (Linear r m)
+instance (Rng r, FreeCounitalCoalgebra r m) => Rng (Linear r m)
+instance (Ring r, FreeCounitalCoalgebra r m) => Ring (Linear r m)
 
--- ring homomorphism from r -> r[a]
-embedHom :: (Multiplicative s, MultiplicativeMonoid a) => s -> Linear s a 
+-- ring homomorphism from r -> r^a
+embedHom :: (Unital m, FreeCounitalCoalgebra r m) => r -> Linear r m
 embedHom r = Linear (\k -> r * k one)
 
 -- if the characteristic of s does not divide the order of a, then s[a] is semisimple
 -- and if a has a length function, we can build a filtered algebra
 
--- | The augmentation ring homomorphism from r[a] -> r
-augmentHom :: MultiplicativeMonoid s => Linear s a -> s
+-- | The augmentation ring homomorphism from r^a -> r
+augmentHom :: Unital s => Linear s a -> s
 augmentHom (Linear m) = m (const one)
 
 -- TODO: we can also build up the augmentation ideal
@@ -90,7 +90,6 @@ augmentHom (Linear m) = m (const one)
 instance AdditiveMonoid s => AdditiveMonoid (Linear s a) where
   zero = Linear zero
   replicate n (Linear m) = Linear (replicate n m)
-
 
 instance Abelian s => Abelian (Linear s a)
 
@@ -100,12 +99,14 @@ instance AdditiveGroup s => AdditiveGroup (Linear s a) where
   subtract (Linear m) (Linear n) = Linear (subtract m n)
   times n (Linear m) = Linear (times n m)
 
-instance (Multiplicative m, Semiring s) => LeftModule (Linear s m) (Linear s m) where (.*) = (*)
+instance FreeCoalgebra r m => LeftModule (Linear r m) (Linear r m) where
+  (.*) = (*)
 
 instance LeftModule r s => LeftModule r (Linear s m) where
   s .* Linear m = Linear (\k -> s .* m k)
 
-instance (Multiplicative m, Semiring s) => RightModule (Linear s m) (Linear s m) where (*.) = (*)
+instance FreeCoalgebra r m => RightModule (Linear r m) (Linear r m) where
+  (*.) = (*)
 
 instance RightModule r s => RightModule r (Linear s m) where
   Linear m *. s = Linear (\k -> m k *. s)

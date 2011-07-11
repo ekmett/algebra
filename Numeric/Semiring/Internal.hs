@@ -1,25 +1,26 @@
-module Numeric.Semigroup.Multiplicative.Internal
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+-- This package is an unfortunate ball of mud forced on me by mutual dependencies
+module Numeric.Semiring.Internal
   ( 
   -- * Multiplicative Semigroups
     Multiplicative(..)
   , pow1pIntegral
   , product1
-  -- * Factorable Multiplicative Semigroups
-  , Factorable(..)
   -- * Semirings
   , Semiring
+  -- * Associative algebras of free semigroups over semirings
+  , FreeAlgebra(..)
   ) where
 
 import Data.Foldable hiding (sum, concat)
-import Data.Int
 import Data.Semigroup.Foldable
+import Data.Int
 import Data.Word
-import Data.List.NonEmpty
+import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat)
+import qualified Prelude
 import Numeric.Natural.Internal
 import Numeric.Semigroup.Additive
 import Numeric.Addition.Abelian
-import Prelude hiding ((*), (+), negate, (-), recip, (/), foldr, sum, product, replicate, concat)
-import qualified Prelude
 
 infixr 8 `pow1p`
 infixl 7 *
@@ -120,45 +121,6 @@ instance (Multiplicative a, Multiplicative b, Multiplicative c, Multiplicative d
 instance (Multiplicative a, Multiplicative b, Multiplicative c, Multiplicative d, Multiplicative e) => Multiplicative (a,b,c,d,e) where
   (a,b,c,d,e) * (i,j,k,l,m) = (a * i, b * j, c * k, d * l, e * m)
 
--- | `factorWith f c` returns a non-empty list containing `f a b` for all `a, b` such that `a * b = c`.
---
--- Results of factorWith f 0 are undefined and may result in either an error or an infinite list.
-
-class Multiplicative m => Factorable m where
-  factorWith :: (m -> m -> r) -> m -> NonEmpty r
-
-instance Factorable Bool where
-  factorWith f False = f False False :| [f False True, f True False]
-  factorWith f True  = f True True :| []
-
-instance Factorable () where
-  factorWith f () = f () () :| []
-
-concat :: NonEmpty (NonEmpty a) -> NonEmpty a
-concat m = m >>= id
-
-instance (Factorable a, Factorable b) => Factorable (a,b) where
-  factorWith f (a,b) = concat $ factorWith (\ax ay -> 
-                                factorWith (\bx by -> f (ax,bx) (ay,by)) b) a
-
-instance (Factorable a, Factorable b, Factorable c) => Factorable (a,b,c) where
-  factorWith f (a,b,c) = concat $ factorWith (\ax ay -> 
-                            concat $ factorWith (\bx by -> 
-                                     factorWith (\cx cy -> f (ax,bx,cx) (ay,by,cy)) c) b) a
-
-instance (Factorable a, Factorable b, Factorable c,Factorable d ) => Factorable (a,b,c,d) where
-  factorWith f (a,b,c,d) = concat $ factorWith (\ax ay -> 
-                           concat $ factorWith (\bx by -> 
-                           concat $ factorWith (\cx cy -> 
-                                    factorWith (\dx dy -> f (ax,bx,cx,dx) (ay,by,cy,dy)) d) c) b) a
-
-instance (Factorable a, Factorable b, Factorable c,Factorable d, Factorable e) => Factorable (a,b,c,d,e) where
-  factorWith f (a,b,c,d,e) = concat $ factorWith (\ax ay -> 
-                             concat $ factorWith (\bx by -> 
-                             concat $ factorWith (\cx cy -> 
-                             concat $ factorWith (\dx dy -> 
-                                      factorWith (\ex ey -> f (ax,bx,cx,dx,ex) (ay,by,cy,dy,ey)) e) d) c) b) a
-
 -- | A pair of an additive abelian semigroup, and a multiplicative semigroup, with the distributive laws:
 -- 
 -- > a(b + c) = ab + ac
@@ -166,27 +128,14 @@ instance (Factorable a, Factorable b, Factorable c,Factorable d, Factorable e) =
 --
 -- Common notation includes the laws for additive and multiplicative identity in semiring.
 --
--- We call that a 'Rig' instead, because it makes the connection between Semiring and Ring
--- analogous to Semigroup and Group, and with the sheer number of classes we're tossing around
--- we can use all the mnemonic devices we can get!
-
+-- If you want that, look at 'Rig' instead.
+--
 -- Ideally we'd use the cyclic definition:
--- class (LeftModule r r, RightModule r r, Additive r, Abelian r, Multiplicative r) => Semiring r
+--
+-- > class (LeftModule r r, RightModule r r, Additive r, Abelian r, Multiplicative r) => Semiring r
+--
+-- to enforce that every semiring r is an r-module over itself, but Haskell doesn't like that.
 class (Additive r, Abelian r, Multiplicative r) => Semiring r
-
--- | Much needed to be moved around to keep this instance from being an orphan!
-instance (Factorable a, Semiring r) => Multiplicative (a -> r) where
-  f * g = sum1 . factorWith (\a b -> f a * g b)
-  pow1p x0 y0 = f x0 (1 Prelude.+ y0)
-    where
-      f x y 
-        | even y = f (x * x) (y `quot` 2)
-        | y == 1 = x
-        | otherwise = g (x * x) (unsafePred y `quot` 2) x
-      g x y z 
-        | even y = g (x * x) (y `quot` 2) z
-        | y == 1 = x * z
-        | otherwise = g (x * x) (unsafePred y `quot` 2) (x * z)
 
 instance Semiring Integer
 instance Semiring Natural
@@ -202,8 +151,36 @@ instance Semiring Word16
 instance Semiring Word32
 instance Semiring Word64
 instance Semiring ()
-instance (Factorable m, Semiring r) => Semiring (m -> r)
 instance (Semiring a, Semiring b) => Semiring (a, b)
 instance (Semiring a, Semiring b, Semiring c) => Semiring (a, b, c)
 instance (Semiring a, Semiring b, Semiring c, Semiring d) => Semiring (a, b, c, d)
 instance (Semiring a, Semiring b, Semiring c, Semiring d, Semiring e) => Semiring (a, b, c, d, e)
+
+-- | An associative algebra built with a free module over a semiring
+class Semiring r => FreeAlgebra r a where
+  join :: (a -> a -> r) -> a -> r
+
+instance FreeAlgebra r a => Multiplicative (a -> r) where
+  f * g = join $ \a b -> f a * g b
+
+instance FreeAlgebra r a => Semiring (a -> r) 
+
+  
+instance FreeAlgebra () a where
+  join _ _ = ()
+
+-- TODO: check this
+instance (FreeAlgebra r b, FreeAlgebra r a) => FreeAlgebra (b -> r) a where
+  join f a b = join (\a1 a2 -> f a1 a2 b) a
+
+instance (FreeAlgebra r a, FreeAlgebra r b) => FreeAlgebra r (a,b) where
+  join f (a,b) = join (\a1 a2 -> join (\b1 b2 -> f (a1,b1) (a2,b2)) b) a
+
+instance (FreeAlgebra r a, FreeAlgebra r b, FreeAlgebra r c) => FreeAlgebra r (a,b,c) where
+  join f (a,b,c) = join (\a1 a2 -> join (\b1 b2 -> join (\c1 c2 -> f (a1,b1,c1) (a2,b2,c2)) c) b) a
+
+instance (FreeAlgebra r a, FreeAlgebra r b, FreeAlgebra r c, FreeAlgebra r d) => FreeAlgebra r (a,b,c,d) where
+  join f (a,b,c,d) = join (\a1 a2 -> join (\b1 b2 -> join (\c1 c2 -> join (\d1 d2 -> f (a1,b1,c1,d1) (a2,b2,c2,d2)) d) c) b) a
+
+instance (FreeAlgebra r a, FreeAlgebra r b, FreeAlgebra r c, FreeAlgebra r d, FreeAlgebra r e) => FreeAlgebra r (a,b,c,d,e) where
+  join f (a,b,c,d,e) = join (\a1 a2 -> join (\b1 b2 -> join (\c1 c2 -> join (\d1 d2 -> join (\e1 e2 -> f (a1,b1,c1,d1,e1) (a2,b2,c2,d2,e2)) e) d) c) b) a

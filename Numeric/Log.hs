@@ -20,13 +20,13 @@ instance Multiplicative r => Additive (Log r) where
   sumWith1 f = Log . productWith1 (runLog . f)
   replicate1p n (Log m) = Log (pow1p m n)
 
-instance MultiplicativeMonoid r => LeftModule Natural (Log r) where
+instance Unital r => LeftModule Natural (Log r) where
   n .* Log m = Log (pow m n)
 
-instance MultiplicativeMonoid r => RightModule Natural (Log r) where
+instance Unital r => RightModule Natural (Log r) where
   Log m *. n = Log (pow m n)
 
-instance MultiplicativeMonoid r => AdditiveMonoid (Log r) where
+instance Unital r => AdditiveMonoid (Log r) where
   zero = Log one
   replicate n (Log m) = Log (pow m n)
   sumWith f = Log . productWith (runLog . f)
