@@ -11,7 +11,6 @@ import Data.Int
 import Data.Word
 import Numeric.Natural.Internal
 import Numeric.Semigroup.Additive
-import Numeric.Addition.Abelian
 import Numeric.Semiring.Internal
 import Prelude hiding ((*))
 

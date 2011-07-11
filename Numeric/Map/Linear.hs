@@ -1,6 +1,7 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeFamilies #-}
 module Numeric.Map.Linear
   ( Map(..)
+  , ($@)
   , joinMap
   , unitMap
   , memoMap
@@ -21,17 +22,16 @@ import Control.Category.Associative
 import Control.Category.Braided
 import Control.Category.Cartesian
 import Control.Category.Cartesian.Closed
---import Control.Category.Distributive
+import Control.Category.Distributive
 import Control.Category.Monoidal
 import Control.Monad hiding (join)
 import Control.Monad.Reader.Class
---import Data.Foldable hiding (sum, concat)
 import Data.Functor.Representable.Trie
 import Data.Functor.Bind hiding (join)
 import Data.Functor.Plus hiding (zero)
 import qualified Data.Functor.Plus as Plus
---import Data.Semigroup.Foldable
 import Data.Semigroupoid
+import Data.Void
 import Numeric.Addition
 import Numeric.Algebra.Free
 import Numeric.Multiplication
@@ -41,6 +41,7 @@ import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Numeric.Rng.Class
 import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat, (.), id, curry, uncurry, fst, snd)
+import Numeric.Functional.Linear
 
 -- | linear maps from elements of a free module to another free module over r
 --
@@ -57,6 +58,11 @@ import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, p
 
 infixr 0 $#
 newtype Map r b a = Map { ($#) :: (a -> r) -> b -> r }
+
+infixr 0 $@
+-- | extract a linear functional from a linear map
+($@) :: Map r b a -> b -> Linear r a
+m $@ b = Linear $ \k -> (m $# k) b
 
 -- NB: due to contravariance (>>>) to get the usual notion of composition!
 instance Category (Map r) where
@@ -103,12 +109,15 @@ instance Braided (Map r) (,) where
 
 instance Symmetric (Map r) (,)
 
-instance HasIdentity (Map r) (,) where
-  type Id (Map r) (,) = ()
+type instance Id (Map r) (,) = ()
 
 instance Monoidal (Map r) (,) where
   idl = arr idl
   idr = arr idr
+
+instance Comonoidal (Map r) (,) where
+  coidl = arr coidl
+  coidr = arr coidr
 
 instance PreCartesian (Map r) where
   type Product (Map r) = (,) 
@@ -117,18 +126,14 @@ instance PreCartesian (Map r) where
   diag = arr diag
   f &&& g = Map $ \k a -> (f $# \b -> (g $# \c -> k (b,c)) a) a
 
--- instance Cartesian (Map r)
-
-{-
 instance CCC (Map r) where
   type Exp (Map r) = Map r 
-  apply = Map $ \k (f,a) -> k $ f a
-  curry m = Map $ \k a -> k $ \b -> m $# (a,b)
-  uncurry m = Map $ \k (a,b) -> k $ (m $# a) b
--}
+  apply = Map $ \k (f,a) -> (f $# k) a
+  curry m = Map $ \k a -> k (Map $ \k' b -> (m $# k') (a, b))
+  uncurry m = Map $ \k (a, b) -> (m $# (\m' -> (m' $# k) b)) a
 
---instance Distributive (Map r) where
---  distribute = Map $ \k (a,p) -> k ((((,)a) *** ((,)a)) p)
+instance Distributive (Map r) where
+  distribute = Map $ \k (a,p) -> k $ bimap ((,) a) ((,)a) p
 
 instance PFunctor Either (Map r) (Map r) where
   first m = Map $ \k -> either (m $# k . Left) (k . Right)
@@ -139,12 +144,43 @@ instance QFunctor Either (Map r) (Map r) where
 instance Bifunctor Either (Map r) (Map r) (Map r) where
   bimap m n = Map $ \k -> either (m $# k . Left) (n $# k . Right)
 
+instance Associative (Map r) Either where
+  associate = arr associate
+
+instance Disassociative (Map r) Either where
+  disassociate = arr disassociate
+
+instance Braided (Map r) Either where
+  braid = arr braid
+
+instance Symmetric (Map r) Either
+
+type instance Id (Map r) Either = Void
+
+instance PreCoCartesian (Map r) where
+  type Sum (Map r) = Either
+  inl = arr inl 
+  inr = arr inr
+  codiag = arr codiag
+  m ||| n = Map $ \k -> either (m $# k) (n $# k) 
+
+instance Comonoidal (Map r) Either where
+  coidl = arr coidl
+  coidr = arr coidr
+
+instance Monoidal (Map r) Either where
+  idl = arr idl
+  idr = arr idr
+
 instance Arrow (Map r) where
   arr f = Map (. f)
   first m = Map $ \k (a,c) -> (m $# \b -> k (b,c)) a
   second m = Map $ \k (c,a) -> (m $# \b -> k (c,b)) a
   m *** n = Map $ \k (a,c) -> (m $# \b -> (n $# \d -> k (b,d)) c) a
   m &&& n = Map $ \k a -> (m $# \b -> (n $# \c -> k (b,c)) a) a
+
+instance ArrowApply (Map r) where
+  app = Map $ \k (f,a) -> (f $# k) a
 
 instance MonadReader b (Map r b) where
   ask = id
@@ -168,12 +204,6 @@ instance AdditiveMonoid r => ArrowPlus (Map r) where
   Map m <+> Map n = Map $ m + n
 
 -- TODO: ArrowChoice, ArrowApply & ArrowLoop
-
--- instance Associative (Map r) Either where
---  associate m = Map $ \k -> m $# k . associate
-
---instance Disassociative (Map r) Either where
---  disassociate m = Map $ \k -> m $# k . disassociate
 
 -- TODO: more categories instances for (Map r) & Either to get to precocartesian!
 
@@ -230,10 +260,11 @@ instance (Rig r, FreeCounitalCoalgebra r m) => Rig (Map r b m)
 instance (Rng r, FreeCounitalCoalgebra r m) => Rng (Map r b m)
 instance (Ring r, FreeCounitalCoalgebra r m) => Ring (Map r a m)
 
--- (inefficiently) combine a linear combination of basis vectors to make a map.
+-- | (inefficiently) combine a linear combination of basis vectors to make a map.
 arrMap :: (AdditiveMonoid r, Semiring r) => (b -> [(r, a)]) -> Map r b a
 arrMap f = Map $ \k b -> sum [ r * k a | (r, a) <- f b ]
 
+-- | Memoize the results of this linear map
 memoMap :: HasTrie a => Map r a a
 memoMap = Map memo
 
@@ -243,15 +274,13 @@ joinMap = Map $ join . curry
 cojoinMap :: FreeCoalgebra r c => Map r (c,c) c
 cojoinMap = Map $ uncurry . cojoin
 
--- r -> a -> r
 unitMap :: FreeUnitalAlgebra r a => Map r a ()
 unitMap = Map $ \k -> unit $ k ()
 
--- counit :: (c -> r) -> r
 counitMap :: FreeCounitalCoalgebra r c => Map r () c
 counitMap = Map $ \k () -> counit k
 
--- | convolution give an associative algebra and coassociative coalgebra
+-- | convolution given an associative algebra and coassociative coalgebra
 convolveMap :: (FreeAlgebra r a, FreeCoalgebra r c) => Map r a c -> Map r a c -> Map r a c
 convolveMap f g = joinMap >>> (f *** g) >>> cojoinMap
 
