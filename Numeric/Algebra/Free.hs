@@ -1,9 +1,7 @@
 module Numeric.Algebra.Free 
-  ( FreeAlgebra(..)
-  , FreeUnitalAlgebra(..)
-  , FreeCoalgebra(..)
-  , FreeCounitalCoalgebra(..)
-  , Hopf(..)
+  ( module Numeric.Algebra.Free.Class
+  , module Numeric.Algebra.Free.Unital
+  , module Numeric.Algebra.Free.Hopf
   ) where
 
 import Numeric.Algebra.Free.Class

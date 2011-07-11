@@ -5,6 +5,8 @@ module Numeric.Algebra.Free.Class
   ) where
 
 import Numeric.Semiring.Internal
+import Data.Sequence
+import Data.Monoid (mappend)
 import Prelude ()
 
 -- A coassociative coalgebra over a semiring using
@@ -36,3 +38,9 @@ instance (FreeCoalgebra r a, FreeCoalgebra r b, FreeCoalgebra r c, FreeCoalgebra
 
 instance (FreeCoalgebra r a, FreeCoalgebra r b, FreeCoalgebra r c, FreeCoalgebra r d, FreeCoalgebra r e) => FreeCoalgebra r (a, b, c, d, e) where
   cojoin f (a1,b1,c1,d1,e1) (a2,b2,c2,d2,e2) = cojoin (\a -> cojoin (\b -> cojoin (\c -> cojoin (\d -> cojoin (\e -> f (a,b,c,d,e)) e1 e2) d1 d2) c1 c2) b1 b2) a1 a2
+
+instance Semiring r => FreeCoalgebra r [a] where
+  cojoin f as bs = f (mappend as bs)
+
+instance Semiring r => FreeCoalgebra r (Seq a) where
+  cojoin f as bs = f (mappend as bs)

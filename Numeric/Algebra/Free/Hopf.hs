@@ -5,9 +5,9 @@ module Numeric.Algebra.Free.Hopf
 
 import Numeric.Algebra.Free.Unital
 
--- | a Hopf algebra on a semiring, where the module is a free.
+-- | A Hopf algebra on a semiring, where the module is free.
 --
--- If @antipode . antipode = id@ then we are Involutive
+-- If @antipode . antipode = id@ then we are 'Involutive'
 
 class (FreeUnitalAlgebra r h, FreeCounitalCoalgebra r h) => Hopf r h where
   -- > convolve id antipode = convolve antipode id = unit . counit

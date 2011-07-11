@@ -8,8 +8,11 @@ module Numeric.Monoid.Multiplicative.Internal
 import Data.Foldable hiding (product)
 import Data.Int
 import Data.Word
+import Data.Sequence (Seq)
+import qualified Data.Sequence as Seq
 import Prelude hiding ((*), foldr, product)
 import Numeric.Semiring.Internal
+import Numeric.Monoid.Additive
 import Numeric.Natural.Internal
 
 infixr 8 `pow`
@@ -60,10 +63,10 @@ instance (Unital a, Unital b, Unital c, Unital d, Unital e) => Unital (a,b,c,d,e
   one = (one,one,one,one,one)
 
 -- | An associative unital algebra over a semiring, built using a free module
-class (Unital r, FreeAlgebra r a) => FreeUnitalAlgebra r a where
+class (FreeAlgebra r a) => FreeUnitalAlgebra r a where
   unit :: r -> a -> r
 
-instance (FreeUnitalAlgebra r a) => Unital (a -> r) where
+instance (Unital r, FreeUnitalAlgebra r a) => Unital (a -> r) where
   one = unit one
 
 instance FreeUnitalAlgebra () a where
@@ -83,3 +86,11 @@ instance (FreeUnitalAlgebra r a, FreeUnitalAlgebra r b, FreeUnitalAlgebra r c, F
 
 instance (FreeUnitalAlgebra r a, FreeUnitalAlgebra r b, FreeUnitalAlgebra r c, FreeUnitalAlgebra r d, FreeUnitalAlgebra r e) => FreeUnitalAlgebra r (a,b,c,d,e) where
   unit r (a,b,c,d,e) = unit r a * unit r b * unit r c * unit r d * unit r e
+
+instance (AdditiveMonoid r, Semiring r) => FreeUnitalAlgebra r [a] where
+  unit r [] = r
+  unit _ _ = zero
+
+instance (AdditiveMonoid r, Semiring r) => FreeUnitalAlgebra r (Seq a) where
+  unit r a | Seq.null a = r
+           | otherwise = zero

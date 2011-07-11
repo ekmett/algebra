@@ -15,6 +15,8 @@ module Numeric.Semiring.Internal
 import Data.Foldable hiding (sum, concat)
 import Data.Semigroup.Foldable
 import Data.Int
+import Data.Sequence hiding (reverse)
+import qualified Data.Sequence as Seq
 import Data.Word
 import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat)
 import qualified Prelude
@@ -169,9 +171,18 @@ instance FreeAlgebra r a => Semiring (a -> r)
 instance FreeAlgebra () a where
   join _ _ = ()
 
--- TODO: check this
-instance (FreeAlgebra r b, FreeAlgebra r a) => FreeAlgebra (b -> r) a where
-  join f a b = join (\a1 a2 -> f a1 a2 b) a
+-- | The tensor algebra
+instance Semiring r => FreeAlgebra r [a] where
+  join f = go [] where
+    go ls rrs@(r:rs) = f (reverse ls) rrs + go (r:ls) rs
+    go ls [] = f (reverse ls) []
+
+-- | The tensor algebra
+instance Semiring r => FreeAlgebra r (Seq a) where
+  join f = go Seq.empty where
+    go ls s = case viewl s of
+       EmptyL -> f ls s 
+       r :< rs -> f ls s + go (ls |> r) rs
 
 instance (FreeAlgebra r a, FreeAlgebra r b) => FreeAlgebra r (a,b) where
   join f (a,b) = join (\a1 a2 -> join (\b1 b2 -> f (a1,b1) (a2,b2)) b) a
@@ -184,3 +195,8 @@ instance (FreeAlgebra r a, FreeAlgebra r b, FreeAlgebra r c, FreeAlgebra r d) =>
 
 instance (FreeAlgebra r a, FreeAlgebra r b, FreeAlgebra r c, FreeAlgebra r d, FreeAlgebra r e) => FreeAlgebra r (a,b,c,d,e) where
   join f (a,b,c,d,e) = join (\a1 a2 -> join (\b1 b2 -> join (\c1 c2 -> join (\d1 d2 -> join (\e1 e2 -> f (a1,b1,c1,d1,e1) (a2,b2,c2,d2,e2)) e) d) c) b) a
+
+-- TODO: check this
+instance (FreeAlgebra r b, FreeAlgebra r a) => FreeAlgebra (b -> r) a where
+  join f a b = join (\a1 a2 -> f a1 a2 b) a
+

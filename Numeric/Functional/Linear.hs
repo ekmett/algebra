@@ -1,7 +1,6 @@
 {-# LANGUAGE ImplicitParams, MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
 module Numeric.Functional.Linear 
   ( Linear(..)
-  , (.*), (*.)
   -- * Vectors
   , Vector
   , unitVector
@@ -85,7 +84,7 @@ instance (Rig r, FreeCounitalCoalgebra r m) => Rig (Linear r m)
 instance (Rng r, FreeCounitalCoalgebra r m) => Rng (Linear r m)
 instance (Ring r, FreeCounitalCoalgebra r m) => Ring (Linear r m)
 
-unitVector :: FreeUnitalAlgebra r a => a -> r
+unitVector :: (FreeUnitalAlgebra r a, Unital r) => a -> r
 unitVector = unit one
 
 counitCovector :: FreeCounitalCoalgebra r c => Linear r c

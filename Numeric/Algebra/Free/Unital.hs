@@ -6,13 +6,16 @@ module Numeric.Algebra.Free.Unital
 
 import Numeric.Algebra.Free.Class
 import Numeric.Monoid.Multiplicative.Internal
+import Data.Sequence (Seq)
+import Numeric.Semiring.Internal
+import qualified Data.Sequence as Seq
 import Prelude (($))
 
 -- A coassociative counital coalgebra over a semiring, where the module is free
 class FreeCoalgebra r c => FreeCounitalCoalgebra r c where
   counit :: (c -> r) -> r
 
-instance FreeUnitalAlgebra r m => FreeCounitalCoalgebra r (m -> r) where
+instance (Unital r, FreeUnitalAlgebra r m) => FreeCounitalCoalgebra r (m -> r) where
   counit k = k one
 
 instance (FreeUnitalAlgebra r a, FreeCounitalCoalgebra r c) => FreeCounitalCoalgebra (a -> r) c where 
@@ -32,3 +35,9 @@ instance (FreeCounitalCoalgebra r a, FreeCounitalCoalgebra r b, FreeCounitalCoal
 
 instance (FreeCounitalCoalgebra r a, FreeCounitalCoalgebra r b, FreeCounitalCoalgebra r c, FreeCounitalCoalgebra r d, FreeCounitalCoalgebra r e) => FreeCounitalCoalgebra r (a, b, c, d, e) where
   counit k = counit $ \a -> counit $ \b -> counit $ \c -> counit $ \d -> counit $ \e -> k (a,b,c,d,e)
+
+instance Semiring r => FreeCounitalCoalgebra r [a] where
+  counit k = k []
+
+instance Semiring r => FreeCounitalCoalgebra r (Seq a) where
+  counit k = k (Seq.empty)
