@@ -203,7 +203,13 @@ instance AdditiveMonoid r => ArrowZero (Map r) where
 instance AdditiveMonoid r => ArrowPlus (Map r) where
   Map m <+> Map n = Map $ m + n
 
--- TODO: ArrowChoice, ArrowApply & ArrowLoop
+instance ArrowChoice (Map r) where
+  left m = Map $ \k -> either (m $# k . Left) (k . Right)
+  right m = Map $ \k -> either (k . Left) (m $# k . Right)
+  m +++ n =  Map $ \k -> either (m $# k . Left) (n $# k . Right)
+  m ||| n = Map $ \k -> either (m $# k) (n $# k) 
+
+-- TODO: ArrowLoop?
 
 -- TODO: more categories instances for (Map r) & Either to get to precocartesian!
 
