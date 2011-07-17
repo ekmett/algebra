@@ -78,6 +78,7 @@ library
     Numeric.Multiplication.Invertible
     Numeric.Multiplication.Involutive
 
+    Numeric.Map.Linear
 
     Numeric.Natural
     Numeric.Natural.Internal
@@ -109,7 +110,6 @@ library
     Numeric.Ring.Endomorphism
 
 
--- Numeric.Map.Linear
   other-modules:
     Numeric.Semiring.Internal
     Numeric.Multiplication.Involutive.Internal
