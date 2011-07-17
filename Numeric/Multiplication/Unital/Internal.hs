@@ -1,8 +1,8 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
-module Numeric.Monoid.Multiplicative.Internal
+module Numeric.Multiplication.Unital.Internal
   ( Unital(..)
   , product
-  , FreeUnitalAlgebra(..)
+  , UnitalAlgebra(..)
   ) where
 
 import Data.Foldable hiding (product)
@@ -12,7 +12,7 @@ import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
 import Prelude hiding ((*), foldr, product)
 import Numeric.Semiring.Internal
-import Numeric.Monoid.Additive
+import Numeric.Addition.Monoidal
 import Numeric.Natural.Internal
 
 infixr 8 `pow`
@@ -63,34 +63,34 @@ instance (Unital a, Unital b, Unital c, Unital d, Unital e) => Unital (a,b,c,d,e
   one = (one,one,one,one,one)
 
 -- | An associative unital algebra over a semiring, built using a free module
-class (FreeAlgebra r a) => FreeUnitalAlgebra r a where
+class (Algebra r a) => UnitalAlgebra r a where
   unit :: r -> a -> r
 
-instance (Unital r, FreeUnitalAlgebra r a) => Unital (a -> r) where
+instance (Unital r, UnitalAlgebra r a) => Unital (a -> r) where
   one = unit one
 
-instance FreeUnitalAlgebra () a where
+instance UnitalAlgebra () a where
   unit _ _ = ()
 
-instance (FreeUnitalAlgebra r a, FreeUnitalAlgebra r b) => FreeUnitalAlgebra (a -> r) b where
+instance (UnitalAlgebra r a, UnitalAlgebra r b) => UnitalAlgebra (a -> r) b where
   unit f b a = unit (f a) b
 
-instance (FreeUnitalAlgebra r a, FreeUnitalAlgebra r b) => FreeUnitalAlgebra r (a,b) where
+instance (UnitalAlgebra r a, UnitalAlgebra r b) => UnitalAlgebra r (a,b) where
   unit r (a,b) = unit r a * unit r b
 
-instance (FreeUnitalAlgebra r a, FreeUnitalAlgebra r b, FreeUnitalAlgebra r c) => FreeUnitalAlgebra r (a,b,c) where
+instance (UnitalAlgebra r a, UnitalAlgebra r b, UnitalAlgebra r c) => UnitalAlgebra r (a,b,c) where
   unit r (a,b,c) = unit r a * unit r b * unit r c
 
-instance (FreeUnitalAlgebra r a, FreeUnitalAlgebra r b, FreeUnitalAlgebra r c, FreeUnitalAlgebra r d) => FreeUnitalAlgebra r (a,b,c,d) where
+instance (UnitalAlgebra r a, UnitalAlgebra r b, UnitalAlgebra r c, UnitalAlgebra r d) => UnitalAlgebra r (a,b,c,d) where
   unit r (a,b,c,d) = unit r a * unit r b * unit r c * unit r d
 
-instance (FreeUnitalAlgebra r a, FreeUnitalAlgebra r b, FreeUnitalAlgebra r c, FreeUnitalAlgebra r d, FreeUnitalAlgebra r e) => FreeUnitalAlgebra r (a,b,c,d,e) where
+instance (UnitalAlgebra r a, UnitalAlgebra r b, UnitalAlgebra r c, UnitalAlgebra r d, UnitalAlgebra r e) => UnitalAlgebra r (a,b,c,d,e) where
   unit r (a,b,c,d,e) = unit r a * unit r b * unit r c * unit r d * unit r e
 
-instance (AdditiveMonoid r, Semiring r) => FreeUnitalAlgebra r [a] where
+instance (Monoidal r, Semiring r) => UnitalAlgebra r [a] where
   unit r [] = r
   unit _ _ = zero
 
-instance (AdditiveMonoid r, Semiring r) => FreeUnitalAlgebra r (Seq a) where
+instance (Monoidal r, Semiring r) => UnitalAlgebra r (Seq a) where
   unit r a | Seq.null a = r
            | otherwise = zero

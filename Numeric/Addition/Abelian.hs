@@ -6,7 +6,7 @@ module Numeric.Addition.Abelian
 
 import Data.Int
 import Data.Word
-import Numeric.Semigroup.Additive
+import Numeric.Additive
 import Numeric.Natural.Internal
 
 -- | an additive abelian semigroup

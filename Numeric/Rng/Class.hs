@@ -2,14 +2,14 @@ module Numeric.Rng.Class
   ( Rng
   ) where
 
-import Numeric.Group.Additive
+import Numeric.Group
 import Numeric.Semiring
 import Data.Int
 import Data.Word
 
 -- | A Ring without an /i/dentity.
 
-class (AdditiveGroup r, Semiring r) => Rng r where
+class (Group r, Semiring r) => Rng r where
 instance Rng Integer
 instance Rng Int
 instance Rng Int8

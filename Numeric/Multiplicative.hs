@@ -1,4 +1,4 @@
-module Numeric.Semigroup.Multiplicative
+module Numeric.Multiplicative
   ( Multiplicative(..)
   , pow1pIntegral
   , product1

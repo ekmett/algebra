@@ -2,7 +2,7 @@ module Numeric.Band.Rectangular
   ( Rect(..)
   ) where
 
-import Numeric.Semigroup.Multiplicative
+import Numeric.Multiplicative
 import Numeric.Band.Class
 import Data.Semigroupoid
 

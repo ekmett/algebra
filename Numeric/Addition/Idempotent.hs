@@ -6,8 +6,8 @@ module Numeric.Addition.Idempotent
   , replicateIdempotent
   ) where
 
-import Numeric.Semigroup.Additive
-import Numeric.Monoid.Additive
+import Numeric.Additive
+import Numeric.Addition.Monoidal
 import Numeric.Natural.Internal
 
 -- | An additive semigroup with idempotent addition.
@@ -20,7 +20,7 @@ class Additive r => Idempotent r
 replicate1pIdempotent :: Natural -> r -> r
 replicate1pIdempotent _ r = r
 
-replicateIdempotent :: (Integral n, Idempotent r, AdditiveMonoid r) => n -> r -> r
+replicateIdempotent :: (Integral n, Idempotent r, Monoidal r) => n -> r -> r
 replicateIdempotent 0 _ = zero
 replicateIdempotent _ x = x
 

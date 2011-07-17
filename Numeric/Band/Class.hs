@@ -6,8 +6,8 @@ module Numeric.Band.Class
   , powBand
   ) where
 
-import Numeric.Semigroup.Multiplicative
-import Numeric.Monoid.Multiplicative
+import Numeric.Multiplicative
+import Numeric.Multiplication.Unital
 import Numeric.Natural
 
 -- | An multiplicative semigroup with idempotent multiplication.

@@ -2,12 +2,12 @@ module Numeric.Decidable.Zero
   ( DecidableZero(..)
   ) where
 
-import Numeric.Monoid.Additive
+import Numeric.Addition.Monoidal
 import Data.Int
 import Data.Word
 import Numeric.Natural
 
-class AdditiveMonoid r => DecidableZero r where
+class Monoidal r => DecidableZero r where
   isZero :: r -> Bool
 
 instance DecidableZero Bool where isZero = not

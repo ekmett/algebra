@@ -1,15 +1,16 @@
-module Numeric.Group.Multiplicative
-  ( MultiplicativeGroup(..)
+module Numeric.Multiplication.Invertible
+  ( Invertible(..)
   ) where
 
 import Prelude hiding ((*), recip, (/),(^))
-import Numeric.Semigroup.Multiplicative
-import Numeric.Monoid.Multiplicative
+import Numeric.Multiplicative
+import Numeric.Multiplication.Unital
 
 infixr 8 ^
 infixl 7 /, \\
 
-class Unital r => MultiplicativeGroup r where
+-- A multiplicative group
+class Unital r => Invertible r where
   recip  :: r -> r
   (/)    :: r -> r -> r
   (\\)   :: r -> r -> r
@@ -31,28 +32,31 @@ class Unital r => MultiplicativeGroup r where
          | y == 1 = x * z
          | otherwise = g (x * x) ((y - 1) `quot` 2) (x * z)
 
-instance MultiplicativeGroup () where 
+instance Invertible () where 
   _ / _   = ()
   recip _ = ()
   _ \\ _  = ()
   _ ^ _   = ()
-instance (MultiplicativeGroup a, MultiplicativeGroup b) => MultiplicativeGroup (a,b) where
+
+instance (Invertible a, Invertible b) => Invertible (a,b) where
   recip (a,b) = (recip a, recip b)
   (a,b) / (i,j) = (a/i,b/j)
   (a,b) \\ (i,j) = (a\\i,b\\j)
   (a,b) ^ n = (a^n,b^n)
-instance (MultiplicativeGroup a, MultiplicativeGroup b, MultiplicativeGroup c) => MultiplicativeGroup (a,b,c) where
+
+instance (Invertible a, Invertible b, Invertible c) => Invertible (a,b,c) where
   recip (a,b,c) = (recip a, recip b, recip c)
   (a,b,c) / (i,j,k) = (a/i,b/j,c/k)
   (a,b,c) \\ (i,j,k) = (a\\i,b\\j,c\\k)
   (a,b,c) ^ n = (a^n,b^n,c^n)
-instance (MultiplicativeGroup a, MultiplicativeGroup b, MultiplicativeGroup c, MultiplicativeGroup d) => MultiplicativeGroup (a,b,c,d) where
+
+instance (Invertible a, Invertible b, Invertible c, Invertible d) => Invertible (a,b,c,d) where
   recip (a,b,c,d) = (recip a, recip b, recip c, recip d)
   (a,b,c,d) / (i,j,k,l) = (a/i,b/j,c/k,d/l)
   (a,b,c,d) \\ (i,j,k,l) = (a\\i,b\\j,c\\k,d\\l)
   (a,b,c,d) ^ n = (a^n,b^n,c^n,d^n)
 
-instance (MultiplicativeGroup a, MultiplicativeGroup b, MultiplicativeGroup c, MultiplicativeGroup d, MultiplicativeGroup e) => MultiplicativeGroup (a,b,c,d,e) where
+instance (Invertible a, Invertible b, Invertible c, Invertible d, Invertible e) => Invertible (a,b,c,d,e) where
   recip (a,b,c,d,e) = (recip a, recip b, recip c, recip d, recip e)
   (a,b,c,d,e) / (i,j,k,l,m) = (a/i,b/j,c/k,d/l,e/m)
   (a,b,c,d,e) \\ (i,j,k,l,m) = (a\\i,b\\j,c\\k,d\\l,e\\m)

@@ -4,8 +4,8 @@ module Numeric.Rig.Class
   , fromWhole
   ) where
 
-import Numeric.Monoid.Additive
-import Numeric.Monoid.Multiplicative
+import Numeric.Addition.Monoidal
+import Numeric.Multiplication.Unital
 import Numeric.Semiring.Class
 import Data.Int
 import Data.Word
@@ -16,8 +16,7 @@ fromNaturalNum :: Num r => Natural -> r
 fromNaturalNum (Natural n) = fromInteger n
 
 -- | A Ring without (n)egation
-
-class (Semiring r, AdditiveMonoid r, Unital r) => Rig r where
+class (Semiring r, Unital r, Monoidal r) => Rig r where
   fromNatural :: Natural -> r
   fromNatural n = replicate n one
 

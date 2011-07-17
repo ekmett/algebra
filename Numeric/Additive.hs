@@ -1,4 +1,4 @@
-module Numeric.Semigroup.Additive
+module Numeric.Additive
   ( 
   -- * Additive Semigroups
     Additive(..)

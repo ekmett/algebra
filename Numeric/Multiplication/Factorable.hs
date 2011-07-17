@@ -4,7 +4,7 @@ module Numeric.Multiplication.Factorable
   ) where
 
 import Data.List.NonEmpty
-import Numeric.Semigroup.Multiplicative
+import Numeric.Multiplicative
 import Prelude hiding (concat)
 
 -- | `factorWith f c` returns a non-empty list containing `f a b` for all `a, b` such that `a * b = c`.

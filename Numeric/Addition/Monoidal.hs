@@ -1,8 +1,8 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, FlexibleContexts #-}
-module Numeric.Monoid.Additive
+module Numeric.Addition.Monoidal
   ( 
   -- * Additive Monoids
-    AdditiveMonoid(..)
+    Monoidal(..)
   , sum
   ) where
 
@@ -11,13 +11,13 @@ import Data.Int
 import Data.Word
 import Numeric.Module.Class
 import Numeric.Natural.Internal
-import Numeric.Semigroup.Additive
+import Numeric.Additive
 import Prelude hiding ((+), sum, replicate)
 
 -- | An additive monoid
 --
 -- > zero + a = a = a + zero
-class (LeftModule Natural m, RightModule Natural m) => AdditiveMonoid m where
+class (LeftModule Natural m, RightModule Natural m) => Monoidal m where
   zero :: m
 
   replicate :: Whole n => n -> m -> m
@@ -36,84 +36,84 @@ class (LeftModule Natural m, RightModule Natural m) => AdditiveMonoid m where
   sumWith :: Foldable f => (a -> m) -> f a -> m
   sumWith f = foldl' (\b a -> b + f a) zero
 
-sum :: (Foldable f, AdditiveMonoid m) => f m -> m
+sum :: (Foldable f, Monoidal m) => f m -> m
 sum = sumWith id
 
-instance AdditiveMonoid Bool where 
+instance Monoidal Bool where 
   zero = False
   replicate 0 _ = False
   replicate _ r = r
 
-instance AdditiveMonoid Natural where
+instance Monoidal Natural where
   zero = 0
   replicate n r = toNatural n * r
 
-instance AdditiveMonoid Integer where 
+instance Monoidal Integer where 
   zero = 0
   replicate n r = toInteger n * r
 
-instance AdditiveMonoid Int where 
+instance Monoidal Int where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Int8 where 
+instance Monoidal Int8 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Int16 where 
+instance Monoidal Int16 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Int32 where 
+instance Monoidal Int32 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Int64 where 
+instance Monoidal Int64 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Word where 
+instance Monoidal Word where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Word8 where 
+instance Monoidal Word8 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Word16 where 
+instance Monoidal Word16 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Word32 where 
+instance Monoidal Word32 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid Word64 where 
+instance Monoidal Word64 where 
   zero = 0
   replicate n r = fromIntegral n * r
 
-instance AdditiveMonoid r => AdditiveMonoid (e -> r) where
+instance Monoidal r => Monoidal (e -> r) where
   zero = const zero
   sumWith f xs e = sumWith (`f` e) xs
   replicate n r e = replicate n (r e)
 
-instance AdditiveMonoid () where 
+instance Monoidal () where 
   zero = ()
   replicate _ () = ()
   sumWith _ _ = ()
 
-instance (AdditiveMonoid a, AdditiveMonoid b) => AdditiveMonoid (a,b) where
+instance (Monoidal a, Monoidal b) => Monoidal (a,b) where
   zero = (zero,zero)
   replicate n (a,b) = (replicate n a, replicate n b)
 
-instance (AdditiveMonoid a, AdditiveMonoid b, AdditiveMonoid c) => AdditiveMonoid (a,b,c) where
+instance (Monoidal a, Monoidal b, Monoidal c) => Monoidal (a,b,c) where
   zero = (zero,zero,zero)
   replicate n (a,b,c) = (replicate n a, replicate n b, replicate n c)
 
-instance (AdditiveMonoid a, AdditiveMonoid b, AdditiveMonoid c, AdditiveMonoid d) => AdditiveMonoid (a,b,c,d) where
+instance (Monoidal a, Monoidal b, Monoidal c, Monoidal d) => Monoidal (a,b,c,d) where
   zero = (zero,zero,zero,zero)
   replicate n (a,b,c,d) = (replicate n a, replicate n b, replicate n c, replicate n d)
 
-instance (AdditiveMonoid a, AdditiveMonoid b, AdditiveMonoid c, AdditiveMonoid d, AdditiveMonoid e) => AdditiveMonoid (a,b,c,d,e) where
+instance (Monoidal a, Monoidal b, Monoidal c, Monoidal d, Monoidal e) => Monoidal (a,b,c,d,e) where
   zero = (zero,zero,zero,zero,zero)
   replicate n (a,b,c,d,e) = (replicate n a, replicate n b, replicate n c, replicate n d, replicate n e)

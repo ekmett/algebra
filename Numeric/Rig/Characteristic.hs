@@ -11,7 +11,7 @@ import Data.Proxy
 import Numeric.Rig.Class
 import Numeric.Ring.Endomorphism
 import Numeric.Natural.Internal
-import Numeric.Monoid.Multiplicative
+import Numeric.Multiplication.Unital
 import Prelude hiding ((^))
 
 class Rig r => Characteristic r where

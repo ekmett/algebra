@@ -2,7 +2,7 @@ module Numeric.Multiplication.Commutative where
 
 import Data.Int
 import Data.Word
-import Numeric.Semigroup.Multiplicative
+import Numeric.Multiplicative
 import Numeric.Natural
 
 -- | A commutative multiplicative semigroup

@@ -7,7 +7,7 @@ module Numeric.Decidable.Associates
 import Data.Function (on)
 import Data.Int
 import Data.Word
-import Numeric.Monoid.Multiplicative
+import Numeric.Multiplication.Unital
 import Numeric.Natural
 
 isAssociateIntegral :: Num n => n -> n -> Bool

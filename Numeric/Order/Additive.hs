@@ -3,7 +3,7 @@ module Numeric.Order.Additive
   ) where
 
 import Numeric.Natural
-import Numeric.Semigroup.Additive
+import Numeric.Additive
 import Numeric.Order.Class
 
 -- An additive semigroup with a partial order (<=)

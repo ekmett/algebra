@@ -7,8 +7,8 @@ import Data.Int
 import Data.Word
 import Numeric.Rig.Class
 import Numeric.Rng.Class
-import Numeric.Group.Additive
-import Numeric.Monoid.Multiplicative
+import Numeric.Group
+import Numeric.Multiplication.Unital
 import qualified Prelude
 import Prelude (Integral(toInteger), Integer, (.))
 

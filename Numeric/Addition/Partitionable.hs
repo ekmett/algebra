@@ -4,7 +4,7 @@ module Numeric.Addition.Partitionable
   ) where
 
 import Prelude ((-),Bool(..),($),id,(>>=))
-import Numeric.Semigroup.Additive
+import Numeric.Additive
 import Numeric.Natural
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 

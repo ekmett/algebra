@@ -1,16 +1,17 @@
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, UndecidableInstances #-}
 -- This package is an unfortunate ball of mud forced on me by mutual dependencies
 module Numeric.Module.Class
   (  
   -- * Module over semirings
     LeftModule(..)
   , RightModule(..)
+  , Module
   ) where
 
 import Data.Int
 import Data.Word
 import Numeric.Natural.Internal
-import Numeric.Semigroup.Additive
+import Numeric.Additive
 import Numeric.Semiring.Internal
 import Prelude hiding ((*))
 
@@ -47,6 +48,9 @@ instance LeftModule Natural Word64 where (.*) = (*) . fromIntegral
 instance LeftModule Integer Word64 where (.*) = (*) . fromInteger
 instance Semiring r => LeftModule r () where _ .* _ = ()
 instance LeftModule r m => LeftModule r (e -> m) where (.*) m f e = m .* f e
+
+instance Additive m => LeftModule () m where 
+  _ .* a = a
 instance (LeftModule r a, LeftModule r b) => LeftModule r (a, b) where
   n .* (a, b) = (n .* a, n .* b)
 instance (LeftModule r a, LeftModule r b, LeftModule r c) => LeftModule r (a, b, c) where
@@ -87,6 +91,8 @@ instance RightModule Natural Word64 where m *. n = m * fromIntegral n
 instance RightModule Integer Word64 where m *. n = m * fromInteger n
 instance Semiring r => RightModule r () where _ *. _ = ()
 instance RightModule r m => RightModule r (e -> m) where (*.) f m e = f e *. m
+instance Additive m => RightModule () m where 
+  (*.) = const
 instance (RightModule r a, RightModule r b) => RightModule r (a, b) where
   (a, b) *. n = (a *. n, b *. n)
 instance (RightModule r a, RightModule r b, RightModule r c) => RightModule r (a, b, c) where
@@ -96,3 +102,5 @@ instance (RightModule r a, RightModule r b, RightModule r c, RightModule r d) =>
 instance (RightModule r a, RightModule r b, RightModule r c, RightModule r d, RightModule r e) => RightModule r (a, b, c, d, e) where
   (a, b, c, d, e) *. n = (a *. n, b *. n, c *. n, d *. n, e *. n)
 
+class (LeftModule r m, RightModule r m) => Module r m
+instance (LeftModule r m, RightModule r m) => Module r m
