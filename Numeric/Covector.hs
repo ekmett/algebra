@@ -4,10 +4,13 @@ module Numeric.Covector
   -- * Covectors as linear functionals
   , counitM
   , unitM
-  , cojoinM
-  , joinM
+  , comultM
+  , multM
+  , invM
+  , coinvM
   , antipodeM
   , convolveM
+  , memoM
   ) where
 
 import Numeric.Addition
@@ -16,7 +19,6 @@ import Numeric.Multiplication
 import Numeric.Module
 import Numeric.Semiring.Class
 import Numeric.Rig.Class
-import Numeric.Rng.Class
 import Numeric.Ring.Class
 import Control.Applicative
 import Control.Monad
@@ -36,7 +38,8 @@ import Prelude hiding ((+),(-),negate,subtract,replicate,(*))
 newtype Covector r a = Covector ((a -> r) -> r)
 
 infixr 0 $*
-($*) :: Indexable r => Covector r (Key m) -> m r -> r
+
+($*) :: Indexable m => Covector r (Key m) -> m r -> r
 Covector f $* m = f (index m)
 
 instance Functor (Covector r) where
@@ -59,14 +62,14 @@ instance Monad (Covector r) where
 instance Additive r => Alt (Covector r) where
   Covector m <!> Covector n = Covector $ m + n
 
-instance AdditiveMonoid r => Plus (Covector r) where
+instance Monoidal r => Plus (Covector r) where
   zero = Covector zero 
 
-instance AdditiveMonoid r => Alternative (Covector r) where
+instance Monoidal r => Alternative (Covector r) where
   Covector m <|> Covector n = Covector $ m + n
   empty = Covector zero
 
-instance AdditiveMonoid r => MonadPlus (Covector r) where
+instance Monoidal r => MonadPlus (Covector r) where
   Covector m `mplus` Covector n = Covector $ m + n
   mzero = Covector zero
 
@@ -75,7 +78,7 @@ instance Additive r => Additive (Covector r a) where
   replicate1p n (Covector m) = Covector $ replicate1p n m
 
 instance Coalgebra r m => Multiplicative (Covector r m) where
-  f * Covector g = Covector $ \k -> f $* g . cojoin k
+  f * Covector g = Covector $ \k -> f $* g . comult k
 
 instance (Commutative m, Coalgebra r m) => Commutative (Covector r m)
 
@@ -86,34 +89,35 @@ instance CounitalCoalgebra r m => Unital (Covector r m) where
 
 instance (Rig r, CounitalCoalgebra r m) => Rig (Covector r m)
 
-instance (Rng r, CounitalCoalgebra r m) => Rng (Covector r m)
-
 instance (Ring r, CounitalCoalgebra r m) => Ring (Covector r m)
 
 multM :: Coalgebra r c => c -> c -> Covector r c
-multM a = Covector $ \k -> cojoin (uncurry k) a
+multM a b = Covector $ \k -> comult k a b
 
 unitM :: CounitalCoalgebra r c => Covector r c
 unitM = Covector counit
 
-comultM :: Algebra r c => a -> Covector r (a,a)
-comultM c = Covector $ \k -> join (curry k) c 
+comultM :: Algebra r a => a -> Covector r (a,a)
+comultM c = Covector $ \k -> mult (curry k) c 
 
-counitM :: Algebra r a => a -> Covector r ()
+counitM :: UnitalAlgebra r a => a -> Covector r ()
 counitM a = Covector $ \k -> unit (k ()) a
 
 convolveM :: (Algebra r c, Coalgebra r a) => (c -> Covector r a) -> (c -> Covector r a) -> c -> Covector r a
 convolveM f g c = do
-   (c1,c2) <- comultCovector c
+   (c1,c2) <- comultM c
    a1 <- f c1
    a2 <- g c2
-   joinCovector a1 a2
+   multM a1 a2
 
 invM :: InvolutiveAlgebra r h => h -> Covector r h
 invM = Covector . flip inv
 
--- | convolveM antipodeM return = convolveM return antipodeM = cojoinM >=> uncurry joinM
-antipodeM :: Hopf r h => h -> Covector r h
+coinvM :: InvolutiveCoalgebra r h => h -> Covector r h
+coinvM = Covector . flip coinv
+
+-- | convolveM antipodeM return = convolveM return antipodeM = comultM >=> uncurry joinM
+antipodeM :: HopfAlgebra r h => h -> Covector r h
 antipodeM = Covector . flip antipode
 
 memoM :: HasTrie a => a -> Covector s a
@@ -121,13 +125,13 @@ memoM = Covector . flip memo
 
 -- TODO: we can also build up the augmentation ideal
 
-instance AdditiveMonoid s => AdditiveMonoid (Covector s a) where
+instance Monoidal s => Monoidal (Covector s a) where
   zero = Covector zero
   replicate n (Covector m) = Covector (replicate n m)
 
 instance Abelian s => Abelian (Covector s a)
 
-instance AdditiveGroup s => AdditiveGroup (Covector s a) where
+instance Group s => Group (Covector s a) where
   Covector m - Covector n = Covector $ m - n
   negate (Covector m) = Covector $ negate m
   subtract (Covector m) (Covector n) = Covector $ subtract m n

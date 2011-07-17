@@ -5,7 +5,6 @@ module Numeric.Exp
 import Data.Function (on)
 import Numeric.Addition
 import Numeric.Multiplication
-import Numeric.Band.Class
 
 import Prelude hiding ((+),(-),negate,replicate,subtract)
 
@@ -16,12 +15,12 @@ instance Additive r => Multiplicative (Exp r) where
   productWith1 f = Exp . sumWith1 (runExp . f)
   pow1p (Exp m) n = Exp (replicate1p n m)
 
-instance AdditiveMonoid r => Unital (Exp r) where
+instance Monoidal r => Unital (Exp r) where
   one = Exp zero
   pow (Exp m) n = Exp (replicate n m)
   productWith f = Exp . sumWith (runExp . f)
 
-instance AdditiveGroup r => MultiplicativeGroup (Exp r) where
+instance Group r => Invertible (Exp r) where
   Exp a / Exp b = Exp (a - b)
   recip (Exp a) = Exp (negate a)
   Exp a \\ Exp b = Exp (subtract a b)

@@ -28,23 +28,23 @@ instance Abelian r => Additive (RngRing r) where
 
 instance Abelian r => Abelian (RngRing r)
 
-instance (Abelian r, AdditiveMonoid r) => LeftModule Natural (RngRing r) where
+instance (Abelian r, Monoidal r) => LeftModule Natural (RngRing r) where
   n .* RngRing m a = RngRing (toInteger n * m) (replicate n a)
 
-instance (Abelian r, AdditiveMonoid r) => RightModule Natural (RngRing r) where
+instance (Abelian r, Monoidal r) => RightModule Natural (RngRing r) where
   RngRing m a *. n = RngRing (toInteger n * m) (replicate n a)
 
-instance (Abelian r, AdditiveMonoid r) => AdditiveMonoid (RngRing r) where
+instance (Abelian r, Monoidal r) => Monoidal (RngRing r) where
   zero = RngRing 0 zero
   replicate n (RngRing m a) = RngRing (toInteger n * m) (replicate n a)
 
-instance (Abelian r, AdditiveGroup r) => LeftModule Integer (RngRing r) where
+instance (Abelian r, Group r) => LeftModule Integer (RngRing r) where
   n .* RngRing m a = RngRing (toInteger n * m) (times n a)
 
-instance (Abelian r, AdditiveGroup r) => RightModule Integer (RngRing r) where
+instance (Abelian r, Group r) => RightModule Integer (RngRing r) where
   RngRing m a *. n = RngRing (toInteger n * m) (times n a)
 
-instance (Abelian r, AdditiveGroup r) => AdditiveGroup (RngRing r) where
+instance (Abelian r, Group r) => Group (RngRing r) where
   RngRing n a - RngRing m b = RngRing (n - m) (a - b)
   negate (RngRing n a) = RngRing (negate n) (negate a)
   subtract (RngRing n a) (RngRing m b) = RngRing (subtract n m) (subtract a b)
@@ -64,12 +64,10 @@ instance Rng s => RightModule (RngRing s) (RngRing s) where
 instance Rng r => Unital (RngRing r) where
   one = RngRing 1 zero
 
-instance (Rng r, MultiplicativeGroup r) => MultiplicativeGroup (RngRing r) where
+instance (Rng r, Invertible r) => Invertible (RngRing r) where
   RngRing n a / RngRing m b = RngRing 0 $ (times n one + a) / (times m one + b)
 
 instance Rng r => Semiring (RngRing r) 
-
-instance Rng r => Rng (RngRing r)
 
 instance Rng r => Rig (RngRing r)
 

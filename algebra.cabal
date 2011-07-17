@@ -20,6 +20,7 @@ source-repository head
 library
   build-depends: 
     base >= 4 && < 4.4,
+    distributive >= 0.2 && < 0.3,
     transformers >= 0.2.0 && < 0.3,
     tagged >= 0.2.2 && < 0.3,
     categories >= 0.58.0 && < 0.59,
@@ -77,7 +78,6 @@ library
     Numeric.Multiplication.Invertible
     Numeric.Multiplication.Involutive
 
-    Numeric.Map.Linear
 
     Numeric.Natural
     Numeric.Natural.Internal
@@ -109,6 +109,7 @@ library
     Numeric.Ring.Endomorphism
 
 
+-- Numeric.Map.Linear
   other-modules:
     Numeric.Semiring.Internal
     Numeric.Multiplication.Involutive.Internal

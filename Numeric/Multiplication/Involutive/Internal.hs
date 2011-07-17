@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, UndecidableInstances #-}
 module Numeric.Multiplication.Involutive.Internal
   ( InvolutiveMultiplication(..)
   , adjointCommutative
@@ -44,21 +45,21 @@ instance (InvolutiveMultiplication a, InvolutiveMultiplication b, InvolutiveMult
   adjoint (a,b,c,d,e) = (adjoint a, adjoint b, adjoint c, adjoint d, adjoint e)
 
 -- inv is an associative algebra homomorphism
-class Algebra r a => InvolutiveAlgebra r h where
-  inv :: (h -> r) -> h -> r
+class Algebra r a => InvolutiveAlgebra r a where
+  inv :: (a -> r) -> a -> r
 
 instance InvolutiveAlgebra () a where
   inv _ _ = ()
-instance (Algebra r b, InvolutiveAlgebra r h) => InvolutiveAgebra (b -> r) a where
+instance (Algebra r b, InvolutiveAlgebra r a) => InvolutiveAlgebra (b -> r) a where
   inv f c a = inv (`f` a) c
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b) => InvolutiveAlgebra r (a, b) where
-  coinv f (a,b) = coinv (\a' -> coinv (\b' -> f (a',b')) b) a
+  inv f (a,b) = inv (\a' -> inv (\b' -> f (a',b')) b) a
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b, InvolutiveAlgebra r c) => InvolutiveAlgebra r (a, b, c) where
-  coinv f (a,b,c) = coinv (\a' -> coinv (\b' -> coinv (\c' -> f (a',b',c')) c) b) a
+  inv f (a,b,c) = inv (\a' -> inv (\b' -> inv (\c' -> f (a',b',c')) c) b) a
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b, InvolutiveAlgebra r c, InvolutiveAlgebra r d) => InvolutiveAlgebra r (a, b, c, d) where
-  coinv f (a,b,c,d) = coinv (\a' -> coinv (\b' -> coinv (\c' -> coinv (\d' -> f (a',b',c',d')) d) c) b) a
+  inv f (a,b,c,d) = inv (\a' -> inv (\b' -> inv (\c' -> inv (\d' -> f (a',b',c',d')) d) c) b) a
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b, InvolutiveAlgebra r c, InvolutiveAlgebra r d, InvolutiveAlgebra r e) => InvolutiveAlgebra r (a, b, c, d, e) where
-  coinv f (a,b,c,d,e) = coinv (\a' -> coinv (\b' -> coinv (\c' -> coinv (\d' -> coinv (\e' -> f (a',b',c',d',e')) e) d) c) b) a
+  inv f (a,b,c,d,e) = inv (\a' -> inv (\b' -> inv (\c' -> inv (\d' -> inv (\e' -> f (a',b',c',d',e')) e) d) c) b) a
 instance InvolutiveAlgebra r h => InvolutiveMultiplication (h -> r) where
   adjoint = inv
 

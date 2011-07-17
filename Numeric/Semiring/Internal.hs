@@ -162,42 +162,42 @@ instance (Semiring a, Semiring b, Semiring c, Semiring d, Semiring e) => Semirin
 
 -- | An associative algebra built with a free module over a semiring
 class Semiring r => Algebra r a where
-  join :: (a -> a -> r) -> a -> r
+  mult :: (a -> a -> r) -> a -> r
 
 instance Algebra r a => Multiplicative (a -> r) where
-  f * g = join $ \a b -> f a * g b
+  f * g = mult $ \a b -> f a * g b
 
 instance Algebra r a => Semiring (a -> r) 
 
   
 instance Algebra () a where
-  join _ _ = ()
+  mult _ _ = ()
 
 -- | The tensor algebra
 instance Semiring r => Algebra r [a] where
-  join f = go [] where
+  mult f = go [] where
     go ls rrs@(r:rs) = f (reverse ls) rrs + go (r:ls) rs
     go ls [] = f (reverse ls) []
 
 -- | The tensor algebra
 instance Semiring r => Algebra r (Seq a) where
-  join f = go Seq.empty where
+  mult f = go Seq.empty where
     go ls s = case viewl s of
        EmptyL -> f ls s 
        r :< rs -> f ls s + go (ls |> r) rs
 
 instance (Algebra r a, Algebra r b) => Algebra r (a,b) where
-  join f (a,b) = join (\a1 a2 -> join (\b1 b2 -> f (a1,b1) (a2,b2)) b) a
+  mult f (a,b) = mult (\a1 a2 -> mult (\b1 b2 -> f (a1,b1) (a2,b2)) b) a
 
 instance (Algebra r a, Algebra r b, Algebra r c) => Algebra r (a,b,c) where
-  join f (a,b,c) = join (\a1 a2 -> join (\b1 b2 -> join (\c1 c2 -> f (a1,b1,c1) (a2,b2,c2)) c) b) a
+  mult f (a,b,c) = mult (\a1 a2 -> mult (\b1 b2 -> mult (\c1 c2 -> f (a1,b1,c1) (a2,b2,c2)) c) b) a
 
 instance (Algebra r a, Algebra r b, Algebra r c, Algebra r d) => Algebra r (a,b,c,d) where
-  join f (a,b,c,d) = join (\a1 a2 -> join (\b1 b2 -> join (\c1 c2 -> join (\d1 d2 -> f (a1,b1,c1,d1) (a2,b2,c2,d2)) d) c) b) a
+  mult f (a,b,c,d) = mult (\a1 a2 -> mult (\b1 b2 -> mult (\c1 c2 -> mult (\d1 d2 -> f (a1,b1,c1,d1) (a2,b2,c2,d2)) d) c) b) a
 
 instance (Algebra r a, Algebra r b, Algebra r c, Algebra r d, Algebra r e) => Algebra r (a,b,c,d,e) where
-  join f (a,b,c,d,e) = join (\a1 a2 -> join (\b1 b2 -> join (\c1 c2 -> join (\d1 d2 -> join (\e1 e2 -> f (a1,b1,c1,d1,e1) (a2,b2,c2,d2,e2)) e) d) c) b) a
+  mult f (a,b,c,d,e) = mult (\a1 a2 -> mult (\b1 b2 -> mult (\c1 c2 -> mult (\d1 d2 -> mult (\e1 e2 -> f (a1,b1,c1,d1,e1) (a2,b2,c2,d2,e2)) e) d) c) b) a
 
 -- TODO: check this
 instance (Algebra r b, Algebra r a) => Algebra (b -> r) a where
-  join f a b = join (\a1 a2 -> f a1 a2 b) a
+  mult f a b = mult (\a1 a2 -> f a1 a2 b) a

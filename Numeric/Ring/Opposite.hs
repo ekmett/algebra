@@ -11,10 +11,8 @@ import Data.Traversable
 import Numeric.Addition
 import Numeric.Multiplication
 import Numeric.Module
-import Numeric.Band.Class
 import Numeric.Semiring.Class
 import Numeric.Rig.Class
-import Numeric.Rng.Class
 import Numeric.Ring.Class
 import Numeric.Decidable.Associates
 import Numeric.Decidable.Units
@@ -41,7 +39,7 @@ instance Additive r => Additive (Opposite r) where
   Opposite a + Opposite b = Opposite (a + b)
   replicate1p n (Opposite a) = Opposite (replicate1p n a)
   sumWith1 f = Opposite . sumWith1 (runOpposite . f)
-instance AdditiveMonoid r => AdditiveMonoid (Opposite r) where
+instance Monoidal r => Monoidal (Opposite r) where
   zero = Opposite zero
   replicate n (Opposite a) = Opposite (replicate n a)
   sumWith f = Opposite . sumWith (runOpposite . f)
@@ -53,7 +51,7 @@ instance LeftModule r s => RightModule r (Opposite s) where
   Opposite s *. r = Opposite (r .* s)
 instance Semiring r => RightModule (Opposite r) (Opposite r) where
   (*.) = (*)
-instance AdditiveGroup r => AdditiveGroup (Opposite r) where
+instance Group r => Group (Opposite r) where
   negate = Opposite . negate . runOpposite
   Opposite a - Opposite b = Opposite (a - b)
   subtract (Opposite a) (Opposite b) = Opposite (subtract a b)
@@ -74,12 +72,11 @@ instance Band r => Band (Opposite r)
 instance Unital r => Unital (Opposite r) where
   one = Opposite one
   pow (Opposite a) n = Opposite (pow a n)
-instance MultiplicativeGroup r => MultiplicativeGroup (Opposite r) where
+instance Invertible r => Invertible (Opposite r) where
   recip = Opposite . recip . runOpposite
   Opposite a / Opposite b = Opposite (b \\ a)
   Opposite a \\ Opposite b = Opposite (b / a)
   Opposite a ^ n = Opposite (a ^ n)
 instance Semiring r => Semiring (Opposite r)
-instance Rng r => Rng (Opposite r)
 instance Rig r => Rig (Opposite r)
 instance Ring r => Ring (Opposite r)
