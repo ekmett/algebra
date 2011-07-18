@@ -5,9 +5,18 @@ module Numeric.Algebra.Class
   ) where
 
 import Numeric.Semiring.Internal
+import Numeric.Additive
 import Data.Sequence
 import Data.Monoid (mappend)
-import Prelude ()
+import Data.Set (Set)
+import Data.IntSet (IntSet)
+import Data.Map (Map)
+import Data.IntMap (IntMap)
+import qualified Data.Set as Set
+import qualified Data.IntSet as IntSet
+import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
+import Prelude (Ord)
 
 -- A coassociative coalgebra over a semiring using
 class Semiring r => Coalgebra r c where
@@ -39,9 +48,26 @@ instance (Coalgebra r a, Coalgebra r b, Coalgebra r c, Coalgebra r d) => Coalgeb
 instance (Coalgebra r a, Coalgebra r b, Coalgebra r c, Coalgebra r d, Coalgebra r e) => Coalgebra r (a, b, c, d, e) where
   comult f (a1,b1,c1,d1,e1) (a2,b2,c2,d2,e2) = comult (\a -> comult (\b -> comult (\c -> comult (\d -> comult (\e -> f (a,b,c,d,e)) e1 e2) d1 d2) c1 c2) b1 b2) a1 a2
 
+-- | The tensor Hopf algebra
 instance Semiring r => Coalgebra r [a] where
   comult f as bs = f (mappend as bs)
 
+-- | The tensor Hopf algebra
 instance Semiring r => Coalgebra r (Seq a) where
   comult f as bs = f (mappend as bs)
 
+-- | the free commutative band coalgebra
+instance (Semiring r, Ord a) => Coalgebra r (Set a) where
+  comult f as bs = f (Set.union as bs)
+
+-- | the free commutative band coalgebra over Int
+instance Semiring r => Coalgebra r IntSet where
+  comult f as bs = f (IntSet.union as bs)
+
+-- | the free commutative coalgebra over a set and a given semigroup
+instance (Semiring r, Ord a, Additive b) => Coalgebra r (Map a b) where
+  comult f as bs = f (Map.unionWith (+) as bs)
+
+-- | the free commutative coalgebra over a set and Int
+instance (Semiring r, Additive b) => Coalgebra r (IntMap b) where
+  comult f as bs = f (IntMap.unionWith (+) as bs)

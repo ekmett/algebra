@@ -19,6 +19,7 @@ source-repository head
 
 library
   build-depends: 
+    array >= 0.3.0.2 && < 0.4,
     base >= 4 && < 4.4,
     distributive >= 0.2 && < 0.3,
     transformers >= 0.2.0 && < 0.3,
@@ -29,11 +30,11 @@ library
     mtl >= 2.0 && < 2.1,
     semigroups >= 0.5 && < 0.6,
     semigroupoids >= 1.2.2 && < 1.3,
-    reflection >= 0.4 && < 0.5,
     representable-functors >= 1.8 && < 1.9,
     representable-tries >= 1.8 && < 1.9,
     void >= 0.5.4 && < 0.6
 
+-- reflection >= 0.4 && < 0.5,
   exposed-modules:
     Numeric.Additive
     Numeric.Addition
@@ -46,14 +47,17 @@ library
     Numeric.Algebra.Class
     Numeric.Algebra.Involutive
     Numeric.Algebra.Unital
+    Numeric.Algebra.Commutative
     Numeric.Bialgebra
     Numeric.Algebra.Hopf
+
 
     Numeric.Band
     Numeric.Band.Class
     Numeric.Band.Rectangular
 
     Numeric.Complex
+    Numeric.Quaternion
 
     Numeric.Covector
 
@@ -87,7 +91,6 @@ library
     Numeric.Order.Additive
     Numeric.Order.Class
 
-    Numeric.Quaternion
 
     Numeric.Semiring
     Numeric.Semiring.Class
@@ -109,9 +112,10 @@ library
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
 
-
+  --  Numeric.Algebra.Geometric
   other-modules:
     Numeric.Semiring.Internal
+    Numeric.Multiplication.Commutative.Internal
     Numeric.Multiplication.Involutive.Internal
     Numeric.Multiplication.Unital.Internal
 

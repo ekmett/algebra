@@ -1,8 +1,9 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, UndecidableInstances #-}
 module Numeric.Multiplication.Involutive.Internal
   ( InvolutiveMultiplication(..)
-  , adjointCommutative
+  , TriviallyInvolutive
   , InvolutiveAlgebra(..)
+  , TriviallyInvolutiveAlgebra
   ) where
 
 import Data.Int
@@ -11,15 +12,13 @@ import Numeric.Natural.Internal
 import Numeric.Multiplicative
 import Numeric.Multiplication.Commutative
 import Numeric.Algebra.Class
+import Numeric.Algebra.Commutative
 
 -- | An semigroup with involution
 -- 
 -- > adjoint a * adjoint b = adjoint (b * a)
 class Multiplicative r => InvolutiveMultiplication r where
   adjoint :: r -> r
-
-adjointCommutative :: Commutative r => r -> r
-adjointCommutative = id
 
 instance InvolutiveMultiplication Int where adjoint = id
 instance InvolutiveMultiplication Integer where adjoint = id
@@ -44,6 +43,27 @@ instance (InvolutiveMultiplication a, InvolutiveMultiplication b, InvolutiveMult
 instance (InvolutiveMultiplication a, InvolutiveMultiplication b, InvolutiveMultiplication c, InvolutiveMultiplication d, InvolutiveMultiplication e) => InvolutiveMultiplication (a,b,c,d,e) where
   adjoint (a,b,c,d,e) = (adjoint a, adjoint b, adjoint c, adjoint d, adjoint e)
 
+-- adjoint = id
+class (Commutative r, InvolutiveMultiplication r) => TriviallyInvolutive r
+instance TriviallyInvolutive Int
+instance TriviallyInvolutive Integer
+instance TriviallyInvolutive Int8
+instance TriviallyInvolutive Int16
+instance TriviallyInvolutive Int32
+instance TriviallyInvolutive Int64
+instance TriviallyInvolutive Bool
+instance TriviallyInvolutive Word
+instance TriviallyInvolutive Natural
+instance TriviallyInvolutive Word8
+instance TriviallyInvolutive Word16
+instance TriviallyInvolutive Word32
+instance TriviallyInvolutive Word64
+instance TriviallyInvolutive ()
+instance (TriviallyInvolutive a, TriviallyInvolutive b) => TriviallyInvolutive (a,b)
+instance (TriviallyInvolutive a, TriviallyInvolutive b, TriviallyInvolutive c) => TriviallyInvolutive (a,b,c)
+instance (TriviallyInvolutive a, TriviallyInvolutive b, TriviallyInvolutive c, TriviallyInvolutive d) => TriviallyInvolutive (a,b,c,d)
+instance (TriviallyInvolutive a, TriviallyInvolutive b, TriviallyInvolutive c, TriviallyInvolutive d, TriviallyInvolutive e) => TriviallyInvolutive (a,b,c,d,e)
+
 -- inv is an associative algebra homomorphism
 class Algebra r a => InvolutiveAlgebra r a where
   inv :: (a -> r) -> a -> r
@@ -62,4 +82,14 @@ instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b, InvolutiveAlgebra r c, I
   inv f (a,b,c,d,e) = inv (\a' -> inv (\b' -> inv (\c' -> inv (\d' -> inv (\e' -> f (a',b',c',d',e')) e) d) c) b) a
 instance InvolutiveAlgebra r h => InvolutiveMultiplication (h -> r) where
   adjoint = inv
+
+class (CommutativeAlgebra r a, InvolutiveAlgebra r a) => TriviallyInvolutiveAlgebra r a
+
+instance TriviallyInvolutiveAlgebra () a 
+instance (Algebra r b, TriviallyInvolutiveAlgebra r a) => TriviallyInvolutiveAlgebra (b -> r) a
+instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b) => TriviallyInvolutiveAlgebra r (a, b) where
+instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b, TriviallyInvolutiveAlgebra r c) => TriviallyInvolutiveAlgebra r (a, b, c) where
+instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b, TriviallyInvolutiveAlgebra r c, TriviallyInvolutiveAlgebra r d) => TriviallyInvolutiveAlgebra r (a, b, c, d)
+instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b, TriviallyInvolutiveAlgebra r c, TriviallyInvolutiveAlgebra r d, TriviallyInvolutiveAlgebra r e) => TriviallyInvolutiveAlgebra r (a, b, c, d, e)
+instance TriviallyInvolutiveAlgebra r h => TriviallyInvolutive (h -> r)
 

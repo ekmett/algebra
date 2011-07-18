@@ -1,6 +1,7 @@
-{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeFamilies, UndecidableInstances #-}
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeFamilies, UndecidableInstances, DeriveDataTypeable #-}
 module Numeric.Quaternion 
-  ( Hamiltonian(..)
+  ( Complicated(..)
+  , Hamiltonian(..)
   , QuaternionBasis(..)
   , Quaternion(..)
   , complicate
@@ -11,6 +12,7 @@ import Control.Applicative
 import Control.Monad.Reader.Class
 import Data.Ix
 import Data.Key
+import Data.Data
 import Data.Distributive
 import Data.Functor.Bind
 import Data.Functor.Representable
@@ -30,54 +32,52 @@ import Numeric.Semiring
 import Numeric.Rig
 import Numeric.Rng
 import Numeric.Ring
-import Numeric.Complex (ComplexBasis)
+import Numeric.Complex (ComplexBasis, Complicated(..))
 import qualified Numeric.Complex as Complex
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)
 
-{-
-ifThenElse :: Bool -> a -> a -> a
-ifThenElse True a _ = a
-ifThenElse False _ b = b
--}
-
-class Hamiltonian t where
-  e :: t
-  i :: t
+class Complicated t => Hamiltonian t where
   j :: t
   k :: t
 
-instance Hamiltonian QuaternionBasis where
+instance Complicated QuaternionBasis where
   e = E
   i = I
+
+instance Hamiltonian QuaternionBasis where
   j = J
   k = K
 
-instance Rig r => Hamiltonian (Quaternion r) where
+instance Rig r => Complicated (Quaternion r) where
   e = Quaternion one zero zero zero
   i = Quaternion zero one zero zero
+
+instance Rig r => Hamiltonian (Quaternion r) where
   j = Quaternion zero zero one zero
   k = Quaternion one zero zero one 
 
-instance Rig r => Hamiltonian (QuaternionBasis -> r) where
+instance Rig r => Complicated (QuaternionBasis -> r) where
   e E = one 
   e _ = zero
+
   i I = one
   i _ = zero
+  
+instance Rig r => Hamiltonian (QuaternionBasis -> r) where
   j J = one
   j _ = zero
+
   k K = one
   k _ = zero
 
 instance Hamiltonian a => Hamiltonian (Covector r a) where
-  e = return e
-  i = return i
   j = return j
   k = return k
 
 -- quaternion basis
-data QuaternionBasis = E | I | J | K deriving (Eq,Ord,Enum,Show,Bounded,Ix)
+data QuaternionBasis = E | I | J | K deriving (Eq,Ord,Enum,Read,Show,Bounded,Ix,Data,Typeable)
 
-data Quaternion a = Quaternion a a a a 
+data Quaternion a = Quaternion a a a a deriving (Eq,Show,Read,Data,Typeable)
 
 type instance Key Quaternion = QuaternionBasis
 
@@ -187,71 +187,87 @@ instance Idempotent r => Idempotent (Quaternion r)
 
 instance Partitionable r => Partitionable (Quaternion r) where
   partitionWith f (Quaternion a b c d) = id =<<
-    partitionWith (\a1 a2 -> id =<< 
-    partitionWith (\b1 b2 -> id =<< 
-    partitionWith (\c1 c2 -> 
-    partitionWith (\d1 d2 -> f (Quaternion a1 b1 c1 d1) (Quaternion a2 b2 c2 d2)) d) c) b) a
+                partitionWith (\a1 a2 -> id =<< 
+                partitionWith (\b1 b2 -> id =<< 
+                partitionWith (\c1 c2 -> 
+                partitionWith (\d1 d2 -> f (Quaternion a1 b1 c1 d1) 
+                                           (Quaternion a2 b2 c2 d2)
+                              ) d) c) b) a
 
-
-instance Rng k => Algebra k QuaternionBasis where
+instance (TriviallyInvolutive r, Rng r) => Algebra r QuaternionBasis where
   mult f = f' where
-    f' E = f E E - (f I I + f J J + f K K)
-    f' I = f E I + f I E + f J K - f K J
-    f' J = f E J + f J E + f K I - f I K
-    f' K = f E K + f K E + f I J - f J I
-
-instance Rng k => UnitalAlgebra k QuaternionBasis where
+    fe = f E E - (f I I + f J J + f K K)
+    fi = f E I + f I E + f J K - f K J
+    fj = f E J + f J E + f K I - f I K
+    fk = f E K + f K E + f I J - f J I
+    f' E = fe
+    f' I = fi
+    f' J = fj
+    f' K = fk
+             
+instance (TriviallyInvolutive r, Rng r) => UnitalAlgebra r QuaternionBasis where
   unit x E = x 
   unit _ _ = zero
 
-instance Rng k => Coalgebra k QuaternionBasis where
-  comult f E b = f b
-  comult f b E = f b 
-  comult f I I = negate (f E)
-  comult f I J = f K
-  comult f I K = negate (f J)
-  comult f J J = negate (f E)
-  comult f J I = negate (f K)
-  comult f J K = f I
-  comult f K I = f J
-  comult f K K = negate (f E)
-  comult f K J = negate (f I)
+instance (TriviallyInvolutive r, Rng r) => Coalgebra r QuaternionBasis where
+  comult f = f' where
+     fe = f E
+     fi = f I
+     fj = f J
+     fk = f K
+     f' E E = fe
+     f' E I = fi
+     f' E J = fj
+     f' E K = fk
+     f' I E = fi
+     f' I I = negate fe
+     f' I J = fk
+     f' I K = negate fj
+     f' J E = fj
+     f' J I = negate fk
+     f' J J = negate fe
+     f' J K = fi
+     f' K E = fk
+     f' K I = fj
+     f' K J = negate fi
+     f' K K = negate fe
 
-instance Rng k => CounitalCoalgebra k QuaternionBasis where
+instance (TriviallyInvolutive r, Rng r) => CounitalCoalgebra r QuaternionBasis where
   counit f = f E
 
-instance Rng k => Bialgebra k QuaternionBasis 
+instance (TriviallyInvolutive r, Rng r)  => Bialgebra r QuaternionBasis 
 
-instance Rng k => InvolutiveAlgebra k QuaternionBasis where
+instance (TriviallyInvolutive r, Rng r)  => InvolutiveAlgebra r QuaternionBasis where
   inv f E = f E
   inv f b = negate (f b)
 
-instance Rng k => InvolutiveCoalgebra k QuaternionBasis where
+instance (TriviallyInvolutive r, Rng r) => InvolutiveCoalgebra r QuaternionBasis where
   coinv = inv
 
-instance Rng k => HopfAlgebra k QuaternionBasis where
+instance (TriviallyInvolutive r, Rng r) => HopfAlgebra r QuaternionBasis where
   antipode = inv
 
-instance Rng r => Multiplicative (Quaternion r) where
+instance (TriviallyInvolutive r, Rng r) => Multiplicative (Quaternion r) where
   (*) = mulRep
 
-instance Rng r => Semiring (Quaternion r)
+instance (TriviallyInvolutive r, Rng r) => Semiring (Quaternion r)
 
-instance Ring r => Unital (Quaternion r) where
+instance (TriviallyInvolutive r, Ring r) => Unital (Quaternion r) where
   one = oneRep
 
-instance Ring r => Rig (Quaternion r) where
+instance (TriviallyInvolutive r, Ring r) => Rig (Quaternion r) where
   fromNatural n = Quaternion (fromNatural n) zero zero zero
 
-instance Ring r => Ring (Quaternion r) where
+instance (TriviallyInvolutive r, Ring r) => Ring (Quaternion r) where
   fromInteger n = Quaternion (fromInteger n) zero zero zero
 
-instance Rng r => LeftModule (Quaternion r) (Quaternion r) where (.*) = (*)
-instance Rng r => RightModule (Quaternion r) (Quaternion r) where (*.) = (*)
+instance (TriviallyInvolutive r, Rng r) => LeftModule (Quaternion r) (Quaternion r) where (.*) = (*)
+instance (TriviallyInvolutive r, Rng r) => RightModule (Quaternion r) (Quaternion r) where (*.) = (*)
 
-instance (Rng r, InvolutiveMultiplication r) => InvolutiveMultiplication (Quaternion r) where
-  -- TODO: check this against the Albert's generalized Cayley-Dickson construction
-  adjoint (Quaternion a b c d) = Quaternion (adjoint a) (negate (adjoint b)) (negate (adjoint c)) (adjoint d)
+instance (TriviallyInvolutive r, Rng r) => InvolutiveMultiplication (Quaternion r) where
+  -- without trivial involution, multiplication fails associativity, and we'd need to 
+  -- support weaker multiplicative properties like Alternative and PowerAssociative
+  adjoint (Quaternion a b c d) = Quaternion a (negate b) (negate c) (negate d)
 
 -- | Cayley-Dickson quaternion isomorphism (one way)
 complicate :: QuaternionBasis -> (ComplexBasis, ComplexBasis)

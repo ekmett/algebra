@@ -1,6 +1,6 @@
 module Numeric.Multiplication.Involutive
   ( InvolutiveMultiplication(..)
-  , adjointCommutative
+  , TriviallyInvolutive
   ) where
 
 import Numeric.Multiplication.Involutive.Internal
