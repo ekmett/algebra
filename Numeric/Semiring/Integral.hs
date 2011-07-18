@@ -2,11 +2,12 @@ module Numeric.Semiring.Integral
   ( IntegralSemiring
   ) where
 
-import Numeric.Semiring.Class
-import Numeric.Addition.Monoidal
+import Numeric.Algebra.Class
 import Numeric.Natural.Internal
 
--- a * b = 0 implies a == 0 || b == 0
+-- | An integral semiring has no zero divisors
+--
+-- > a * b = 0 implies a == 0 || b == 0
 class (Monoidal r, Semiring r) => IntegralSemiring r
 
 instance IntegralSemiring Integer

@@ -5,14 +5,7 @@ module Numeric.Ring.Rng
   , liftRngHom
   ) where
 
-import Numeric.Addition
-import Numeric.Module
-import Numeric.Natural.Internal
-import Numeric.Multiplication
-import Numeric.Rig.Class
-import Numeric.Rng.Class
-import Numeric.Ring.Class
-import Numeric.Semiring.Class
+import Numeric.Algebra
 import Prelude hiding ((+),(-),(*),(/),replicate,negate,subtract,fromIntegral)
 
 -- | The free Ring given a Rng obtained by adjoining Z, such that
@@ -64,7 +57,7 @@ instance Rng s => RightModule (RngRing s) (RngRing s) where
 instance Rng r => Unital (RngRing r) where
   one = RngRing 1 zero
 
-instance (Rng r, Invertible r) => Invertible (RngRing r) where
+instance (Rng r, Division r) => Division (RngRing r) where
   RngRing n a / RngRing m b = RngRing 0 $ (times n one + a) / (times m one + b)
 
 instance Rng r => Semiring (RngRing r) 

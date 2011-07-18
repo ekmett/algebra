@@ -3,8 +3,7 @@ module Numeric.Exp
   ) where
 
 import Data.Function (on)
-import Numeric.Addition
-import Numeric.Multiplication
+import Numeric.Algebra
 
 import Prelude hiding ((+),(-),negate,replicate,subtract)
 
@@ -20,7 +19,7 @@ instance Monoidal r => Unital (Exp r) where
   pow (Exp m) n = Exp (replicate n m)
   productWith f = Exp . sumWith (runExp . f)
 
-instance Group r => Invertible (Exp r) where
+instance Group r => Division (Exp r) where
   Exp a / Exp b = Exp (a - b)
   recip (Exp a) = Exp (negate a)
   Exp a \\ Exp b = Exp (subtract a b)

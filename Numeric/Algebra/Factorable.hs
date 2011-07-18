@@ -1,10 +1,10 @@
-module Numeric.Multiplication.Factorable
-  ( -- * Partitionable Additive Semigroups
+module Numeric.Algebra.Factorable
+  ( -- * Factorable Multiplicative Semigroups
     Factorable(..)
   ) where
 
 import Data.List.NonEmpty
-import Numeric.Multiplicative
+import Numeric.Algebra.Class (Multiplicative(..))
 import Prelude hiding (concat)
 
 -- | `factorWith f c` returns a non-empty list containing `f a b` for all `a, b` such that `a * b = c`.

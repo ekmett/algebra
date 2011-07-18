@@ -2,10 +2,10 @@ module Numeric.Decidable.Zero
   ( DecidableZero(..)
   ) where
 
-import Numeric.Addition.Monoidal
+import Numeric.Algebra.Class
 import Data.Int
 import Data.Word
-import Numeric.Natural
+import Numeric.Natural.Internal
 
 class Monoidal r => DecidableZero r where
   isZero :: r -> Bool

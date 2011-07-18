@@ -3,8 +3,8 @@ module Numeric.Rng.Class
   ( Rng
   ) where
 
-import Numeric.Group
-import Numeric.Semiring
+import Numeric.Additive.Group
+import Numeric.Algebra.Class
 
 -- | A Ring without an /i/dentity.
 

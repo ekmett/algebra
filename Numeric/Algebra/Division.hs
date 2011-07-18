@@ -1,16 +1,20 @@
-module Numeric.Multiplication.Invertible
-  ( Invertible(..)
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+module Numeric.Algebra.Division
+  ( Division(..)
+  , DivisionAlgebra(..)
+--  , CodivisionCoalgebra(..)
+--  , DivisionBialgebra
   ) where
 
 import Prelude hiding ((*), recip, (/),(^))
-import Numeric.Multiplicative
-import Numeric.Multiplication.Unital
+import Numeric.Algebra.Class
+import Numeric.Algebra.Unital
 
 infixr 8 ^
 infixl 7 /, \\
 
 -- A multiplicative group
-class Unital r => Invertible r where
+class Unital r => Division r where
   recip  :: r -> r
   (/)    :: r -> r -> r
   (\\)   :: r -> r -> r
@@ -32,32 +36,51 @@ class Unital r => Invertible r where
          | y == 1 = x * z
          | otherwise = g (x * x) ((y - 1) `quot` 2) (x * z)
 
-instance Invertible () where 
+instance Division () where 
   _ / _   = ()
   recip _ = ()
   _ \\ _  = ()
   _ ^ _   = ()
 
-instance (Invertible a, Invertible b) => Invertible (a,b) where
+instance (Division a, Division b) => Division (a,b) where
   recip (a,b) = (recip a, recip b)
   (a,b) / (i,j) = (a/i,b/j)
   (a,b) \\ (i,j) = (a\\i,b\\j)
   (a,b) ^ n = (a^n,b^n)
 
-instance (Invertible a, Invertible b, Invertible c) => Invertible (a,b,c) where
+instance (Division a, Division b, Division c) => Division (a,b,c) where
   recip (a,b,c) = (recip a, recip b, recip c)
   (a,b,c) / (i,j,k) = (a/i,b/j,c/k)
   (a,b,c) \\ (i,j,k) = (a\\i,b\\j,c\\k)
   (a,b,c) ^ n = (a^n,b^n,c^n)
 
-instance (Invertible a, Invertible b, Invertible c, Invertible d) => Invertible (a,b,c,d) where
+instance (Division a, Division b, Division c, Division d) => Division (a,b,c,d) where
   recip (a,b,c,d) = (recip a, recip b, recip c, recip d)
   (a,b,c,d) / (i,j,k,l) = (a/i,b/j,c/k,d/l)
   (a,b,c,d) \\ (i,j,k,l) = (a\\i,b\\j,c\\k,d\\l)
   (a,b,c,d) ^ n = (a^n,b^n,c^n,d^n)
 
-instance (Invertible a, Invertible b, Invertible c, Invertible d, Invertible e) => Invertible (a,b,c,d,e) where
+instance (Division a, Division b, Division c, Division d, Division e) => Division (a,b,c,d,e) where
   recip (a,b,c,d,e) = (recip a, recip b, recip c, recip d, recip e)
   (a,b,c,d,e) / (i,j,k,l,m) = (a/i,b/j,c/k,d/l,e/m)
   (a,b,c,d,e) \\ (i,j,k,l,m) = (a\\i,b\\j,c\\k,d\\l,e\\m)
   (a,b,c,d,e) ^ n = (a^n,b^n,c^n,d^n,e^n)
+
+class UnitalAlgebra r a => DivisionAlgebra r a where
+  recipriocal :: (a -> r) -> a -> r
+  -- recipriocal f = one `over` f
+
+instance (Unital r, DivisionAlgebra r a) => Division (a -> r) where
+  recip = recipriocal
+
+{-
+class CounitalCoalgebra r c => DivisionCoalgebra r c where
+  corecipriocal :: (c -> r) -> c -> r
+
+instance CodivisionCoalgebra () c where
+  corecipriocal _ _ = ()
+
+-- | corecipriocal = recipriocal
+class (Bialgebra r h, DivisionAlgebra r h, CodivisionCoalgebra r h) => DivisionBialgebra r h
+instance (Bialgebra r h, DivisionAlgebra r h, CodivisionCoalgebra r h) => DivisionBialgebra r h
+-}

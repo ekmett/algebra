@@ -2,8 +2,8 @@ module Numeric.Band.Rectangular
   ( Rect(..)
   ) where
 
-import Numeric.Multiplicative
-import Numeric.Band.Class
+import Numeric.Algebra.Class
+import Numeric.Algebra.Idempotent
 import Data.Semigroupoid
 
 -- | a rectangular band is a nowhere commutative semigroup.

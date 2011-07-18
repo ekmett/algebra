@@ -13,13 +13,7 @@ module Numeric.Covector
   , memoM
   ) where
 
-import Numeric.Addition
 import Numeric.Algebra
-import Numeric.Multiplication
-import Numeric.Module
-import Numeric.Semiring.Class
-import Numeric.Rig.Class
-import Numeric.Ring.Class
 import Control.Applicative
 import Control.Monad
 import Data.Key

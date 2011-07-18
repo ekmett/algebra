@@ -8,12 +8,7 @@ import Data.Function (on)
 import Data.Semigroup.Foldable
 import Data.Semigroup.Traversable
 import Data.Traversable
-import Numeric.Addition
-import Numeric.Multiplication
-import Numeric.Module
-import Numeric.Semiring.Class
-import Numeric.Rig.Class
-import Numeric.Ring.Class
+import Numeric.Algebra
 import Numeric.Decidable.Associates
 import Numeric.Decidable.Units
 import Numeric.Decidable.Zero
@@ -72,7 +67,7 @@ instance Band r => Band (Opposite r)
 instance Unital r => Unital (Opposite r) where
   one = Opposite one
   pow (Opposite a) n = Opposite (pow a n)
-instance Invertible r => Invertible (Opposite r) where
+instance Division r => Division (Opposite r) where
   recip = Opposite . recip . runOpposite
   Opposite a / Opposite b = Opposite (b \\ a)
   Opposite a \\ Opposite b = Opposite (b / a)

@@ -4,7 +4,6 @@ module Numeric.Algebra.Hopf
   ) where
 
 import Numeric.Algebra.Unital
-import Numeric.Bialgebra
 
 -- | A HopfAlgebra algebra on a semiring, where the module is free.
 --

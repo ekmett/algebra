@@ -1,5 +1,5 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, TypeFamilies, UndecidableInstances, DeriveDataTypeable #-}
-module Numeric.Complex
+module Numeric.Module.Complex
   ( Complicated(..)
   , ComplexBasis(..)
   , Complex
@@ -19,16 +19,8 @@ import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Data.Traversable
-import Numeric.Addition
 import Numeric.Algebra
 import Numeric.Covector
-import Numeric.Group 
-import Numeric.Module
-import Numeric.Multiplication
-import Numeric.Rig
-import Numeric.Rng
-import Numeric.Ring
-import Numeric.Semiring
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)
 
 -- complex basis

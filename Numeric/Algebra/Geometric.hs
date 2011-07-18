@@ -31,7 +31,7 @@ import Data.Proxy
 import Data.Word
 import Data.Ix
 import Data.Array.Unboxed
-import Numeric.Addition
+import Numeric.Additive
 import Numeric.Multiplication
 import Numeric.Decidable.Units
 import Numeric.Decidable.Associates

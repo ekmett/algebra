@@ -2,8 +2,8 @@ module Numeric.Order.Additive
   ( AdditiveOrder
   ) where
 
-import Numeric.Natural
-import Numeric.Additive
+import Numeric.Natural.Internal
+import Numeric.Additive.Class
 import Numeric.Order.Class
 
 -- An additive semigroup with a partial order (<=)

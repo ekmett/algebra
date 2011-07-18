@@ -1,5 +1,5 @@
-module Numeric.Semiring.Class
-  ( Semiring
+module Numeric.Semiring.Class 
+  ( Semiring 
   ) where
 
-import Numeric.Semiring.Internal
+import Numeric.Algebra.Class

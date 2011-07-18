@@ -4,9 +4,8 @@ module Numeric.Rig.Class
   , fromWhole
   ) where
 
-import Numeric.Addition.Monoidal
-import Numeric.Multiplication.Unital
-import Numeric.Semiring.Class
+import Numeric.Algebra.Class
+import Numeric.Algebra.Unital
 import Data.Int
 import Data.Word
 import Prelude (Integer, Bool, Num(fromInteger),(/=),id,(.))

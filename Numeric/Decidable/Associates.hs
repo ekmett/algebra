@@ -7,8 +7,8 @@ module Numeric.Decidable.Associates
 import Data.Function (on)
 import Data.Int
 import Data.Word
-import Numeric.Multiplication.Unital
-import Numeric.Natural
+import Numeric.Algebra.Unital
+import Numeric.Natural.Internal
 
 isAssociateIntegral :: Num n => n -> n -> Bool
 isAssociateIntegral = (==) `on` abs

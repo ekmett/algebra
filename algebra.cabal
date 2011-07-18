@@ -36,87 +36,49 @@ library
 
 -- reflection >= 0.4 && < 0.5,
   exposed-modules:
-    Numeric.Additive
-    Numeric.Addition
-    Numeric.Addition.Abelian
-    Numeric.Addition.Monoidal
-    Numeric.Addition.Partitionable
-    Numeric.Addition.Idempotent
-
     Numeric.Algebra
-    Numeric.Algebra.Class
-    Numeric.Algebra.Involutive
-    Numeric.Algebra.Unital
-    Numeric.Algebra.Commutative
-    Numeric.Bialgebra
-    Numeric.Algebra.Hopf
-
-
-    Numeric.Band
-    Numeric.Band.Class
     Numeric.Band.Rectangular
-
-    Numeric.Complex
-    Numeric.Quaternion
-
     Numeric.Covector
-
-    Numeric.Decidable.Zero
-    Numeric.Decidable.Units
-    Numeric.Decidable.Associates
-
     Numeric.Exp
     Numeric.Log
-
-    Numeric.Group
-
-    Numeric.Module
-    Numeric.Module.Representable
-    Numeric.Module.Class
-
-    Numeric.Multiplicative
-    Numeric.Multiplication
-    Numeric.Multiplication.Commutative
-    Numeric.Multiplication.Unital
-    Numeric.Multiplication.Factorable
-    Numeric.Multiplication.Invertible
-    Numeric.Multiplication.Involutive
-
-    Numeric.Map.Linear
-
-    Numeric.Natural
+    Numeric.Map
+    Numeric.Module.Complex
+    Numeric.Module.Quaternion
     Numeric.Natural.Internal
-
-    Numeric.Order
-    Numeric.Order.Additive
-    Numeric.Order.Class
-
-
-    Numeric.Semiring
-    Numeric.Semiring.Class
-    Numeric.Semiring.Integral
-    Numeric.Semiring.Involutive
-
-    Numeric.Rig
-    Numeric.Rig.Class
-    Numeric.Rig.Ordered
-    Numeric.Rig.Characteristic
-
-    Numeric.Rng
-    Numeric.Rng.Class
     Numeric.Rng.Zero
-
-    Numeric.Ring
-    Numeric.Ring.Class
     Numeric.Ring.Rng
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
 
   --  Numeric.Algebra.Geometric
+
   other-modules:
-    Numeric.Semiring.Internal
-    Numeric.Multiplication.Commutative.Internal
-    Numeric.Multiplication.Involutive.Internal
-    Numeric.Multiplication.Unital.Internal
+    Numeric.Additive.Class
+    Numeric.Additive.Group
+    Numeric.Algebra.Class
+    Numeric.Algebra.Involutive
+    Numeric.Algebra.Idempotent
+    Numeric.Algebra.Division
+    Numeric.Algebra.Unital
+    Numeric.Algebra.Commutative
+    Numeric.Algebra.Factorable
+    Numeric.Algebra.Hopf
+    Numeric.Natural
+    Numeric.Decidable.Zero
+    Numeric.Decidable.Units
+    Numeric.Decidable.Associates
+    Numeric.Module.Class
+    Numeric.Module.Representable
+    Numeric.Semiring.Integral
+    Numeric.Semiring.Involutive
+    Numeric.Band.Class
+    Numeric.Dioid.Class
+    Numeric.Rig.Class
+    Numeric.Rng.Class
+    Numeric.Ring.Class
+    Numeric.Rig.Ordered
+    Numeric.Rig.Characteristic
+    Numeric.Order.Class
+    Numeric.Order.Additive
 
   ghc-options: -Wall 

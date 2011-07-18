@@ -1,16 +1,15 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
-module Numeric.Group
+module Numeric.Additive.Group
   ( -- * Additive Groups
     Group(..)
   ) where
 
 import Data.Int
 import Data.Word
-import Prelude hiding ((+), (-), negate, subtract)
+import Prelude hiding ((*), (+), (-), negate, subtract)
 import qualified Prelude
-import Numeric.Additive
-import Numeric.Addition.Monoidal
-import Numeric.Module.Class
+import Numeric.Additive.Class
+import Numeric.Algebra.Class
 
 infixl 6 - 
 infixl 7 `times`

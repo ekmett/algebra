@@ -7,8 +7,8 @@ module Numeric.Decidable.Units
 import Data.Maybe (isJust)
 import Data.Int
 import Data.Word
-import Numeric.Multiplicative
-import Numeric.Multiplication.Unital
+import Numeric.Algebra.Class
+import Numeric.Algebra.Unital
 import Numeric.Natural.Internal
 import Control.Applicative
 import Prelude hiding ((*))

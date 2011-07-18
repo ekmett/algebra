@@ -3,12 +3,7 @@ module Numeric.Rng.Zero
   ( ZeroRng(..)
   ) where
 
-import Numeric.Addition
-import Numeric.Multiplication
-import Numeric.Module
-import Numeric.Semiring.Class
-import Numeric.Rng.Class
-import Numeric.Natural.Internal
+import Numeric.Algebra
 import Data.Foldable (toList)
 import Prelude hiding ((+),(-),negate,subtract,replicate)
 

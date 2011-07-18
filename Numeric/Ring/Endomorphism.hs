@@ -3,16 +3,13 @@ module Numeric.Ring.Endomorphism
   ( End(..)
   , toEnd
   , fromEnd
+  , frobenius
   ) where
 
 import Data.Monoid
-import Numeric.Addition
-import Numeric.Module
-import Numeric.Multiplication
-import Numeric.Semiring.Class
-import Numeric.Rig.Class
-import Numeric.Ring.Class
+import Numeric.Algebra
 import Prelude hiding ((*),(+),(-),negate,subtract)
+import Data.Proxy
 
 -- | The endomorphism ring of an abelian group or the endomorphism semiring of an abelian monoid
 -- 
@@ -57,3 +54,11 @@ toEnd r = End (*r)
 -- ring isomorphism from the endormorphism ring of r to r.
 fromEnd :: Unital r => End r -> r
 fromEnd (End f) = f one
+
+-- the frobenius ring endomorphism (assuming the characteristic is prime)
+frobenius :: Characteristic r => End r
+frobenius = End $ \r -> r `pow` char (ofRing r)
+
+ofRing :: r -> Proxy r
+ofRing _ = Proxy
+

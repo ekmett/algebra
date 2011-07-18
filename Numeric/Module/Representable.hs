@@ -21,15 +21,15 @@ import Control.Applicative
 import Data.Functor
 import Data.Functor.Representable
 import Data.Key
+import Numeric.Additive.Class
+import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
 import Numeric.Natural.Internal
-import Numeric.Addition
-import Numeric.Multiplication
-import Control.Category
-import Prelude (($), Integral(..),Integer)
 import Numeric.Rig.Class
 import Numeric.Ring.Class
+import Control.Category
+import Prelude (($), Integral(..),Integer)
 
 -- | `Additive.(+)` default definition
 addRep :: (Zip m, Additive r) => m r -> m r -> m r

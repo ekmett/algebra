@@ -4,15 +4,11 @@ module Numeric.Log
   ) where
 
 import Data.Function (on)
-import Numeric.Addition
-import Numeric.Module
-import Numeric.Multiplication
-import Numeric.Natural.Internal
+import Numeric.Algebra
 
 import Prelude hiding ((*),(^),(/),recip,negate,subtract)
 
 newtype Log r = Log { runLog :: r } 
-
 
 instance Multiplicative r => Additive (Log r) where
   Log a + Log b = Log (a * b)
@@ -30,13 +26,13 @@ instance Unital r => Monoidal (Log r) where
   replicate n (Log m) = Log (pow m n)
   sumWith f = Log . productWith (runLog . f)
 
-instance Invertible r => LeftModule Integer (Log r) where
+instance Division r => LeftModule Integer (Log r) where
   n .* Log m = Log (m ^ n)
 
-instance Invertible r => RightModule Integer (Log r) where
+instance Division r => RightModule Integer (Log r) where
   Log m *. n = Log (m ^ n)
 
-instance Invertible r => Group (Log r) where
+instance Division r => Group (Log r) where
   Log a - Log b = Log (a / b)
   negate (Log a) = Log (recip a)
   subtract (Log a) (Log b) = Log (a \\ b)
