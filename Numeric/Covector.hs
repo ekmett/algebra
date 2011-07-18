@@ -13,7 +13,17 @@ module Numeric.Covector
   , memoM
   ) where
 
-import Numeric.Algebra
+import Numeric.Additive.Class
+import Numeric.Additive.Group
+import Numeric.Algebra.Class
+import Numeric.Algebra.Unital
+import Numeric.Algebra.Idempotent
+import Numeric.Algebra.Involutive
+import Numeric.Algebra.Commutative
+import Numeric.Algebra.Hopf
+import Numeric.Module.Class
+import Numeric.Rig.Class
+import Numeric.Ring.Class
 import Control.Applicative
 import Control.Monad
 import Data.Key
@@ -84,6 +94,10 @@ instance CounitalCoalgebra r m => Unital (Covector r m) where
 instance (Rig r, CounitalCoalgebra r m) => Rig (Covector r m)
 
 instance (Ring r, CounitalCoalgebra r m) => Ring (Covector r m)
+
+instance Idempotent r => Idempotent (Covector r a)
+
+instance (Idempotent r, IdempotentCoalgebra r a) => Band (Covector r a)
 
 multM :: Coalgebra r c => c -> c -> Covector r c
 multM a b = Covector $ \k -> comult k a b

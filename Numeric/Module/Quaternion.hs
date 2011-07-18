@@ -23,7 +23,6 @@ import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Numeric.Algebra
-import Numeric.Covector
 import Numeric.Module.Complex (ComplexBasis, Complicated(..))
 import qualified Numeric.Module.Complex as Complex
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)

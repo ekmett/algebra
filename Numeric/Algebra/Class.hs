@@ -21,7 +21,7 @@ module Numeric.Algebra.Class
   , Coalgebra(..)
   ) where
 
-import Numeric.Additive.Class
+import  Numeric.Additive.Class
 import Data.Monoid (mappend)
 import Data.Set (Set)
 import qualified Data.Set as Set
@@ -229,8 +229,7 @@ instance (Algebra r a, Algebra r b, Algebra r c, Algebra r d, Algebra r e) => Al
   mult f (a,b,c,d,e) = mult (\a1 a2 -> mult (\b1 b2 -> mult (\c1 c2 -> mult (\d1 d2 -> mult (\e1 e2 -> f (a1,b1,c1,d1,e1) (a2,b2,c2,d2,e2)) e) d) c) b) a
 
 -- incoherent
-instance (Algebra r b, Algebra r a) => Algebra (b -> r) a where
-  mult f a b = mult (\a1 a2 -> f a1 a2 b) a
+-- instance (Algebra r b, Algebra r a) => Algebra (b -> r) a where mult f a b = mult (\a1 a2 -> f a1 a2 b) a
 
 instance Algebra r a => Multiplicative (a -> r) where
   f * g = mult $ \a b -> f a * g b
@@ -249,12 +248,10 @@ instance Algebra r m => Coalgebra r (m -> r) where
   comult k f g = k (f * g)
 
 -- incoherent
-instance Coalgebra () c where
-  comult _ _ _ = ()
+-- instance Coalgebra () c where comult _ _ _ = ()
 
 -- incoherent
-instance (Algebra r b, Coalgebra r c) => Coalgebra (b -> r) c where
-  comult f c1 c2 b = comult (`f` b) c1 c2 
+-- instance (Algebra r b, Coalgebra r c) => Coalgebra (b -> r) c where comult f c1 c2 b = comult (`f` b) c1 c2 
 
 instance Semiring r => Coalgebra r () where
   comult = const

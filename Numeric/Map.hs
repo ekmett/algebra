@@ -35,7 +35,6 @@ import qualified Data.Functor.Plus as Plus
 import Data.Semigroupoid
 import Data.Void
 import Numeric.Algebra
-import Numeric.Covector
 import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat, (.), id, curry, uncurry, fst, snd)
 
 -- | linear maps from elements of a free module to another free module over r

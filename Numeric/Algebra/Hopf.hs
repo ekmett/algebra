@@ -13,11 +13,12 @@ class Bialgebra r h => HopfAlgebra r h where
   -- > convolve id antipode = convolve antipode id = unit . counit
   antipode :: (h -> r) -> h -> r
 
-instance (UnitalAlgebra r a, HopfAlgebra r h) => HopfAlgebra (a -> r) h where
-  antipode f h a = antipode (`f` a) h
+-- incoherent
+-- instance (UnitalAlgebra r a, HopfAlgebra r h) => HopfAlgebra (a -> r) h where antipode f h a = antipode (`f` a) h
+-- instance HopfAlgebra () h where antipode = id
 
-instance HopfAlgebra () h where
-  antipode = id
+-- TODO: check this
+-- instance InvolutiveSemiring r => HopfAlgebra r () where antipode = adjoint
 
 instance (HopfAlgebra r a, HopfAlgebra r b) => HopfAlgebra r (a, b) where
   antipode f (a,b) = antipode (\a' -> antipode (\b' -> f (a',b')) b) a

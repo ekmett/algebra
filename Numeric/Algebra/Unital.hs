@@ -75,11 +75,12 @@ class Algebra r a => UnitalAlgebra r a where
 instance (Unital r, UnitalAlgebra r a) => Unital (a -> r) where
   one = unit one
 
-instance UnitalAlgebra () a where
-  unit _ _ = ()
+instance Semiring r => UnitalAlgebra r () where
+  unit r () = r
 
-instance (UnitalAlgebra r a, UnitalAlgebra r b) => UnitalAlgebra (a -> r) b where
-  unit f b a = unit (f a) b
+-- incoherent
+-- instance UnitalAlgebra () a where unit _ _ = ()
+-- instance (UnitalAlgebra r a, UnitalAlgebra r b) => UnitalAlgebra (a -> r) b where unit f b a = unit (f a) b
 
 instance (UnitalAlgebra r a, UnitalAlgebra r b) => UnitalAlgebra r (a,b) where
   unit r (a,b) = unit r a * unit r b
@@ -108,11 +109,12 @@ class Coalgebra r c => CounitalCoalgebra r c where
 instance (Unital r, UnitalAlgebra r m) => CounitalCoalgebra r (m -> r) where
   counit k = k one
 
-instance (UnitalAlgebra r a, CounitalCoalgebra r c) => CounitalCoalgebra (a -> r) c where 
-  counit k a = counit (`k` a)
+-- incoherent
+-- instance (UnitalAlgebra r a, CounitalCoalgebra r c) => CounitalCoalgebra (a -> r) c where counit k a = counit (`k` a)
+-- instance CounitalCoalgebra () a where counit _ = ()
 
-instance CounitalCoalgebra () a where
-  counit _ = ()
+instance Semiring r => CounitalCoalgebra r () where
+  counit f = f ()
 
 instance (CounitalCoalgebra r a, CounitalCoalgebra r b) => CounitalCoalgebra r (a, b) where
   counit k = counit $ \a -> counit $ \b -> k (a,b)
@@ -132,7 +134,6 @@ instance Semiring r => CounitalCoalgebra r [a] where
 instance Semiring r => CounitalCoalgebra r (Seq a) where
   counit k = k (Seq.empty)
 
-
 -- | A bialgebra is both a unital algebra and counital coalgebra 
 -- where the `mult` and `unit` are compatible in some sense with 
 -- the `comult` and `counit`. That is to say that 
@@ -143,8 +144,10 @@ class (UnitalAlgebra r a, CounitalCoalgebra r a) => Bialgebra r a
 
 -- TODO
 -- instance (Unital r, Bialgebra r m) => Bialgebra r (m -> r)
-instance Bialgebra () c
-instance (UnitalAlgebra r b, Bialgebra r c) => Bialgebra (b -> r) c
+-- instance Bialgebra () c
+-- instance (UnitalAlgebra r b, Bialgebra r c) => Bialgebra (b -> r) c
+
+instance Semiring r => Bialgebra r ()
 instance (Bialgebra r a, Bialgebra r b) => Bialgebra r (a, b)
 instance (Bialgebra r a, Bialgebra r b, Bialgebra r c) => Bialgebra r (a, b, c)
 instance (Bialgebra r a, Bialgebra r b, Bialgebra r c, Bialgebra r d) => Bialgebra r (a, b, c, d)

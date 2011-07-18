@@ -45,12 +45,16 @@ instance (Commutative a, Commutative b, Commutative c, Commutative d) => Commuta
 instance (Commutative a, Commutative b, Commutative c, Commutative d, Commutative e) => Commutative (a,b,c,d,e)
 
 class Algebra r a => CommutativeAlgebra r a
-instance CommutativeAlgebra () a
+
+instance (Commutative r, Semiring r) => CommutativeAlgebra r ()
 instance (CommutativeAlgebra r a, CommutativeAlgebra r b) => CommutativeAlgebra r (a,b)
 instance (CommutativeAlgebra r a, CommutativeAlgebra r b, CommutativeAlgebra r c) => CommutativeAlgebra r (a,b,c)
 instance (CommutativeAlgebra r a, CommutativeAlgebra r b, CommutativeAlgebra r c, CommutativeAlgebra r d) => CommutativeAlgebra r (a,b,c,d)
 instance (CommutativeAlgebra r a, CommutativeAlgebra r b, CommutativeAlgebra r c, CommutativeAlgebra r d, CommutativeAlgebra r e) => CommutativeAlgebra r (a,b,c,d,e)
-instance (Algebra r a, CommutativeAlgebra r b) => CommutativeAlgebra (a -> r) b
+
+-- incoherent
+-- instance (Algebra r a, CommutativeAlgebra r b) => CommutativeAlgebra (a -> r) b
+-- instance CommutativeAlgebra () a
 
 instance (Commutative r, Semiring r, Ord a) => CommutativeAlgebra r (Set a)
 instance (Commutative r, Semiring r) => CommutativeAlgebra r IntSet
@@ -60,8 +64,8 @@ instance (Commutative r, Monoidal r, Semiring r, Abelian b, Partitionable b) => 
 instance CommutativeAlgebra r a => Commutative (a -> r)
 
 class Coalgebra r c => CommutativeCoalgebra r c
-instance (Algebra r a, CommutativeCoalgebra r c) => CommutativeCoalgebra (a -> r) c -- TODO: check this instance!
-instance CommutativeCoalgebra () a
+
+
 instance CommutativeAlgebra r m => CommutativeCoalgebra r (m -> r)
 instance (CommutativeCoalgebra r a, CommutativeCoalgebra r b) => CommutativeCoalgebra r (a,b)
 instance (CommutativeCoalgebra r a, CommutativeCoalgebra r b, CommutativeCoalgebra r c) => CommutativeCoalgebra r (a,b,c)
@@ -73,8 +77,9 @@ instance (Commutative r, Semiring r) => CommutativeCoalgebra r IntSet
 instance (Commutative r, Semiring r, Ord a, Abelian b) => CommutativeCoalgebra r (Map a b)
 instance (Commutative r, Semiring r, Abelian b) => CommutativeCoalgebra r (IntMap b)
 
+-- incoherent
+-- instance (Algebra r a, CommutativeCoalgebra r c) => CommutativeCoalgebra (a -> r) c -- TODO: check this instance!
+-- instance CommutativeCoalgebra () a
+
 class    (Bialgebra r h, CommutativeAlgebra r h, CommutativeCoalgebra r h) => CommutativeBialgebra r h
 instance (Bialgebra r h, CommutativeAlgebra r h, CommutativeCoalgebra r h) => CommutativeBialgebra r h
-
--- TODO: add commutative coalgebras for multisets 
--- and a commutative band coalgebra for sets

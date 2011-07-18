@@ -20,7 +20,6 @@ import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Data.Traversable
 import Numeric.Algebra
-import Numeric.Covector
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)
 
 -- complex basis

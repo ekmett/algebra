@@ -100,37 +100,44 @@ instance (TriviallyInvolutive a, TriviallyInvolutive b, TriviallyInvolutive c, T
 class Algebra r a => InvolutiveAlgebra r a where
   inv :: (a -> r) -> a -> r
 
-instance InvolutiveAlgebra () a where
-  inv _ _ = ()
-instance (Algebra r b, InvolutiveAlgebra r a) => InvolutiveAlgebra (b -> r) a where
-  inv f c a = inv (`f` a) c
+-- instance InvolutiveAlgebra () a where inv _ _ = ()
+-- instance (Algebra r b, InvolutiveAlgebra r a) => InvolutiveAlgebra (b -> r) a where inv f c a = inv (`f` a) c
+
+instance InvolutiveSemiring r => InvolutiveAlgebra r () where
+  inv = (adjoint .)
+
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b) => InvolutiveAlgebra r (a, b) where
   inv f (a,b) = inv (\a' -> inv (\b' -> f (a',b')) b) a
+
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b, InvolutiveAlgebra r c) => InvolutiveAlgebra r (a, b, c) where
   inv f (a,b,c) = inv (\a' -> inv (\b' -> inv (\c' -> f (a',b',c')) c) b) a
+
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b, InvolutiveAlgebra r c, InvolutiveAlgebra r d) => InvolutiveAlgebra r (a, b, c, d) where
   inv f (a,b,c,d) = inv (\a' -> inv (\b' -> inv (\c' -> inv (\d' -> f (a',b',c',d')) d) c) b) a
+
 instance (InvolutiveAlgebra r a, InvolutiveAlgebra r b, InvolutiveAlgebra r c, InvolutiveAlgebra r d, InvolutiveAlgebra r e) => InvolutiveAlgebra r (a, b, c, d, e) where
   inv f (a,b,c,d,e) = inv (\a' -> inv (\b' -> inv (\c' -> inv (\d' -> inv (\e' -> f (a',b',c',d',e')) e) d) c) b) a
+
 instance InvolutiveAlgebra r h => InvolutiveMultiplication (h -> r) where
   adjoint = inv
 
 class (CommutativeAlgebra r a, InvolutiveAlgebra r a) => TriviallyInvolutiveAlgebra r a
 
-instance TriviallyInvolutiveAlgebra () a 
-instance (Algebra r b, TriviallyInvolutiveAlgebra r a) => TriviallyInvolutiveAlgebra (b -> r) a
+instance (TriviallyInvolutive r, InvolutiveSemiring r) => TriviallyInvolutiveAlgebra r ()
 instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b) => TriviallyInvolutiveAlgebra r (a, b) where
 instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b, TriviallyInvolutiveAlgebra r c) => TriviallyInvolutiveAlgebra r (a, b, c) where
 instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b, TriviallyInvolutiveAlgebra r c, TriviallyInvolutiveAlgebra r d) => TriviallyInvolutiveAlgebra r (a, b, c, d)
 instance (TriviallyInvolutiveAlgebra r a, TriviallyInvolutiveAlgebra r b, TriviallyInvolutiveAlgebra r c, TriviallyInvolutiveAlgebra r d, TriviallyInvolutiveAlgebra r e) => TriviallyInvolutiveAlgebra r (a, b, c, d, e)
 instance TriviallyInvolutiveAlgebra r h => TriviallyInvolutive (h -> r)
+-- instance TriviallyInvolutiveAlgebra () a 
+-- instance (Algebra r b, TriviallyInvolutiveAlgebra r a) => TriviallyInvolutiveAlgebra (b -> r) a
 
 class Coalgebra r c => InvolutiveCoalgebra r c where
   coinv :: (c -> r) -> c -> r
-instance InvolutiveCoalgebra () c where
-  coinv _ _ = ()
-instance (Algebra r b, InvolutiveCoalgebra r c) => InvolutiveCoalgebra (b -> r) c where
-  coinv f c a = coinv (`f` a) c
+-- instance InvolutiveCoalgebra () c where coinv _ _ = ()
+-- instance (Algebra r b, InvolutiveCoalgebra r c) => InvolutiveCoalgebra (b -> r) c where coinv f c a = coinv (`f` a) c
+instance InvolutiveSemiring r => InvolutiveCoalgebra r () where
+  coinv f c = adjoint (f c)
 instance (InvolutiveCoalgebra r a, InvolutiveCoalgebra r b) => InvolutiveCoalgebra r (a, b) where
   coinv f (a,b) = coinv (\a' -> coinv (\b' -> f (a',b')) b) a
 instance (InvolutiveCoalgebra r a, InvolutiveCoalgebra r b, InvolutiveCoalgebra r c) => InvolutiveCoalgebra r (a, b, c) where
@@ -143,8 +150,9 @@ instance (InvolutiveCoalgebra r a, InvolutiveCoalgebra r b, InvolutiveCoalgebra 
 
 class (CommutativeCoalgebra r a, InvolutiveCoalgebra r a) => TriviallyInvolutiveCoalgebra r a
 
-instance TriviallyInvolutiveCoalgebra () a 
-instance (Algebra r b, TriviallyInvolutiveCoalgebra r a) => TriviallyInvolutiveCoalgebra (b -> r) a
+-- instance TriviallyInvolutiveCoalgebra () a 
+-- instance (Algebra r b, TriviallyInvolutiveCoalgebra r a) => TriviallyInvolutiveCoalgebra (b -> r) a
+
 instance (TriviallyInvolutiveCoalgebra r a, TriviallyInvolutiveCoalgebra r b) => TriviallyInvolutiveCoalgebra r (a, b) where
 instance (TriviallyInvolutiveCoalgebra r a, TriviallyInvolutiveCoalgebra r b, TriviallyInvolutiveCoalgebra r c) => TriviallyInvolutiveCoalgebra r (a, b, c) where
 instance (TriviallyInvolutiveCoalgebra r a, TriviallyInvolutiveCoalgebra r b, TriviallyInvolutiveCoalgebra r c, TriviallyInvolutiveCoalgebra r d) => TriviallyInvolutiveCoalgebra r (a, b, c, d)

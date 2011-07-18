@@ -116,6 +116,22 @@ module Numeric.Algebra
   , fromNaturalRep
   -- * Representable Ring (via Algebra)
   , fromIntegerRep
+  
+  -- * Norm
+  , Quadrance(..)
+
+  -- * Covectors
+  , Covector(..)
+  -- ** Covectors as linear functionals
+  , counitM
+  , unitM
+  , comultM
+  , multM
+  , invM
+  , coinvM
+  , antipodeM
+  , convolveM
+  , memoM
   ) where
 
 import Prelude ()
@@ -129,17 +145,18 @@ import Numeric.Algebra.Division
 import Numeric.Algebra.Factorable
 import Numeric.Algebra.Unital
 import Numeric.Algebra.Hopf
+import Numeric.Covector
+import Numeric.Decidable.Units
+import Numeric.Decidable.Associates
+import Numeric.Decidable.Zero
+import Numeric.Dioid.Class
+import Numeric.Module.Representable
+import Numeric.Natural.Internal
+import Numeric.Order.Class
+import Numeric.Order.Additive
+import Numeric.Quadrance.Class
 import Numeric.Rig.Class
 import Numeric.Rig.Characteristic
 import Numeric.Rig.Ordered
-import Numeric.Order.Class
-import Numeric.Order.Additive
 import Numeric.Rng.Class
 import Numeric.Ring.Class
-import Numeric.Dioid.Class
-import Numeric.Decidable.Units
-import Numeric.Module.Representable
-import Numeric.Decidable.Associates
-import Numeric.Decidable.Zero
-import Numeric.Natural.Internal
--- import Numeric.Covector
