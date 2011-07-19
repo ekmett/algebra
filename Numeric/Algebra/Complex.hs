@@ -1,8 +1,8 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, TypeFamilies, UndecidableInstances, DeriveDataTypeable #-}
-module Numeric.Module.Complex
+module Numeric.Algebra.Complex
   ( Complicated(..)
   , ComplexBasis(..)
-  , Complex
+  , Complex(..)
   ) where
 
 import Control.Applicative

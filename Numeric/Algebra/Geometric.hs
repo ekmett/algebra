@@ -48,11 +48,11 @@ import Prelude hiding ((-),(*),(+),negate,reverse)
 
 -- a basis vector for a simple geometric algebra with the euclidean inner product
 newtype Blade m = Blade { runBlade :: Word64 } deriving 
-  (Eq,Ord,Num,Bits,Enum,Ix,Bounded,Show,Read,Real,Integral
-  ,Additive,Abelian,LeftModule Natural,RightModule Natural,Monoidal
-  ,Multiplicative,Unital,Commutative
-  ,Semiring,Rig
-  ,DecidableZero,DecidableAssociates,DecidableUnits
+  ( Eq,Ord,Num,Bits,Enum,Ix,Bounded,Show,Read,Real,Integral
+  , Additive,Abelian,LeftModule Natural,RightModule Natural,Monoidal
+  , Multiplicative,Unital,Commutative
+  , Semiring,Rig
+  , DecidableZero,DecidableAssociates,DecidableUnits
   )
 
 instance HasTrie (Blade m) where
@@ -66,7 +66,6 @@ class Eigenbasis m where
   antiEuclidean :: proxy m -> Bool
   v             :: m -> Blade m
   e             :: Int -> m
-
 
 -- assuming n /= 0, find the index of the least significant set bit in a basis blade
 lsb :: Blade m -> Int
@@ -95,11 +94,11 @@ type Multivector r m = Blade m :->: r
 -- Euclidean basis, we can work with basis vectors for euclidean spaces of up to 64 dimensions without 
 -- expanding the representation of our basis vectors
 newtype Euclidean = Euclidean Int deriving 
-  (Eq,Ord,Show,Read,Num,Ix,Enum,Real,Integral
-  ,Data,Typeable
-  ,Additive,LeftModule Natural,RightModule Natural,Monoidal,Abelian,LeftModule Integer,RightModule Integer,Group
-  ,Multiplicative,TriviallyInvolutive,InvolutiveMultiplication,InvolutiveSemiring,Unital,Commutative
-  ,Semiring,Rig,Ring
+  ( Eq,Ord,Show,Read,Num,Ix,Enum,Real,Integral
+  , Data,Typeable
+  , Additive,LeftModule Natural,RightModule Natural,Monoidal,Abelian,LeftModule Integer,RightModule Integer,Group
+  , Multiplicative,TriviallyInvolutive,InvolutiveMultiplication,InvolutiveSemiring,Unital,Commutative
+  , Semiring,Rig,Ring
   )
 
 instance HasTrie Euclidean where

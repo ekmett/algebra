@@ -37,19 +37,21 @@ library
 -- reflection >= 0.4 && < 0.5,
   exposed-modules:
     Numeric.Algebra
+    Numeric.Algebra.Complex
+    Numeric.Algebra.Quaternion
+    Numeric.Algebra.Trigonometric
+    Numeric.Algebra.Hyperbolic
+    Numeric.Algebra.Geometric
     Numeric.Band.Rectangular
     Numeric.Covector
     Numeric.Exp
     Numeric.Log
     Numeric.Map
-    Numeric.Module.Complex
-    Numeric.Module.Quaternion
     Numeric.Natural.Internal
     Numeric.Rng.Zero
     Numeric.Ring.Rng
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
-    Numeric.Algebra.Geometric
 
   other-modules:
     Numeric.Additive.Class

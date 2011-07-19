@@ -82,7 +82,7 @@ instance Additive r => Additive (Covector r a) where
   replicate1p n (Covector m) = Covector $ replicate1p n m
 
 instance Coalgebra r m => Multiplicative (Covector r m) where
-  f * Covector g = Covector $ \k -> f $* g . comult k
+  Covector f * Covector g = Covector $ \k -> f (\m -> g (comult k m))
 
 instance (Commutative m, Coalgebra r m) => Commutative (Covector r m)
 

@@ -1,5 +1,5 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeFamilies, UndecidableInstances, DeriveDataTypeable #-}
-module Numeric.Module.Quaternion 
+module Numeric.Algebra.Quaternion 
   ( Complicated(..)
   , Hamiltonian(..)
   , QuaternionBasis(..)
@@ -23,8 +23,8 @@ import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Numeric.Algebra
-import Numeric.Module.Complex (ComplexBasis, Complicated(..))
-import qualified Numeric.Module.Complex as Complex
+import Numeric.Algebra.Complex (ComplexBasis, Complicated(..))
+import qualified Numeric.Algebra.Complex as Complex
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)
 
 class Complicated t => Hamiltonian t where
