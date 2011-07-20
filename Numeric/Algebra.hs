@@ -79,7 +79,7 @@ module Numeric.Algebra
   -- ** commutative algebras
   , CommutativeAlgebra
   , CommutativeBialgebra
-  , CommutativeCoalgebra
+  , CocommutativeCoalgebra
   -- ** division algebras
   , DivisionAlgebra(..)
   -- ** Hopf alegebras

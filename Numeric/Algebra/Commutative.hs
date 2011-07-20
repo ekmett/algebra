@@ -1,26 +1,25 @@
-{-# LANGUAGE MultiParamTypeClasses, UndecidableInstances, FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses, UndecidableInstances, FlexibleInstances, TypeOperators #-}
 module Numeric.Algebra.Commutative 
   ( Commutative
   , CommutativeAlgebra
-  , CommutativeCoalgebra
+  , CocommutativeCoalgebra
   , CommutativeBialgebra
   ) where
 
+import Data.Functor.Representable.Trie
+import Data.Int
+import Data.IntSet (IntSet)
+import Data.IntMap (IntMap)
+import Data.Set (Set)
+import Data.Map (Map)
+import Data.Word
 import Numeric.Additive.Class
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
-import Prelude (Bool, Ord, Integer)
-import Data.Int
-import Data.Word
 import Numeric.Natural
-import Data.Set (Set)
--- import qualified Data.Set as Set
-import Data.IntSet (IntSet)
--- import qualified Data.IntSet as IntSet
-import Data.Map (Map)
--- import qualified Data.Map as Map
-import Data.IntMap (IntMap)
--- import qualified Data.IntMap as IntMap
+import Prelude (Bool, Ord, Integer)
+
+
 
 -- | A commutative multiplicative semigroup
 class Multiplicative r => Commutative r
@@ -39,47 +38,150 @@ instance Commutative Word8
 instance Commutative Word16
 instance Commutative Word32
 instance Commutative Word64
-instance (Commutative a, Commutative b) => Commutative (a,b) 
-instance (Commutative a, Commutative b, Commutative c) => Commutative (a,b,c) 
-instance (Commutative a, Commutative b, Commutative c, Commutative d) => Commutative (a,b,c,d) 
-instance (Commutative a, Commutative b, Commutative c, Commutative d, Commutative e) => Commutative (a,b,c,d,e)
 
-class Algebra r a => CommutativeAlgebra r a
+instance ( Commutative a
+         , Commutative b
+         ) => Commutative (a,b) 
 
-instance (Commutative r, Semiring r) => CommutativeAlgebra r ()
-instance (CommutativeAlgebra r a, CommutativeAlgebra r b) => CommutativeAlgebra r (a,b)
-instance (CommutativeAlgebra r a, CommutativeAlgebra r b, CommutativeAlgebra r c) => CommutativeAlgebra r (a,b,c)
-instance (CommutativeAlgebra r a, CommutativeAlgebra r b, CommutativeAlgebra r c, CommutativeAlgebra r d) => CommutativeAlgebra r (a,b,c,d)
-instance (CommutativeAlgebra r a, CommutativeAlgebra r b, CommutativeAlgebra r c, CommutativeAlgebra r d, CommutativeAlgebra r e) => CommutativeAlgebra r (a,b,c,d,e)
+instance ( Commutative a
+         , Commutative b
+         , Commutative c
+         ) => Commutative (a,b,c) 
 
--- incoherent
--- instance (Algebra r a, CommutativeAlgebra r b) => CommutativeAlgebra (a -> r) b
--- instance CommutativeAlgebra () a
+instance ( Commutative a
+         , Commutative b
+         , Commutative c
+         , Commutative d
+         ) => Commutative (a,b,c,d) 
 
-instance (Commutative r, Semiring r, Ord a) => CommutativeAlgebra r (Set a)
-instance (Commutative r, Semiring r) => CommutativeAlgebra r IntSet
-instance (Commutative r, Monoidal r, Semiring r, Ord a, Abelian b, Partitionable b) => CommutativeAlgebra r (Map a b)
-instance (Commutative r, Monoidal r, Semiring r, Abelian b, Partitionable b) => CommutativeAlgebra r (IntMap b)
+instance ( Commutative a
+         , Commutative b
+         , Commutative c
+         , Commutative d
+         , Commutative e
+         ) => Commutative (a,b,c,d,e)
 
 instance CommutativeAlgebra r a => Commutative (a -> r)
 
-class Coalgebra r c => CommutativeCoalgebra r c
+instance ( HasTrie a
+         , CommutativeAlgebra r a
+         ) => Commutative (a :->: r) 
 
 
-instance CommutativeAlgebra r m => CommutativeCoalgebra r (m -> r)
-instance (CommutativeCoalgebra r a, CommutativeCoalgebra r b) => CommutativeCoalgebra r (a,b)
-instance (CommutativeCoalgebra r a, CommutativeCoalgebra r b, CommutativeCoalgebra r c) => CommutativeCoalgebra r (a,b,c)
-instance (CommutativeCoalgebra r a, CommutativeCoalgebra r b, CommutativeCoalgebra r c, CommutativeCoalgebra r d) => CommutativeCoalgebra r (a,b,c,d)
-instance (CommutativeCoalgebra r a, CommutativeCoalgebra r b, CommutativeCoalgebra r c, CommutativeCoalgebra r d, CommutativeCoalgebra r e) => CommutativeCoalgebra r (a,b,c,d,e)
 
-instance (Commutative r, Semiring r, Ord a) => CommutativeCoalgebra r (Set a)
-instance (Commutative r, Semiring r) => CommutativeCoalgebra r IntSet
-instance (Commutative r, Semiring r, Ord a, Abelian b) => CommutativeCoalgebra r (Map a b)
-instance (Commutative r, Semiring r, Abelian b) => CommutativeCoalgebra r (IntMap b)
+class Algebra r a => CommutativeAlgebra r a
 
--- incoherent
--- instance (Algebra r a, CommutativeCoalgebra r c) => CommutativeCoalgebra (a -> r) c -- TODO: check this instance!
--- instance CommutativeCoalgebra () a
+instance ( Commutative r
+         , Semiring r
+         ) => CommutativeAlgebra r ()
 
-class    (Bialgebra r h, CommutativeAlgebra r h, CommutativeCoalgebra r h) => CommutativeBialgebra r h
-instance (Bialgebra r h, CommutativeAlgebra r h, CommutativeCoalgebra r h) => CommutativeBialgebra r h
+instance ( CommutativeAlgebra r a
+         , CommutativeAlgebra r b
+         ) => CommutativeAlgebra r (a,b)
+
+instance ( CommutativeAlgebra r a
+         , CommutativeAlgebra r b
+         , CommutativeAlgebra r c
+         ) => CommutativeAlgebra r (a,b,c)
+
+instance ( CommutativeAlgebra r a
+         , CommutativeAlgebra r b
+         , CommutativeAlgebra r c
+         , CommutativeAlgebra r d
+         ) => CommutativeAlgebra r (a,b,c,d)
+
+instance ( CommutativeAlgebra r a
+         , CommutativeAlgebra r b
+         , CommutativeAlgebra r c
+         , CommutativeAlgebra r d
+         , CommutativeAlgebra r e
+         ) => CommutativeAlgebra r (a,b,c,d,e)
+
+instance ( Commutative r
+         , Semiring r
+         , Ord a
+         ) => CommutativeAlgebra r (Set a)
+
+instance (Commutative r
+         , Semiring r
+         ) => CommutativeAlgebra r IntSet
+
+instance (Commutative r
+         , Monoidal r
+         , Semiring r
+         , Ord a
+         , Abelian b
+         , Partitionable b
+         ) => CommutativeAlgebra r (Map a b)
+
+instance ( Commutative r
+         , Monoidal r
+         , Semiring r
+         , Abelian b
+         , Partitionable b
+         ) => CommutativeAlgebra r (IntMap b)
+
+
+
+class Coalgebra r c => CocommutativeCoalgebra r c
+
+instance CommutativeAlgebra r m => CocommutativeCoalgebra r (m -> r)
+
+instance ( HasTrie m
+         , CommutativeAlgebra r m
+         ) => CocommutativeCoalgebra r (m :->: r)
+
+instance (Commutative r, Semiring r) => CocommutativeCoalgebra r ()
+
+instance ( CocommutativeCoalgebra r a
+         , CocommutativeCoalgebra r b
+         ) => CocommutativeCoalgebra r (a,b)
+
+instance ( CocommutativeCoalgebra r a
+         , CocommutativeCoalgebra r b
+         , CocommutativeCoalgebra r c
+         ) => CocommutativeCoalgebra r (a,b,c)
+
+instance ( CocommutativeCoalgebra r a
+         , CocommutativeCoalgebra r b
+         , CocommutativeCoalgebra r c
+         , CocommutativeCoalgebra r d
+         ) => CocommutativeCoalgebra r (a,b,c,d)
+
+instance ( CocommutativeCoalgebra r a
+         , CocommutativeCoalgebra r b
+         , CocommutativeCoalgebra r c
+         , CocommutativeCoalgebra r d
+         , CocommutativeCoalgebra r e
+         ) => CocommutativeCoalgebra r (a,b,c,d,e)
+
+instance ( Commutative r
+         , Semiring r
+         , Ord a) => CocommutativeCoalgebra r (Set a)
+
+instance ( Commutative r
+         , Semiring r
+         ) => CocommutativeCoalgebra r IntSet
+
+instance ( Commutative r
+         , Semiring r
+         , Ord a
+         , Abelian b
+         ) => CocommutativeCoalgebra r (Map a b)
+
+instance ( Commutative r
+         , Semiring r
+         , Abelian b
+         ) => CocommutativeCoalgebra r (IntMap b)
+
+
+
+class ( Bialgebra r h
+      , CommutativeAlgebra r h
+      , CocommutativeCoalgebra r h
+      ) => CommutativeBialgebra r h
+
+instance ( Bialgebra r h
+         , CommutativeAlgebra r h
+         , CocommutativeCoalgebra r h
+         ) => CommutativeBialgebra r h

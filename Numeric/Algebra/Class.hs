@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts, UndecidableInstances #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts, UndecidableInstances, TypeOperators #-}
 module Numeric.Algebra.Class 
   (
   -- * Multiplicative Semigroups
@@ -21,25 +21,29 @@ module Numeric.Algebra.Class
   , Coalgebra(..)
   ) where
 
-import  Numeric.Additive.Class
-import Data.Monoid (mappend)
-import Data.Set (Set)
-import qualified Data.Set as Set
-import Data.IntSet (IntSet)
-import qualified Data.IntSet as IntSet
-import Data.Map (Map)
-import qualified Data.Map as Map
-import Data.IntMap (IntMap)
-import qualified Data.IntMap as IntMap
-import Data.Sequence hiding (reverse,replicate)
-import qualified Data.Sequence as Seq
+import Control.Applicative
 import Data.Foldable hiding (sum, concat)
-import Data.Semigroup.Foldable
+import Data.Functor.Representable
+import Data.Functor.Representable.Trie
 import Data.Int
+import Data.IntMap (IntMap)
+import Data.IntSet (IntSet)
+import Data.Key hiding (sum)
+import Data.Map (Map)
+import Data.Monoid (mappend)
+-- import Data.Semigroup.Foldable
+import Data.Sequence hiding (reverse,replicate,index)
+import Data.Set (Set)
 import Data.Word
-import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat)
-import qualified Prelude
+import Numeric.Additive.Class
 import Numeric.Natural.Internal
+import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat)
+import qualified Data.IntMap as IntMap
+import qualified Data.IntSet as IntSet
+import qualified Data.Map as Map
+import qualified Data.Sequence as Seq
+import qualified Data.Set as Set
+import qualified Prelude
 
 infixr 8 `pow1p`
 infixl 7 *, .*, *.
@@ -142,6 +146,11 @@ instance (Multiplicative a, Multiplicative b, Multiplicative c, Multiplicative d
 instance (Multiplicative a, Multiplicative b, Multiplicative c, Multiplicative d, Multiplicative e) => Multiplicative (a,b,c,d,e) where
   (a,b,c,d,e) * (i,j,k,l,m) = (a * i, b * j, c * k, d * l, e * m)
 
+instance Algebra r a => Multiplicative (a -> r) where
+  f * g = mult $ \a b -> f a * g b
+instance (HasTrie a, Algebra r a) => Multiplicative (a :->: r) where
+  f * g = tabulate $ mult $ \a b -> index f a * index g b
+
 -- | A pair of an additive abelian semigroup, and a multiplicative semigroup, with the distributive laws:
 -- 
 -- > a(b + c) = ab + ac -- left distribution (we are a LeftNearSemiring)
@@ -175,6 +184,8 @@ instance (Semiring a, Semiring b) => Semiring (a, b)
 instance (Semiring a, Semiring b, Semiring c) => Semiring (a, b, c)
 instance (Semiring a, Semiring b, Semiring c, Semiring d) => Semiring (a, b, c, d)
 instance (Semiring a, Semiring b, Semiring c, Semiring d, Semiring e) => Semiring (a, b, c, d, e)
+instance Algebra r a => Semiring (a -> r) 
+instance (HasTrie a, Algebra r a) => Semiring (a :->: r) 
 
 -- | An associative algebra built with a free module over a semiring
 class Semiring r => Algebra r a where
@@ -231,11 +242,6 @@ instance (Algebra r a, Algebra r b, Algebra r c, Algebra r d, Algebra r e) => Al
 -- incoherent
 -- instance (Algebra r b, Algebra r a) => Algebra (b -> r) a where mult f a b = mult (\a1 a2 -> f a1 a2 b) a
 
-instance Algebra r a => Multiplicative (a -> r) where
-  f * g = mult $ \a b -> f a * g b
-
-instance Algebra r a => Semiring (a -> r) 
-
 -- A coassociative coalgebra over a semiring using
 class Semiring r => Coalgebra r c where
   comult :: (c -> r) -> c -> c -> r
@@ -247,10 +253,10 @@ class Semiring r => Coalgebra r c where
 instance Algebra r m => Coalgebra r (m -> r) where
   comult k f g = k (f * g)
 
--- incoherent
--- instance Coalgebra () c where comult _ _ _ = ()
+instance (HasTrie m, Algebra r m) => Coalgebra r (m :->: r) where
+  comult k f g = k (f * g)
 
--- incoherent
+-- instance Coalgebra () c where comult _ _ _ = ()
 -- instance (Algebra r b, Coalgebra r c) => Coalgebra (b -> r) c where comult f c1 c2 b = comult (`f` b) c1 c2 
 
 instance Semiring r => Coalgebra r () where
@@ -298,42 +304,101 @@ class (Semiring r, Additive m) => LeftModule r m where
 instance LeftModule Natural Bool where 
   0 .* _ = False
   _ .* a = a
-instance LeftModule Natural Natural where (.*) = (*)
-instance LeftModule Natural Integer where Natural n .* m = n * m
-instance LeftModule Integer Integer where (.*) = (*) 
-instance LeftModule Natural Int where (.*) = (*) . fromIntegral
-instance LeftModule Integer Int where (.*) = (*) . fromInteger
-instance LeftModule Natural Int8 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Int8 where (.*) = (*) . fromInteger
-instance LeftModule Natural Int16 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Int16 where (.*) = (*) . fromInteger
-instance LeftModule Natural Int32 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Int32 where (.*) = (*) . fromInteger
-instance LeftModule Natural Int64 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Int64 where (.*) = (*) . fromInteger
-instance LeftModule Natural Word where (.*) = (*) . fromIntegral
-instance LeftModule Integer Word where (.*) = (*) . fromInteger
-instance LeftModule Natural Word8 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Word8 where (.*) = (*) . fromInteger
-instance LeftModule Natural Word16 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Word16 where (.*) = (*) . fromInteger
-instance LeftModule Natural Word32 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Word32 where (.*) = (*) . fromInteger
-instance LeftModule Natural Word64 where (.*) = (*) . fromIntegral
-instance LeftModule Integer Word64 where (.*) = (*) . fromInteger
-instance Semiring r => LeftModule r () where _ .* _ = ()
-instance LeftModule r m => LeftModule r (e -> m) where (.*) m f e = m .* f e
+
+instance LeftModule Natural Natural where 
+  (.*) = (*)
+
+instance LeftModule Natural Integer where 
+  Natural n .* m = n * m
+
+instance LeftModule Integer Integer where 
+  (.*) = (*) 
+
+instance LeftModule Natural Int where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Int where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Int8 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Int8 where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Int16 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Int16 where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Int32 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Int32 where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Int64 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Int64 where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Word where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Word where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Word8 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Word8 where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Word16 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Word16 where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Word32 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Word32 where
+  (.*) = (*) . fromInteger
+
+instance LeftModule Natural Word64 where
+  (.*) = (*) . fromIntegral
+
+instance LeftModule Integer Word64 where
+  (.*) = (*) . fromInteger
+
+instance Semiring r => LeftModule r () where 
+  _ .* _ = ()
+
+instance LeftModule r m => LeftModule r (e -> m) where 
+  (.*) m f e = m .* f e
+
+instance (HasTrie e, LeftModule r m) => LeftModule r (e :->: m) where 
+  (.*) m f = tabulate $ \e -> m .* index f e
 
 instance Additive m => LeftModule () m where 
   _ .* a = a
+
 instance (LeftModule r a, LeftModule r b) => LeftModule r (a, b) where
   n .* (a, b) = (n .* a, n .* b)
+
 instance (LeftModule r a, LeftModule r b, LeftModule r c) => LeftModule r (a, b, c) where
   n .* (a, b, c) = (n .* a, n .* b, n .* c)
+
 instance (LeftModule r a, LeftModule r b, LeftModule r c, LeftModule r d) => LeftModule r (a, b, c, d) where
   n .* (a, b, c, d) = (n .* a, n .* b, n .* c, n .* d)
+
 instance (LeftModule r a, LeftModule r b, LeftModule r c, LeftModule r d, LeftModule r e) => LeftModule r (a, b, c, d, e) where
   n .* (a, b, c, d, e) = (n .* a, n .* b, n .* c, n .* d, n .* e)
+
+
 
 class (Semiring r, Additive m) => RightModule r m where
   (*.) :: m -> r -> m
@@ -341,44 +406,82 @@ class (Semiring r, Additive m) => RightModule r m where
 instance RightModule Natural Bool where 
   _ *. 0 = False
   a *. _ = a
+
 instance RightModule Natural Natural where (*.) = (*)
+
 instance RightModule Natural Integer where n *. Natural m = n * m
+
 instance RightModule Integer Integer where (*.) = (*) 
+
 instance RightModule Natural Int where m *. n = m * fromIntegral n
+
 instance RightModule Integer Int where m *. n = m * fromInteger n
+
 instance RightModule Natural Int8 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Int8 where m *. n = m * fromInteger n
+
 instance RightModule Natural Int16 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Int16 where m *. n = m * fromInteger n
+
 instance RightModule Natural Int32 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Int32 where m *. n = m * fromInteger n
+
 instance RightModule Natural Int64 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Int64 where m *. n = m * fromInteger n
+
 instance RightModule Natural Word where m *. n = m * fromIntegral n
+
 instance RightModule Integer Word where m *. n = m * fromInteger n
+
 instance RightModule Natural Word8 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Word8 where m *. n = m * fromInteger n
+
 instance RightModule Natural Word16 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Word16 where m *. n = m * fromInteger n
+
 instance RightModule Natural Word32 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Word32 where m *. n = m * fromInteger n
+
 instance RightModule Natural Word64 where m *. n = m * fromIntegral n
+
 instance RightModule Integer Word64 where m *. n = m * fromInteger n
-instance Semiring r => RightModule r () where _ *. _ = ()
-instance RightModule r m => RightModule r (e -> m) where (*.) f m e = f e *. m
+
+instance Semiring r => RightModule r () where 
+  _ *. _ = ()
+
+instance RightModule r m => RightModule r (e -> m) where 
+  (*.) f m e = f e *. m
+
+instance (HasTrie e, RightModule r m) => RightModule r (e :->: m) where 
+  (*.) f m = tabulate $ \e -> index f e *. m
+
 instance Additive m => RightModule () m where 
   (*.) = const
+
 instance (RightModule r a, RightModule r b) => RightModule r (a, b) where
   (a, b) *. n = (a *. n, b *. n)
+
 instance (RightModule r a, RightModule r b, RightModule r c) => RightModule r (a, b, c) where
   (a, b, c) *. n = (a *. n, b *. n, c *. n)
+
 instance (RightModule r a, RightModule r b, RightModule r c, RightModule r d) => RightModule r (a, b, c, d) where
   (a, b, c, d) *. n = (a *. n, b *. n, c *. n, d *. n)
+
 instance (RightModule r a, RightModule r b, RightModule r c, RightModule r d, RightModule r e) => RightModule r (a, b, c, d, e) where
   (a, b, c, d, e) *. n = (a *. n, b *. n, c *. n, d *. n, e *. n)
 
+
+
 class (LeftModule r m, RightModule r m) => Module r m
 instance (LeftModule r m, RightModule r m) => Module r m
+
 
 
 -- | An additive monoid
@@ -468,6 +571,11 @@ instance Monoidal r => Monoidal (e -> r) where
   sumWith f xs e = sumWith (`f` e) xs
   replicate n r e = replicate n (r e)
 
+instance (HasTrie e, Monoidal r) => Monoidal (e :->: r) where
+  zero = pure zero
+  sumWith f xs = tabulate $ \e -> sumWith (\a -> index (f a) e) xs
+  replicate n r = tabulate $ replicate n . index r
+
 instance Monoidal () where 
   zero = ()
   replicate _ () = ()
@@ -488,3 +596,4 @@ instance (Monoidal a, Monoidal b, Monoidal c, Monoidal d) => Monoidal (a,b,c,d) 
 instance (Monoidal a, Monoidal b, Monoidal c, Monoidal d, Monoidal e) => Monoidal (a,b,c,d,e) where
   zero = (zero,zero,zero,zero,zero)
   replicate n (a,b,c,d,e) = (replicate n a, replicate n b, replicate n c, replicate n d, replicate n e)
+

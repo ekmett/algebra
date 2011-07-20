@@ -180,14 +180,14 @@ instance Rng k => CounitalCoalgebra k ComplexBasis where
 
 instance Rng k => Bialgebra k ComplexBasis 
 
-instance Rng k => InvolutiveAlgebra k ComplexBasis where
+instance (InvolutiveSemiring k, Rng k) => InvolutiveAlgebra k ComplexBasis where
   inv f E = f E
   inv f b = negate (f b)
 
-instance Rng k => InvolutiveCoalgebra k ComplexBasis where
+instance (InvolutiveSemiring k, Rng k) => InvolutiveCoalgebra k ComplexBasis where
   coinv = inv
 
-instance Rng k => HopfAlgebra k ComplexBasis where
+instance (InvolutiveSemiring k, Rng k) => HopfAlgebra k ComplexBasis where
   antipode = inv
 
 instance (Commutative r, Rng r) => Multiplicative (Complex r) where

@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeOperators #-}
 module Numeric.Additive.Class
   ( 
   -- * Additive Semigroups
@@ -15,9 +16,12 @@ module Numeric.Additive.Class
 import Data.Int
 import Data.Word
 import Data.Semigroup.Foldable
-import Data.Foldable hiding (concat)
+import Data.Key hiding (concat)
+import Data.Functor.Representable
+import Data.Functor.Representable.Trie
+-- import Data.Foldable hiding (concat)
 import Numeric.Natural.Internal
-import Prelude ((-),Bool(..),($),id,(>>=),fromIntegral,(*),otherwise,quot,maybe,error,even,Maybe(..),(==),(.),($!),Integer,(||),toInteger,Integral)
+import Prelude (fmap,(-),Bool(..),($),id,(>>=),fromIntegral,(*),otherwise,quot,maybe,error,even,Maybe(..),(==),(.),($!),Integer,(||),toInteger,Integral)
 import qualified Prelude
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
@@ -56,6 +60,11 @@ instance Additive r => Additive (b -> r) where
   f + g = \e -> f e + g e 
   replicate1p n f e = replicate1p n (f e)
   sumWith1 f xs e = sumWith1 (`f` e) xs
+
+instance (HasTrie b, Additive r) => Additive (b :->: r) where
+  (+) = zipWith (+)
+  replicate1p = fmap . replicate1p
+  sumWith1 f xs = tabulate $ \e -> sumWith1 (\a -> index (f a) e) xs
 
 instance Additive Bool where
   (+) = (||)
@@ -177,6 +186,7 @@ instance (Partitionable a, Partitionable b, Partitionable c,Partitionable d, Par
 class Additive r => Abelian r
 
 instance Abelian r => Abelian (e -> r)
+instance (HasTrie e, Abelian r) => Abelian (e :->: r)
 instance Abelian ()
 instance Abelian Bool
 instance Abelian Integer
@@ -208,6 +218,7 @@ replicate1pIdempotent _ r = r
 instance Idempotent ()
 instance Idempotent Bool
 instance Idempotent r => Idempotent (e -> r)
+instance (HasTrie e, Idempotent r) => Idempotent (e :->: r)
 instance (Idempotent a, Idempotent b) => Idempotent (a,b)
 instance (Idempotent a, Idempotent b, Idempotent c) => Idempotent (a,b,c)
 instance (Idempotent a, Idempotent b, Idempotent c, Idempotent d) => Idempotent (a,b,c,d)

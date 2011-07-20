@@ -97,10 +97,12 @@ instance Functor Quaternion where
   fmap = fmapRep
 
 instance Zip Quaternion where
-  zipWith f (Quaternion a1 b1 c1 d1) (Quaternion a2 b2 c2 d2) = Quaternion (f a1 a2) (f b1 b2) (f c1 c2) (f d1 d2)
+  zipWith f (Quaternion a1 b1 c1 d1) (Quaternion a2 b2 c2 d2) = 
+    Quaternion (f a1 a2) (f b1 b2) (f c1 c2) (f d1 d2)
 
 instance ZipWithKey Quaternion where
-  zipWithKey f (Quaternion a1 b1 c1 d1) (Quaternion a2 b2 c2 d2) = Quaternion (f E a1 a2) (f I b1 b2) (f J c1 c2) (f K d1 d2)
+  zipWithKey f (Quaternion a1 b1 c1 d1) (Quaternion a2 b2 c2 d2) = 
+    Quaternion (f E a1 a2) (f I b1 b2) (f J c1 c2) (f K d1 d2)
 
 instance Keyed Quaternion where
   mapWithKey = mapWithKeyRep
@@ -124,28 +126,36 @@ instance MonadReader QuaternionBasis Quaternion where
   local = localRep
 
 instance Foldable Quaternion where
-  foldMap f (Quaternion a b c d) = f a `mappend` f b `mappend` f c `mappend` f d
+  foldMap f (Quaternion a b c d) = 
+    f a `mappend` f b `mappend` f c `mappend` f d
 
 instance FoldableWithKey Quaternion where
-  foldMapWithKey f (Quaternion a b c d) = f E a `mappend` f I b `mappend` f J c `mappend` f K d
+  foldMapWithKey f (Quaternion a b c d) = 
+    f E a `mappend` f I b `mappend` f J c `mappend` f K d
 
 instance Traversable Quaternion where
-  traverse f (Quaternion a b c d) = Quaternion <$> f a <*> f b <*> f c <*> f d
+  traverse f (Quaternion a b c d) = 
+    Quaternion <$> f a <*> f b <*> f c <*> f d
 
 instance TraversableWithKey Quaternion where
-  traverseWithKey f (Quaternion a b c d) = Quaternion <$> f E a <*> f I b <*> f J c <*> f K d
+  traverseWithKey f (Quaternion a b c d) = 
+    Quaternion <$> f E a <*> f I b <*> f J c <*> f K d
 
 instance Foldable1 Quaternion where
-  foldMap1 f (Quaternion a b c d) = f a <> f b <> f c <> f d
+  foldMap1 f (Quaternion a b c d) = 
+    f a <> f b <> f c <> f d
 
 instance FoldableWithKey1 Quaternion where
-  foldMapWithKey1 f (Quaternion a b c d) = f E a <> f I b <> f J c <> f K d
+  foldMapWithKey1 f (Quaternion a b c d) = 
+    f E a <> f I b <> f J c <> f K d
 
 instance Traversable1 Quaternion where
-  traverse1 f (Quaternion a b c d) = Quaternion <$> f a <.> f b <.> f c <.> f d
+  traverse1 f (Quaternion a b c d) = 
+    Quaternion <$> f a <.> f b <.> f c <.> f d
 
 instance TraversableWithKey1 Quaternion where
-  traverseWithKey1 f (Quaternion a b c d) = Quaternion <$> f E a <.> f I b <.> f J c <.> f K d
+  traverseWithKey1 f (Quaternion a b c d) = 
+    Quaternion <$> f E a <.> f I b <.> f J c <.> f K d
 
 instance HasTrie QuaternionBasis where
   type BaseTrie QuaternionBasis = Quaternion
@@ -157,10 +167,12 @@ instance Additive r => Additive (Quaternion r) where
   replicate1p = replicate1pRep
 
 instance LeftModule r s => LeftModule r (Quaternion s) where
-  r .* Quaternion a b c d = Quaternion (r .* a) (r .* b) (r .* c) (r .* d)
+  r .* Quaternion a b c d =
+    Quaternion (r .* a) (r .* b) (r .* c) (r .* d)
 
 instance RightModule r s => RightModule r (Quaternion s) where
-  Quaternion a b c d *. r = Quaternion (a *. r) (b *. r) (c *. r) (d *. r)
+  Quaternion a b c d *. r =
+    Quaternion (a *. r) (b *. r) (c *. r) (d *. r)
 
 instance Monoidal r => Monoidal (Quaternion r) where
   zero = zeroRep
@@ -178,12 +190,12 @@ instance Idempotent r => Idempotent (Quaternion r)
 
 instance Partitionable r => Partitionable (Quaternion r) where
   partitionWith f (Quaternion a b c d) = id =<<
-                partitionWith (\a1 a2 -> id =<< 
-                partitionWith (\b1 b2 -> id =<< 
-                partitionWith (\c1 c2 -> 
-                partitionWith (\d1 d2 -> f (Quaternion a1 b1 c1 d1) 
-                                           (Quaternion a2 b2 c2 d2)
-                              ) d) c) b) a
+    partitionWith (\a1 a2 -> id =<< 
+    partitionWith (\b1 b2 -> id =<< 
+    partitionWith (\c1 c2 -> 
+    partitionWith (\d1 d2 -> f (Quaternion a1 b1 c1 d1) 
+                               (Quaternion a2 b2 c2 d2)
+                  ) d) c) b) a
 
 instance (TriviallyInvolutive r, Rng r) => Algebra r QuaternionBasis where
   mult f = f' where
@@ -202,40 +214,44 @@ instance (TriviallyInvolutive r, Rng r) => UnitalAlgebra r QuaternionBasis where
 
 instance (TriviallyInvolutive r, Rng r) => Coalgebra r QuaternionBasis where
   comult f = f' where
-     fe = f E
-     fi = f I
-     fj = f J
-     fk = f K
-     f' E E = fe
-     f' E I = fi
-     f' E J = fj
-     f' E K = fk
-     f' I E = fi
-     f' I I = negate fe
-     f' I J = fk
-     f' I K = negate fj
-     f' J E = fj
-     f' J I = negate fk
-     f' J J = negate fe
-     f' J K = fi
-     f' K E = fk
-     f' K I = fj
-     f' K J = negate fi
-     f' K K = negate fe
+    fe = f E
+    fi = f I
+    fj = f J
+    fk = f K
+    fe' = negate fe
+    fi' = negate fi
+    fj' = negate fj
+    fk' = negate fk
+    f' E E = fe
+    f' E I = fi
+    f' E J = fj
+    f' E K = fk
+    f' I E = fi
+    f' I I = fe'
+    f' I J = fk
+    f' I K = fj'
+    f' J E = fj
+    f' J I = fk'
+    f' J J = fe'
+    f' J K = fi
+    f' K E = fk
+    f' K I = fj
+    f' K J = fi'
+    f' K K = fe'
 
 instance (TriviallyInvolutive r, Rng r) => CounitalCoalgebra r QuaternionBasis where
   counit f = f E
 
 instance (TriviallyInvolutive r, Rng r)  => Bialgebra r QuaternionBasis 
 
-instance (TriviallyInvolutive r, Rng r)  => InvolutiveAlgebra r QuaternionBasis where
+instance (TriviallyInvolutive r, InvolutiveSemiring r, Rng r)  => InvolutiveAlgebra r QuaternionBasis where
   inv f E = f E
   inv f b = negate (f b)
 
-instance (TriviallyInvolutive r, Rng r) => InvolutiveCoalgebra r QuaternionBasis where
+instance (TriviallyInvolutive r, InvolutiveSemiring r, Rng r) => InvolutiveCoalgebra r QuaternionBasis where
   coinv = inv
 
-instance (TriviallyInvolutive r, Rng r) => HopfAlgebra r QuaternionBasis where
+instance (TriviallyInvolutive r, InvolutiveSemiring r, Rng r) => HopfAlgebra r QuaternionBasis where
   antipode = inv
 
 instance (TriviallyInvolutive r, Rng r) => Multiplicative (Quaternion r) where
@@ -252,8 +268,10 @@ instance (TriviallyInvolutive r, Ring r) => Rig (Quaternion r) where
 instance (TriviallyInvolutive r, Ring r) => Ring (Quaternion r) where
   fromInteger n = Quaternion (fromInteger n) zero zero zero
 
-instance (TriviallyInvolutive r, Rng r) => LeftModule (Quaternion r) (Quaternion r) where (.*) = (*)
-instance (TriviallyInvolutive r, Rng r) => RightModule (Quaternion r) (Quaternion r) where (*.) = (*)
+instance ( TriviallyInvolutive r, Rng r) => LeftModule (Quaternion r) (Quaternion r) where 
+  (.*) = (*)
+instance (TriviallyInvolutive r, Rng r) => RightModule (Quaternion r) (Quaternion r) where 
+  (*.) = (*)
 
 instance (TriviallyInvolutive r, Rng r) => InvolutiveMultiplication (Quaternion r) where
   -- without trivial involution, multiplication fails associativity, and we'd need to 

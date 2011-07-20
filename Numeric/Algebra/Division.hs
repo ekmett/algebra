@@ -2,8 +2,6 @@
 module Numeric.Algebra.Division
   ( Division(..)
   , DivisionAlgebra(..)
---  , CodivisionCoalgebra(..)
---  , DivisionBialgebra
   ) where
 
 import Prelude hiding ((*), recip, (/),(^))
@@ -73,14 +71,3 @@ class UnitalAlgebra r a => DivisionAlgebra r a where
 instance (Unital r, DivisionAlgebra r a) => Division (a -> r) where
   recip = recipriocal
 
-{-
-class CounitalCoalgebra r c => DivisionCoalgebra r c where
-  corecipriocal :: (c -> r) -> c -> r
-
-instance CodivisionCoalgebra () c where
-  corecipriocal _ _ = ()
-
--- | corecipriocal = recipriocal
-class (Bialgebra r h, DivisionAlgebra r h, CodivisionCoalgebra r h) => DivisionBialgebra r h
-instance (Bialgebra r h, DivisionAlgebra r h, CodivisionCoalgebra r h) => DivisionBialgebra r h
--}
