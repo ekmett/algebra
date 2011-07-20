@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts, TypeOperators #-}
 module Numeric.Additive.Group
   ( -- * Additive Groups
     Group(..)
@@ -6,7 +6,9 @@ module Numeric.Additive.Group
 
 import Data.Int
 import Data.Word
-import Prelude hiding ((*), (+), (-), negate, subtract)
+import Data.Key
+import Data.Functor.Representable.Trie
+import Prelude hiding ((*), (+), (-), negate, subtract,zipWith)
 import qualified Prelude
 import Numeric.Additive.Class
 import Numeric.Algebra.Class
@@ -42,6 +44,12 @@ instance Group r => Group (e -> r) where
   negate f x = negate (f x)
   subtract f g x = subtract (f x) (g x)
   times n f e = times n (f e)
+
+instance (HasTrie e, Group r) => Group (e :->: r) where
+  (-) = zipWith (-)
+  negate = fmap negate
+  subtract = zipWith subtract
+  times = fmap . times
 
 instance Group Integer where
   (-) = (Prelude.-)
