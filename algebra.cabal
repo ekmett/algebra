@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       0.7.0
+version:       0.7.1
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -64,7 +64,6 @@ library
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
 
-  other-modules:
     Numeric.Additive.Class
     Numeric.Additive.Group
     Numeric.Algebra.Class
