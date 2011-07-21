@@ -11,6 +11,7 @@ module Numeric.Algebra.Complex
   , Complex(..)
   , realPart
   , imagPart
+  , uncomplicate
   ) where
 
 import Control.Applicative
@@ -30,6 +31,7 @@ import Data.Traversable
 import Numeric.Algebra
 import Numeric.Algebra.Distinguished.Class
 import Numeric.Algebra.Complex.Class
+import Numeric.Algebra.Quaternion.Class
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger,recip)
 
 -- complex basis
@@ -240,3 +242,11 @@ instance (Commutative r, Rng r, InvolutiveSemiring r) => Quadrance r (Complex r)
 instance (Commutative r, InvolutiveSemiring r, DivisionRing r) => Division (Complex r) where
   recip q@(Complex a b) = Complex (qq \\ a) (qq \\ b)
     where qq = quadrance q
+
+-- | half of the Cayley-Dickson quaternion isomorphism 
+uncomplicate :: Hamiltonian q => ComplexBasis -> ComplexBasis -> q
+uncomplicate E E = e
+uncomplicate I E = i
+uncomplicate E I = j
+uncomplicate I I = k
+

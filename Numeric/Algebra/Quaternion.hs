@@ -11,7 +11,6 @@ module Numeric.Algebra.Quaternion
   , QuaternionBasis(..)
   , Quaternion(..)
   , complicate
-  , uncomplicate
   , vectorPart
   , scalarPart
   ) where
@@ -31,7 +30,6 @@ import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Numeric.Algebra
-import Numeric.Algebra.Complex (ComplexBasis)
 import Numeric.Algebra.Distinguished.Class
 import Numeric.Algebra.Complex.Class
 import Numeric.Algebra.Quaternion.Class
@@ -317,18 +315,11 @@ instance (TriviallyInvolutive r, Rng r) => InvolutiveMultiplication (Quaternion 
   adjoint (Quaternion a b c d) = Quaternion a (negate b) (negate c) (negate d)
 
 -- | Cayley-Dickson quaternion isomorphism (one way)
-complicate :: QuaternionBasis -> (ComplexBasis, ComplexBasis)
-complicate E = (Complex.E, Complex.E)
-complicate I = (Complex.I, Complex.E)
-complicate J = (Complex.E, Complex.I)
-complicate K = (Complex.I, Complex.I)
-
--- | Cayley-Dickson quaternion isomorphism (the other half)
-uncomplicate :: ComplexBasis -> ComplexBasis -> QuaternionBasis
-uncomplicate Complex.E Complex.E = E
-uncomplicate Complex.I Complex.E = I
-uncomplicate Complex.E Complex.I = J
-uncomplicate Complex.I Complex.I = K
+complicate :: Complicated c => QuaternionBasis -> (c,c)
+complicate E = (e, e)
+complicate I = (i, e) 
+complicate J = (e, i)
+complicate K = (i, i)
 
 scalarPart :: (Representable f, Key f ~ QuaternionBasis) => f r -> r
 scalarPart f = index f E
