@@ -1,16 +1,24 @@
-{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeFamilies, UndecidableInstances, DeriveDataTypeable #-}
+{-# LANGUAGE FlexibleInstances
+           , MultiParamTypeClasses
+           , TypeFamilies
+           , UndecidableInstances
+           , DeriveDataTypeable
+           , TypeOperators #-}
 module Numeric.Algebra.Quaternion 
-  ( Complicated(..)
+  ( Distinguished(..)
+  , Complicated(..)
   , Hamiltonian(..)
   , QuaternionBasis(..)
   , Quaternion(..)
   , complicate
   , uncomplicate
+  , vectorPart
+  , scalarPart
   ) where
 
 import Control.Applicative
 import Control.Monad.Reader.Class
-import Data.Ix
+import Data.Ix hiding (index)
 import Data.Key
 import Data.Data
 import Data.Distributive
@@ -23,34 +31,48 @@ import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Numeric.Algebra
-import Numeric.Algebra.Complex (ComplexBasis, Complicated(..))
+import Numeric.Algebra.Complex (ComplexBasis)
+import Numeric.Algebra.Distinguished.Class
+import Numeric.Algebra.Complex.Class
+import Numeric.Algebra.Quaternion.Class
 import qualified Numeric.Algebra.Complex as Complex
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)
 
-class Complicated t => Hamiltonian t where
-  j :: t
-  k :: t
+instance Distinguished QuaternionBasis where
+  e = E
 
 instance Complicated QuaternionBasis where
-  e = E
   i = I
 
 instance Hamiltonian QuaternionBasis where
   j = J
   k = K
 
-instance Rig r => Complicated (Quaternion r) where
+instance Rig r => Distinguished (Quaternion r) where
   e = Quaternion one zero zero zero
+
+instance Rig r => Complicated (Quaternion r) where
   i = Quaternion zero one zero zero
 
 instance Rig r => Hamiltonian (Quaternion r) where
   j = Quaternion zero zero one zero
   k = Quaternion one zero zero one 
 
-instance Rig r => Complicated (QuaternionBasis -> r) where
+instance Rig r => Distinguished (QuaternionBasis :->: r) where
+  e = Trie e
+
+instance Rig r => Complicated (QuaternionBasis :->: r) where
+  i = Trie i
+
+instance Rig r => Hamiltonian (QuaternionBasis :->: r) where
+  j = Trie j
+  k = Trie k
+
+instance Rig r => Distinguished (QuaternionBasis -> r) where
   e E = one 
   e _ = zero
 
+instance Rig r => Complicated (QuaternionBasis -> r) where
   i I = one
   i _ = zero
   
@@ -60,10 +82,6 @@ instance Rig r => Hamiltonian (QuaternionBasis -> r) where
 
   k K = one
   k _ = zero
-
-instance Hamiltonian a => Hamiltonian (Covector r a) where
-  j = return j
-  k = return k
 
 -- quaternion basis
 data QuaternionBasis = E | I | J | K deriving (Eq,Ord,Enum,Read,Show,Bounded,Ix,Data,Typeable)
@@ -197,6 +215,7 @@ instance Partitionable r => Partitionable (Quaternion r) where
                                (Quaternion a2 b2 c2 d2)
                   ) d) c) b) a
 
+-- | the quaternion algebra
 instance (TriviallyInvolutive r, Rng r) => Algebra r QuaternionBasis where
   mult f = f' where
     fe = f E E - (f I I + f J J + f K K)
@@ -212,6 +231,24 @@ instance (TriviallyInvolutive r, Rng r) => UnitalAlgebra r QuaternionBasis where
   unit x E = x 
   unit _ _ = zero
 
+-- | the trivial diagonal coalgebra
+instance (TriviallyInvolutive r, Rng r) => Coalgebra r QuaternionBasis where
+  comult f = f' where
+    fe = f E
+    fi = f I
+    fj = f J
+    fk = f K
+    f' E E = fe
+    f' I I = fi
+    f' J J = fj
+    f' K K = fk
+    f' _ _ = zero
+
+instance (TriviallyInvolutive r, Rng r) => CounitalCoalgebra r QuaternionBasis where
+  counit f = f E + f I + f J + f K
+
+{-
+-- dual quaternion comultiplication
 instance (TriviallyInvolutive r, Rng r) => Coalgebra r QuaternionBasis where
   comult f = f' where
     fe = f E
@@ -241,6 +278,7 @@ instance (TriviallyInvolutive r, Rng r) => Coalgebra r QuaternionBasis where
 
 instance (TriviallyInvolutive r, Rng r) => CounitalCoalgebra r QuaternionBasis where
   counit f = f E
+-}
 
 instance (TriviallyInvolutive r, Rng r)  => Bialgebra r QuaternionBasis 
 
@@ -291,3 +329,16 @@ uncomplicate Complex.E Complex.E = E
 uncomplicate Complex.I Complex.E = I
 uncomplicate Complex.E Complex.I = J
 uncomplicate Complex.I Complex.I = K
+
+scalarPart :: (Representable f, Key f ~ QuaternionBasis) => f r -> r
+scalarPart f = index f E
+
+vectorPart :: (Representable f, Key f ~ QuaternionBasis) => f r -> (r,r,r)
+vectorPart f = (index f I, index f J, index f K)
+
+instance (TriviallyInvolutive r, Rng r) => Quadrance r (Quaternion r) where
+  quadrance n = scalarPart (adjoint n * n)
+
+instance (TriviallyInvolutive r, Ring r, Division r) => Division (Quaternion r) where
+  recip q@(Quaternion a b c d) = Quaternion (qq \\ a) (qq \\ b) (qq \\ c) (qq \\ d)
+    where qq = quadrance q

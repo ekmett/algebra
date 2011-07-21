@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       0.6.1
+version:       0.7.0
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -34,16 +34,26 @@ library
     representable-tries >= 2.0 && < 2.1,
     void >= 0.5.4 && < 0.6
 
--- reflection >= 0.4 && < 0.5,
   exposed-modules:
     Numeric.Algebra
-    Numeric.Algebra.Complex
-    Numeric.Algebra.Quaternion
-    Numeric.Algebra.Trigonometric
-    Numeric.Algebra.Hyperbolic
-    Numeric.Algebra.Geometric
-    Numeric.Band.Rectangular
     Numeric.Covector
+    Numeric.Natural
+
+    Numeric.Algebra.Distinguished.Class
+    Numeric.Algebra.Complex
+    Numeric.Algebra.Complex.Class
+    Numeric.Algebra.Dual
+    Numeric.Algebra.Dual.Class
+    Numeric.Algebra.Quaternion
+    Numeric.Algebra.Quaternion.Class
+    Numeric.Algebra.Hyperbolic
+    Numeric.Coalgebra.Dual
+    Numeric.Coalgebra.Hyperbolic
+    Numeric.Coalgebra.Hyperbolic.Class
+    Numeric.Coalgebra.Trigonometric
+    Numeric.Coalgebra.Trigonometric.Class
+    Numeric.Coalgebra.Geometric
+    Numeric.Band.Rectangular
     Numeric.Exp
     Numeric.Log
     Numeric.Map
@@ -64,10 +74,10 @@ library
     Numeric.Algebra.Commutative
     Numeric.Algebra.Factorable
     Numeric.Algebra.Hopf
-    Numeric.Natural
     Numeric.Decidable.Zero
     Numeric.Decidable.Units
     Numeric.Decidable.Associates
+    Numeric.Field.Class
     Numeric.Module.Class
     Numeric.Module.Representable
     Numeric.Semiring.Integral
@@ -78,6 +88,7 @@ library
     Numeric.Rig.Class
     Numeric.Rng.Class
     Numeric.Ring.Class
+    Numeric.Ring.Division
     Numeric.Rig.Ordered
     Numeric.Rig.Characteristic
     Numeric.Order.Class

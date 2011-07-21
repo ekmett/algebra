@@ -1,8 +1,16 @@
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, TypeFamilies, UndecidableInstances, DeriveDataTypeable #-}
+{-# LANGUAGE MultiParamTypeClasses
+           , FlexibleInstances
+           , TypeFamilies
+           , UndecidableInstances
+           , DeriveDataTypeable
+           , TypeOperators #-}
 module Numeric.Algebra.Complex
-  ( Complicated(..)
+  ( Distinguished(..)
+  , Complicated(..)
   , ComplexBasis(..)
   , Complex(..)
+  , realPart
+  , imagPart
   ) where
 
 import Control.Applicative
@@ -13,40 +21,52 @@ import Data.Functor.Bind
 import Data.Functor.Representable
 import Data.Functor.Representable.Trie
 import Data.Foldable
-import Data.Ix
+import Data.Ix hiding (index)
 import Data.Key
 import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Data.Traversable
 import Numeric.Algebra
-import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)
+import Numeric.Algebra.Distinguished.Class
+import Numeric.Algebra.Complex.Class
+import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger,recip)
 
 -- complex basis
 data ComplexBasis = E | I deriving (Eq,Ord,Show,Read,Enum,Ix,Bounded,Data,Typeable)
 data Complex a = Complex a a deriving (Eq,Show,Read,Data,Typeable)
 
-class Complicated r where
-  e :: r
-  i :: r
+realPart :: (Representable f, Key f ~ ComplexBasis) => f a -> a
+realPart f = index f E 
 
-instance Complicated ComplexBasis where
+imagPart :: (Representable f, Key f ~ ComplexBasis) => f a -> a
+imagPart f = index f I
+
+instance Distinguished ComplexBasis where
   e = E
+  
+instance Complicated ComplexBasis where
   i = I
 
-instance Rig r => Complicated (Complex r) where
+instance Rig r => Distinguished (Complex r) where
   e = Complex one zero
+
+instance Rig r => Complicated (Complex r) where
   i = Complex zero one
-  
-instance Rig r => Complicated (ComplexBasis -> r) where
+
+instance Rig r => Distinguished (ComplexBasis -> r) where
   e E = one
   e _ = zero
+  
+instance Rig r => Complicated (ComplexBasis -> r) where
   i I = one
   i _ = zero 
 
-instance Complicated a => Complicated (Covector r a) where
-  e = return e
-  i = return i
+instance Rig r => Distinguished (ComplexBasis :->: r) where
+  e = Trie e
+  
+instance Rig r => Complicated (ComplexBasis :->: r) where
+  i = Trie i
 
 type instance Key Complex = ComplexBasis
 
@@ -166,23 +186,23 @@ instance Rng k => UnitalAlgebra k ComplexBasis where
   unit x E = x
   unit _ _ = zero
 
+-- the trivial coalgebra
 instance Rng k => Coalgebra k ComplexBasis where
-  comult f = f' where 
-    fe = f E
-    fi = f I
-    f' E E = fe
-    f' E I = fi
-    f' I E = fi
-    f' I I = negate fe
+  comult f E E = f E
+  comult f I I = f I
+  comult _ _ _ = zero
 
 instance Rng k => CounitalCoalgebra k ComplexBasis where
-  counit f = f E
+  counit f = f E + f I
 
 instance Rng k => Bialgebra k ComplexBasis 
 
 instance (InvolutiveSemiring k, Rng k) => InvolutiveAlgebra k ComplexBasis where
-  inv f E = f E
-  inv f b = negate (f b)
+  inv f = f' where
+    afe = adjoint (f E)
+    nfi = negate (f I)
+    f' E = afe
+    f' I = nfi
 
 instance (InvolutiveSemiring k, Rng k) => InvolutiveCoalgebra k ComplexBasis where
   coinv = inv
@@ -213,3 +233,10 @@ instance (Commutative r, Rng r, InvolutiveMultiplication r) => InvolutiveMultipl
   adjoint (Complex a b) = Complex (adjoint a) (negate b)
 
 instance (Commutative r, Rng r, InvolutiveSemiring r) => InvolutiveSemiring (Complex r)
+
+instance (Commutative r, Rng r, InvolutiveSemiring r) => Quadrance r (Complex r) where
+  quadrance n = realPart $ adjoint n * n
+
+instance (Commutative r, InvolutiveSemiring r, DivisionRing r) => Division (Complex r) where
+  recip q@(Complex a b) = Complex (qq \\ a) (qq \\ b)
+    where qq = quadrance q

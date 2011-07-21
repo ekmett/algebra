@@ -52,6 +52,9 @@ module Numeric.Algebra
   , Rig(..)
   -- * Rings
   , Ring(..)
+  -- ** Division Rings
+  , DivisionRing
+  , Field
 
   -- * Modules
   , LeftModule(..)
@@ -160,3 +163,5 @@ import Numeric.Rig.Characteristic
 import Numeric.Rig.Ordered
 import Numeric.Rng.Class
 import Numeric.Ring.Class
+import Numeric.Ring.Division
+import Numeric.Field.Class

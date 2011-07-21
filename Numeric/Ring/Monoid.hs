@@ -1,29 +1,48 @@
-{-
+{-# LANGUAGE DeriveDataTypeable
 module Numeric.Ring.Monoid
-  ( 
+  ( Mon(..)
   ) where
 
-import Data.Map
+import Data.Data
+import Data.Ix
+import Numeric.Algebra
 
-newtype MonoidRing r m = MonoidRing [(r,m)]
+-- additive monoid ring
+newtype Mon m = Mon m deriving 
+  ( Eq, Ord, Show, Read, Ix, Enum, Bounded, Num, Real, Integral
+  , Additive, Abelian, Idempotent, Partitionable
+  , LeftModule Natural, RightModule Natural, Monoidal
+  , LeftModule Integer, RightModule Integer, Group
+  , Data, Typeable
+  ) where
 
-instance Applicative (MonadRing r m) where
-  fmap f (MonoidRing as) = 
+runMon :: Mon m -> m
+runMon (Mon m) = m
 
-instance Additive (MonoidRing r m) where
-  MonoidRing as + MonoidRing bs = MonoidRing (as ++ bs)
--- TODO: lazy sumWith1
+instance HasTrie m => HasTrie (Mon m) where
+  type BaseTrie (Mon m) = BaseTrie m
+  embedKey = embedKey . runMon
+  projectKey = Mon . projectKey
 
-instance AdditiveMonoid (MonoidRing r m) where
-  zero = MonoidRing []
--- TODO: lazy sum
+instance (Semiring r, Additive m) => Coalgebra r (Mon m) where
+  comult f m n = f (m + n)
 
-instance (AdditiveGroup r, Semiring r) => AdditiveGroup (MonoidRing r m) where
-  negate (MonoidRing as) = MonoidRing [ (negate r,m) | (r,m) <- as ]
+instance (Semiring r, Monoidal m) => CounitalCoalgebra r (Mon m) where
+  counit f = f zero
+  
+instance (Commutative r, Semiring r, Abelian m) => CocommutativeCoalgebra r (Mon m)
 
-instance (Multiplicative m, Multiplicative r) => Multiplicative (MonoidRing r m) where
-  MonoidRing as * MonoidRing bs = MonoidRing [ (r * s, m * n) | (r,m) <- as, (s,n) <- bs ]
--- TODO: lazy productWith1
+-- TODO: check
+instance (IdempotentSemiring r, Idempotent m) => IdempotentCoalgebra r (Mon m) 
 
-instance (Commutative m, Abelian r, Commutative r) => Commutative (MonoidRing r m)
--}
+instance (Semiring r, Partitionable m) => Algebra r (Mon m) where
+  mult f = sum1 . partitionWith f
+
+instance (Monoidal r, Semiring r, Partitionable m, DecidableZero m) => UnitalAlgebra r (Mon m) where
+  unit x m | isZero m  = x
+           | otherwise = zero
+
+instance (Commutative r, Semiring r, Partitionable m, Abelian m) => CommutativeCoalgebra r (Mon m)
+
+instance (IdempotentSemiring r, Partitionable m, Idempotent m) => IdempotentAlgebra r (Mult m)
+
