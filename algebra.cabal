@@ -53,6 +53,7 @@ library
     Numeric.Coalgebra.Trigonometric
     Numeric.Coalgebra.Trigonometric.Class
     Numeric.Coalgebra.Geometric
+    Numeric.Coalgebra.Quaternion
     Numeric.Band.Rectangular
     Numeric.Exp
     Numeric.Log
