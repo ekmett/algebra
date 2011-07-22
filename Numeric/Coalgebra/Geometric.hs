@@ -17,6 +17,7 @@ module Numeric.Coalgebra.Geometric
   -- * Operations over an eigenbasis
   , Eigenbasis(..)
   , Eigenmetric(..)
+  , Euclidean(..)
   -- * Grade
   , grade
   , filterGrade

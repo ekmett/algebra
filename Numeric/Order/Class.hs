@@ -5,6 +5,7 @@ module Numeric.Order.Class
 
 import Data.Int
 import Data.Word
+import Data.Set
 import Numeric.Natural.Internal
 
 -- a partial order (a, <=)
@@ -55,6 +56,8 @@ instance Order Word8 where order = orderOrd
 instance Order Word16 where order = orderOrd
 instance Order Word32 where order = orderOrd
 instance Order Word64 where order = orderOrd
+instance Ord a => Order (Set a) where
+  (<~) = isSubsetOf
 
 instance Order () where 
   order _ _ = Just EQ

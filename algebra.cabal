@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       0.7.1
+version:       0.7.2
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -47,6 +47,7 @@ library
     Numeric.Algebra.Quaternion
     Numeric.Algebra.Quaternion.Class
     Numeric.Algebra.Hyperbolic
+    Numeric.Algebra.Incidence
     Numeric.Coalgebra.Dual
     Numeric.Coalgebra.Hyperbolic
     Numeric.Coalgebra.Hyperbolic.Class

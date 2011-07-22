@@ -3,12 +3,12 @@ module Numeric.Natural.Internal
   , Whole(..)
   ) where
 
-{-# OPTIONS_HADDOCK hide #-}
-
 import Data.Word
+import Data.Bits
 import Text.Read
+import Data.Ix
 
-newtype Natural = Natural { runNatural :: Integer } deriving (Eq,Ord)
+newtype Natural = Natural { runNatural :: Integer } deriving (Eq,Ord,Ix)
 
 instance Show Natural where
   showsPrec d (Natural n) = showsPrec d n
@@ -27,6 +27,25 @@ instance Num Natural where
   fromInteger n 
     | n >= 0 = Natural n
     | otherwise = error "Natural.fromInteger: negative"
+
+instance Bits Natural where
+  Natural n .&. Natural m = Natural (n .&. m)
+  Natural n .|. Natural m = Natural (n .|. m)
+  xor (Natural n) (Natural m) = Natural (xor n m)
+  complement _ = error "Bits.complement: Natural complement undefined"
+  shift (Natural n) = Natural . shift n
+  rotate (Natural n) = Natural . rotate n
+  bit = Natural . bit
+  setBit (Natural n) = Natural . setBit n
+  clearBit (Natural n) = Natural . clearBit n
+  complementBit (Natural n) = Natural . complementBit n
+  testBit = testBit . runNatural 
+  bitSize = bitSize . runNatural
+  isSigned _ = False
+  shiftL (Natural n) = Natural . shiftL n
+  shiftR (Natural n) = Natural . shiftR n
+  rotateL (Natural n) = Natural . rotateL n
+  rotateR (Natural n) = Natural . rotateR n
 
 instance Real Natural where
   toRational (Natural a) = toRational a
