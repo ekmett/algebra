@@ -96,6 +96,7 @@ module Numeric.Algebra
   , Order(..)
   , OrderedRig
   , AdditiveOrder
+  , LocallyFiniteOrder
 
   , DecidableZero
   , DecidableUnits
@@ -157,6 +158,7 @@ import Numeric.Module.Representable
 import Numeric.Natural.Internal
 import Numeric.Order.Class
 import Numeric.Order.Additive
+import Numeric.Order.LocallyFinite
 import Numeric.Quadrance.Class
 import Numeric.Rig.Class
 import Numeric.Rig.Characteristic

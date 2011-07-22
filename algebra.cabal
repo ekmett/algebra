@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       0.7.2
+version:       0.8.0
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -55,6 +55,7 @@ library
     Numeric.Coalgebra.Trigonometric.Class
     Numeric.Coalgebra.Geometric
     Numeric.Coalgebra.Quaternion
+    Numeric.Coalgebra.Categorical
     Numeric.Band.Rectangular
     Numeric.Exp
     Numeric.Log
@@ -64,7 +65,9 @@ library
     Numeric.Ring.Rng
     Numeric.Ring.Opposite
     Numeric.Ring.Endomorphism
-
+    Numeric.Partial.Semigroup
+    Numeric.Partial.Monoid
+    Numeric.Partial.Group
     Numeric.Additive.Class
     Numeric.Additive.Group
     Numeric.Algebra.Class
@@ -94,5 +97,6 @@ library
     Numeric.Rig.Characteristic
     Numeric.Order.Class
     Numeric.Order.Additive
+    Numeric.Order.LocallyFinite
 
   ghc-options: -Wall 
