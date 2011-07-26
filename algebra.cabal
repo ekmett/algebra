@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       0.8.0
+version:       0.9.0.1
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -18,6 +18,20 @@ source-repository head
   location: git://github.com/ekmett/algebra.git
 
 library
+  other-extensions:
+    TypeOperators
+    MultiParamTypeClasses
+    FlexibleInstances
+    FlexibleContexts
+    MultiParamTypeClasses
+    BangPatterns
+    ScopedTypeVariables
+    UndecidableInstances
+    PatternGuards
+    DeriveDataTypeable
+    RebindableSyntax
+    GeneralizedNewtypeDeriving
+
   build-depends: 
     array >= 0.3.0.2 && < 0.4,
     base >= 4 && < 4.4,
@@ -35,68 +49,69 @@ library
     void >= 0.5.4 && < 0.6
 
   exposed-modules:
-    Numeric.Algebra
-    Numeric.Covector
-    Numeric.Natural
-
-    Numeric.Algebra.Distinguished.Class
-    Numeric.Algebra.Complex
-    Numeric.Algebra.Complex.Class
-    Numeric.Algebra.Dual
-    Numeric.Algebra.Dual.Class
-    Numeric.Algebra.Quaternion
-    Numeric.Algebra.Quaternion.Class
-    Numeric.Algebra.Hyperbolic
-    Numeric.Algebra.Incidence
-    Numeric.Coalgebra.Dual
-    Numeric.Coalgebra.Hyperbolic
-    Numeric.Coalgebra.Hyperbolic.Class
-    Numeric.Coalgebra.Trigonometric
-    Numeric.Coalgebra.Trigonometric.Class
-    Numeric.Coalgebra.Geometric
-    Numeric.Coalgebra.Quaternion
-    Numeric.Coalgebra.Categorical
-    Numeric.Band.Rectangular
-    Numeric.Exp
-    Numeric.Log
-    Numeric.Map
-    Numeric.Natural.Internal
-    Numeric.Rng.Zero
-    Numeric.Ring.Rng
-    Numeric.Ring.Opposite
-    Numeric.Ring.Endomorphism
-    Numeric.Partial.Semigroup
-    Numeric.Partial.Monoid
-    Numeric.Partial.Group
     Numeric.Additive.Class
     Numeric.Additive.Group
+    Numeric.Algebra
     Numeric.Algebra.Class
-    Numeric.Algebra.Involutive
-    Numeric.Algebra.Idempotent
-    Numeric.Algebra.Division
-    Numeric.Algebra.Unital
     Numeric.Algebra.Commutative
+    Numeric.Algebra.Complex
+    Numeric.Algebra.Complex.Class
+    Numeric.Algebra.Distinguished.Class
+    Numeric.Algebra.Division
+    Numeric.Algebra.Dual
+    Numeric.Algebra.Dual.Class
     Numeric.Algebra.Factorable
     Numeric.Algebra.Hopf
-    Numeric.Decidable.Zero
-    Numeric.Decidable.Units
+    Numeric.Algebra.Hyperbolic
+    Numeric.Algebra.Idempotent
+    Numeric.Algebra.Incidence
+    Numeric.Algebra.Involutive
+    Numeric.Algebra.Quaternion
+    Numeric.Algebra.Quaternion.Class
+    Numeric.Algebra.Unital
+    Numeric.Band.Class
+    Numeric.Band.Rectangular
+    Numeric.Coalgebra.Categorical
+    Numeric.Coalgebra.Dual
+    Numeric.Coalgebra.Geometric
+    Numeric.Coalgebra.Hyperbolic
+    Numeric.Coalgebra.Hyperbolic.Class
+    Numeric.Coalgebra.Quaternion
+    Numeric.Coalgebra.Incidence
+    Numeric.Coalgebra.Trigonometric
+    Numeric.Coalgebra.Trigonometric.Class
+    Numeric.Covector
     Numeric.Decidable.Associates
+    Numeric.Decidable.Units
+    Numeric.Decidable.Zero
+    Numeric.Dioid.Class
+    Numeric.Exp
     Numeric.Field.Class
+    Numeric.Log
+    Numeric.Map
     Numeric.Module.Class
     Numeric.Module.Representable
-    Numeric.Semiring.Integral
-    Numeric.Semiring.Involutive
-    Numeric.Band.Class
-    Numeric.Dioid.Class
+    Numeric.Natural
+    Numeric.Natural.Internal
+    Numeric.Order.Additive
+    Numeric.Order.Class
+    Numeric.Order.LocallyFinite
+    Numeric.Partial.Group
+    Numeric.Partial.Monoid
+    Numeric.Partial.Semigroup
     Numeric.Quadrance.Class
+    Numeric.Rig.Characteristic
     Numeric.Rig.Class
-    Numeric.Rng.Class
+    Numeric.Rig.Ordered
     Numeric.Ring.Class
     Numeric.Ring.Division
-    Numeric.Rig.Ordered
-    Numeric.Rig.Characteristic
-    Numeric.Order.Class
-    Numeric.Order.Additive
-    Numeric.Order.LocallyFinite
+    Numeric.Ring.Endomorphism
+    Numeric.Ring.Local
+    Numeric.Ring.Opposite
+    Numeric.Ring.Rng
+    Numeric.Rng.Class
+    Numeric.Rng.Zero
+    Numeric.Semiring.Integral
+    Numeric.Semiring.Involutive
 
   ghc-options: -Wall 

@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses, IncoherentInstances, OverlappingInstances, FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 module Numeric.Quadrance.Class
   ( Quadrance(..)
   ) where

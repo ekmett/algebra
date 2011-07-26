@@ -6,6 +6,7 @@
     DeriveDataTypeable,
     FlexibleInstances,
     TypeFamilies,
+    PatternGuards,
     UndecidableInstances,
     ScopedTypeVariables #-}
 

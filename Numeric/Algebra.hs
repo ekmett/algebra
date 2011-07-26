@@ -53,6 +53,7 @@ module Numeric.Algebra
   -- * Rings
   , Ring(..)
   -- ** Division Rings
+  , LocalRing
   , DivisionRing
   , Field
 
@@ -165,5 +166,6 @@ import Numeric.Rig.Characteristic
 import Numeric.Rig.Ordered
 import Numeric.Rng.Class
 import Numeric.Ring.Class
+import Numeric.Ring.Local
 import Numeric.Ring.Division
 import Numeric.Field.Class

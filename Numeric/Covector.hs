@@ -1,4 +1,4 @@
-{-# LANGUAGE ImplicitParams, MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
 module Numeric.Covector 
   ( Covector(..)
   -- * Covectors as linear functionals
