@@ -9,8 +9,8 @@ module Numeric.Algebra
   , Abelian
   -- ** additive idempotent semigroups
   , Idempotent
-  , replicate1pIdempotent
-  , replicateIdempotent
+  , sinnum1pIdempotent
+  , sinnumIdempotent
   -- ** partitionable additive semigroups
   , Partitionable(..)
   -- ** additive monoids
@@ -108,9 +108,9 @@ module Numeric.Algebra
   , Whole(toNatural)
 
   -- * Representable Additive
-  , addRep, replicate1pRep
+  , addRep, sinnum1pRep
   -- * Representable Monoidal
-  , zeroRep, replicateRep
+  , zeroRep, sinnumRep
   -- * Representable Group
   , negateRep, minusRep, subtractRep, timesRep
   -- * Representable Multiplicative (via Algebra)

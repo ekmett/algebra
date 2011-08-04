@@ -17,19 +17,19 @@ data RngRing r = RngRing !Integer r deriving (Show,Read)
 
 instance Abelian r => Additive (RngRing r) where
   RngRing n a + RngRing m b = RngRing (n + m) (a + b)
-  replicate1p n (RngRing m a) = RngRing ((1 + toInteger n) * m) (replicate1p n a)
+  sinnum1p n (RngRing m a) = RngRing ((1 + toInteger n) * m) (sinnum1p n a)
 
 instance Abelian r => Abelian (RngRing r)
 
 instance (Abelian r, Monoidal r) => LeftModule Natural (RngRing r) where
-  n .* RngRing m a = RngRing (toInteger n * m) (replicate n a)
+  n .* RngRing m a = RngRing (toInteger n * m) (sinnum n a)
 
 instance (Abelian r, Monoidal r) => RightModule Natural (RngRing r) where
-  RngRing m a *. n = RngRing (toInteger n * m) (replicate n a)
+  RngRing m a *. n = RngRing (toInteger n * m) (sinnum n a)
 
 instance (Abelian r, Monoidal r) => Monoidal (RngRing r) where
   zero = RngRing 0 zero
-  replicate n (RngRing m a) = RngRing (toInteger n * m) (replicate n a)
+  sinnum n (RngRing m a) = RngRing (toInteger n * m) (sinnum n a)
 
 instance (Abelian r, Group r) => LeftModule Integer (RngRing r) where
   n .* RngRing m a = RngRing (toInteger n * m) (times n a)

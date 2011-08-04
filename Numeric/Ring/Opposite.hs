@@ -32,11 +32,11 @@ instance Traversable1 Opposite where
   traverse1 f (Opposite r) = fmap Opposite (f r)
 instance Additive r => Additive (Opposite r) where
   Opposite a + Opposite b = Opposite (a + b)
-  replicate1p n (Opposite a) = Opposite (replicate1p n a)
+  sinnum1p n (Opposite a) = Opposite (sinnum1p n a)
   sumWith1 f = Opposite . sumWith1 (runOpposite . f)
 instance Monoidal r => Monoidal (Opposite r) where
   zero = Opposite zero
-  replicate n (Opposite a) = Opposite (replicate n a)
+  sinnum n (Opposite a) = Opposite (sinnum n a)
   sumWith f = Opposite . sumWith (runOpposite . f)
 instance Semiring r => LeftModule (Opposite r) (Opposite r) where
   (.*) = (*)

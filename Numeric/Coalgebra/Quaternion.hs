@@ -180,7 +180,7 @@ instance HasTrie QuaternionBasis' where
 
 instance Additive r => Additive (Quaternion' r) where
   (+) = addRep 
-  replicate1p = replicate1pRep
+  sinnum1p = sinnum1pRep
 
 instance LeftModule r s => LeftModule r (Quaternion' s) where
   r .* Quaternion' a b c d =
@@ -192,7 +192,7 @@ instance RightModule r s => RightModule r (Quaternion' s) where
 
 instance Monoidal r => Monoidal (Quaternion' r) where
   zero = zeroRep
-  replicate = replicateRep
+  sinnum = sinnumRep
 
 instance Group r => Group (Quaternion' r) where
   (-) = minusRep

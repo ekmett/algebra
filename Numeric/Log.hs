@@ -13,7 +13,7 @@ newtype Log r = Log { runLog :: r }
 instance Multiplicative r => Additive (Log r) where
   Log a + Log b = Log (a * b)
   sumWith1 f = Log . productWith1 (runLog . f)
-  replicate1p n (Log m) = Log (pow1p m n)
+  sinnum1p n (Log m) = Log (pow1p m n)
 
 instance Unital r => LeftModule Natural (Log r) where
   n .* Log m = Log (pow m n)
@@ -23,7 +23,7 @@ instance Unital r => RightModule Natural (Log r) where
 
 instance Unital r => Monoidal (Log r) where
   zero = Log one
-  replicate n (Log m) = Log (pow m n)
+  sinnum n (Log m) = Log (pow m n)
   sumWith f = Log . productWith (runLog . f)
 
 instance Division r => LeftModule Integer (Log r) where

@@ -2,9 +2,9 @@
 module Numeric.Module.Representable 
   ( 
   -- * Representable Additive
-    addRep, replicate1pRep
+    addRep, sinnum1pRep
   -- * Representable Monoidal
-  , zeroRep, replicateRep
+  , zeroRep, sinnumRep
   -- * Representable Group
   , negateRep, minusRep, subtractRep, timesRep
   -- * Representable Multiplicative (via Algebra)
@@ -35,17 +35,17 @@ import Prelude (($), Integral(..),Integer)
 addRep :: (Zip m, Additive r) => m r -> m r -> m r
 addRep = zipWith (+)
 
--- | `Additive.replicate1p` default definition
-replicate1pRep :: (Whole n, Functor m, Additive r) => n -> m r -> m r
-replicate1pRep = fmap . replicate1p
+-- | `Additive.sinnum1p` default definition
+sinnum1pRep :: (Whole n, Functor m, Additive r) => n -> m r -> m r
+sinnum1pRep = fmap . sinnum1p
 
 -- | `Monoidal.zero` default definition
 zeroRep :: (Applicative m, Monoidal r) => m r 
 zeroRep = pure zero
 
--- | `Monoidal.replicate` default definition
-replicateRep :: (Whole n, Functor m, Monoidal r) => n -> m r -> m r
-replicateRep = fmap . replicate
+-- | `Monoidal.sinnum` default definition
+sinnumRep :: (Whole n, Functor m, Monoidal r) => n -> m r -> m r
+sinnumRep = fmap . sinnum
 
 -- | `Group.negate` default definition
 negateRep :: (Functor m, Group r) => m r -> m r

@@ -129,7 +129,7 @@ instance HasTrie DualBasis' where
 
 instance Additive r => Additive (Dual' r) where
   (+) = addRep 
-  replicate1p = replicate1pRep
+  sinnum1p = sinnum1pRep
 
 instance LeftModule r s => LeftModule r (Dual' s) where
   r .* Dual' a b = Dual' (r .* a) (r .* b)
@@ -139,7 +139,7 @@ instance RightModule r s => RightModule r (Dual' s) where
 
 instance Monoidal r => Monoidal (Dual' r) where
   zero = zeroRep
-  replicate = replicateRep
+  sinnum = sinnumRep
 
 instance Group r => Group (Dual' r) where
   (-) = minusRep

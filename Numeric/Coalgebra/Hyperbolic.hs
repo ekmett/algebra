@@ -121,7 +121,7 @@ instance HasTrie HyperBasis where
 
 instance Additive r => Additive (Hyper r) where
   (+) = addRep 
-  replicate1p = replicate1pRep
+  sinnum1p = sinnum1pRep
 
 instance LeftModule r s => LeftModule r (Hyper s) where
   r .* Hyper a b = Hyper (r .* a) (r .* b)
@@ -131,7 +131,7 @@ instance RightModule r s => RightModule r (Hyper s) where
 
 instance Monoidal r => Monoidal (Hyper r) where
   zero = zeroRep
-  replicate = replicateRep
+  sinnum = sinnumRep
 
 instance Group r => Group (Hyper r) where
   (-) = minusRep

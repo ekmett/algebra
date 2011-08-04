@@ -212,7 +212,7 @@ instance ArrowChoice (Map r) where
 
 instance Additive r => Additive (Map r b a) where
   Map m + Map n = Map $ m + n
-  replicate1p n (Map m) = Map $ replicate1p n m
+  sinnum1p n (Map m) = Map $ sinnum1p n m
 
 instance Coalgebra r m => Multiplicative (Map r b m) where
   f * g = Map $ \k b -> (f $# \a -> (g $# comult k a) b) b
@@ -247,7 +247,7 @@ instance Monoidal r => MonadPlus (Map r b) where
 
 instance Monoidal s => Monoidal (Map s b a) where
   zero = Map zero
-  replicate n (Map m) = Map $ replicate n m
+  sinnum n (Map m) = Map $ sinnum n m
 
 instance Abelian s => Abelian (Map s b a)
 

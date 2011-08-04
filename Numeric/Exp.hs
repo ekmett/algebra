@@ -12,11 +12,11 @@ newtype Exp r = Exp { runExp :: r }
 instance Additive r => Multiplicative (Exp r) where
   Exp a * Exp b = Exp (a + b)
   productWith1 f = Exp . sumWith1 (runExp . f)
-  pow1p (Exp m) n = Exp (replicate1p n m)
+  pow1p (Exp m) n = Exp (sinnum1p n m)
 
 instance Monoidal r => Unital (Exp r) where
   one = Exp zero
-  pow (Exp m) n = Exp (replicate n m)
+  pow (Exp m) n = Exp (sinnum n m)
   productWith f = Exp . sumWith (runExp . f)
 
 instance Group r => Division (Exp r) where

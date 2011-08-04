@@ -79,7 +79,7 @@ instance Monoidal r => MonadPlus (Covector r) where
 
 instance Additive r => Additive (Covector r a) where
   Covector m + Covector n = Covector $ m + n
-  replicate1p n (Covector m) = Covector $ replicate1p n m
+  sinnum1p n (Covector m) = Covector $ sinnum1p n m
 
 instance Coalgebra r m => Multiplicative (Covector r m) where
   Covector f * Covector g = Covector $ \k -> f (\m -> g (comult k m))
@@ -135,7 +135,7 @@ memoM = Covector . flip memo
 
 instance Monoidal s => Monoidal (Covector s a) where
   zero = Covector zero
-  replicate n (Covector m) = Covector (replicate n m)
+  sinnum n (Covector m) = Covector (sinnum n m)
 
 instance Abelian s => Abelian (Covector s a)
 

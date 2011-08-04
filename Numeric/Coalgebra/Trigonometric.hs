@@ -157,7 +157,7 @@ instance HasTrie TrigBasis where
 
 instance Additive r => Additive (Trig r) where
   (+) = addRep 
-  replicate1p = replicate1pRep
+  sinnum1p = sinnum1pRep
 
 instance LeftModule r s => LeftModule r (Trig s) where
   r .* Trig a b = Trig (r .* a) (r .* b)
@@ -167,7 +167,7 @@ instance RightModule r s => RightModule r (Trig s) where
 
 instance Monoidal r => Monoidal (Trig r) where
   zero = zeroRep
-  replicate = replicateRep
+  sinnum = sinnumRep
 
 instance Group r => Group (Trig r) where
   (-) = minusRep

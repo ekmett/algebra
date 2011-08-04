@@ -150,7 +150,7 @@ instance HasTrie ComplexBasis where
 
 instance Additive r => Additive (Complex r) where
   (+) = addRep 
-  replicate1p = replicate1pRep
+  sinnum1p = sinnum1pRep
 
 instance LeftModule r s => LeftModule r (Complex s) where
   r .* Complex a b = Complex (r .* a) (r .* b)
@@ -160,7 +160,7 @@ instance RightModule r s => RightModule r (Complex s) where
 
 instance Monoidal r => Monoidal (Complex r) where
   zero = zeroRep
-  replicate = replicateRep
+  sinnum = sinnumRep
 
 instance Group r => Group (Complex r) where
   (-) = minusRep

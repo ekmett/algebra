@@ -14,7 +14,7 @@ module Numeric.Algebra.Class
   -- * Additive Monoids
   , Monoidal(..)
   , sum
-  , replicateIdempotent
+  , sinnumIdempotent
   -- * Associative algebras
   , Algebra(..)
   -- * Coassociative coalgebras
@@ -32,7 +32,7 @@ import Data.Key hiding (sum)
 import Data.Map (Map)
 import Data.Monoid (mappend)
 -- import Data.Semigroup.Foldable
-import Data.Sequence hiding (reverse,replicate,index)
+import Data.Sequence hiding (reverse,index)
 import Data.Set (Set)
 import Data.Word
 import Numeric.Additive.Class
@@ -490,9 +490,9 @@ instance (LeftModule r m, RightModule r m) => Module r m
 class (LeftModule Natural m, RightModule Natural m) => Monoidal m where
   zero :: m
 
-  replicate :: Whole n => n -> m -> m
-  replicate 0 _  = zero
-  replicate n x0 = f x0 n
+  sinnum :: Whole n => n -> m -> m
+  sinnum 0 _  = zero
+  sinnum n x0 = f x0 n
     where
       f x y
         | even y = f (x + x) (y `quot` 2)
@@ -509,91 +509,91 @@ class (LeftModule Natural m, RightModule Natural m) => Monoidal m where
 sum :: (Foldable f, Monoidal m) => f m -> m
 sum = sumWith id
 
-replicateIdempotent :: (Integral n, Idempotent r, Monoidal r) => n -> r -> r
-replicateIdempotent 0 _ = zero
-replicateIdempotent _ x = x
+sinnumIdempotent :: (Integral n, Idempotent r, Monoidal r) => n -> r -> r
+sinnumIdempotent 0 _ = zero
+sinnumIdempotent _ x = x
 
 instance Monoidal Bool where 
   zero = False
-  replicate 0 _ = False
-  replicate _ r = r
+  sinnum 0 _ = False
+  sinnum _ r = r
 
 instance Monoidal Natural where
   zero = 0
-  replicate n r = toNatural n * r
+  sinnum n r = toNatural n * r
 
 instance Monoidal Integer where 
   zero = 0
-  replicate n r = toInteger n * r
+  sinnum n r = toInteger n * r
 
 instance Monoidal Int where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Int8 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Int16 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Int32 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Int64 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Word where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Word8 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Word16 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Word32 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Word64 where 
   zero = 0
-  replicate n r = fromIntegral n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal r => Monoidal (e -> r) where
   zero = const zero
   sumWith f xs e = sumWith (`f` e) xs
-  replicate n r e = replicate n (r e)
+  sinnum n r e = sinnum n (r e)
 
 instance (HasTrie e, Monoidal r) => Monoidal (e :->: r) where
   zero = pure zero
   sumWith f xs = tabulate $ \e -> sumWith (\a -> index (f a) e) xs
-  replicate n r = tabulate $ replicate n . index r
+  sinnum n r = tabulate $ sinnum n . index r
 
 instance Monoidal () where 
   zero = ()
-  replicate _ () = ()
+  sinnum _ () = ()
   sumWith _ _ = ()
 
 instance (Monoidal a, Monoidal b) => Monoidal (a,b) where
   zero = (zero,zero)
-  replicate n (a,b) = (replicate n a, replicate n b)
+  sinnum n (a,b) = (sinnum n a, sinnum n b)
 
 instance (Monoidal a, Monoidal b, Monoidal c) => Monoidal (a,b,c) where
   zero = (zero,zero,zero)
-  replicate n (a,b,c) = (replicate n a, replicate n b, replicate n c)
+  sinnum n (a,b,c) = (sinnum n a, sinnum n b, sinnum n c)
 
 instance (Monoidal a, Monoidal b, Monoidal c, Monoidal d) => Monoidal (a,b,c,d) where
   zero = (zero,zero,zero,zero)
-  replicate n (a,b,c,d) = (replicate n a, replicate n b, replicate n c, replicate n d)
+  sinnum n (a,b,c,d) = (sinnum n a, sinnum n b, sinnum n c, sinnum n d)
 
 instance (Monoidal a, Monoidal b, Monoidal c, Monoidal d, Monoidal e) => Monoidal (a,b,c,d,e) where
   zero = (zero,zero,zero,zero,zero)
-  replicate n (a,b,c,d,e) = (replicate n a, replicate n b, replicate n c, replicate n d, replicate n e)
+  sinnum n (a,b,c,d,e) = (sinnum n a, sinnum n b, sinnum n c, sinnum n d, sinnum n e)
 
