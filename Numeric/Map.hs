@@ -26,7 +26,7 @@ import qualified Control.Category.Monoidal as C
 import Control.Category.Monoidal (Id)
 import Control.Monad
 import Control.Monad.Reader.Class
-import Data.Key hiding (Sum)
+import Data.Key
 import Data.Functor.Representable
 import Data.Functor.Representable.Trie 
 import Data.Functor.Bind

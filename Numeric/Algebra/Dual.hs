@@ -15,7 +15,8 @@ import Data.Functor.Representable
 import Data.Functor.Representable.Trie
 import Data.Foldable
 import Data.Ix
-import Data.Key hiding (Dual)
+import Data.Key
+import Data.Semigroup hiding (Dual)
 import Data.Monoid hiding (Dual)
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable

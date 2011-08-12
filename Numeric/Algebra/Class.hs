@@ -28,11 +28,12 @@ import Data.Functor.Representable.Trie
 import Data.Int
 import Data.IntMap (IntMap)
 import Data.IntSet (IntSet)
-import Data.Key hiding (sum)
+import Data.Key
 import Data.Map (Map)
 import Data.Monoid (mappend)
 -- import Data.Semigroup.Foldable
 import Data.Sequence hiding (reverse,index)
+import Data.Semigroup.Foldable
 import Data.Set (Set)
 import Data.Word
 import Numeric.Additive.Class

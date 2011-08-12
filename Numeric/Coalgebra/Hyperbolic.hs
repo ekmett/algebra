@@ -18,6 +18,7 @@ import Data.Key
 import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
+import Data.Semigroup
 import Data.Traversable
 import Numeric.Algebra
 import Numeric.Coalgebra.Hyperbolic.Class

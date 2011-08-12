@@ -15,8 +15,9 @@ module Numeric.Additive.Class
 
 import Data.Int
 import Data.Word
+import Data.Foldable hiding (concat)
 import Data.Semigroup.Foldable
-import Data.Key hiding (concat)
+import Data.Key
 import Data.Functor.Representable
 import Data.Functor.Representable.Trie
 -- import Data.Foldable hiding (concat)

@@ -29,6 +29,7 @@ import Data.Traversable
 import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
+import Data.Semigroup
 import Numeric.Algebra
 import Numeric.Algebra.Distinguished.Class
 import Numeric.Algebra.Complex.Class
