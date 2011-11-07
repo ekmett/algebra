@@ -74,7 +74,7 @@ lsb n = fromIntegral $ ix ! shiftR ((n .&. (-n)) * 0x07EDD5E59A4E28C2) 58
   where 
     -- a 64 bit deBruijn multiplication table
     ix :: UArray (BasisCoblade m) Word8
-    ix = listArray (0, 63) 
+    ix = listArray (0, 63)
       [ 63,  0, 58,  1, 59, 47, 53,  2
       , 60, 39, 48, 27, 54, 33, 42,  3
       , 61, 51, 37, 40, 49, 18, 28, 20

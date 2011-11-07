@@ -10,7 +10,7 @@ import Data.Word
 import Numeric.Algebra.Unital
 import Numeric.Natural.Internal
 
-isAssociateIntegral :: Num n => n -> n -> Bool
+isAssociateIntegral :: (Eq n, Num n) => n -> n -> Bool
 isAssociateIntegral = (==) `on` abs
 
 isAssociateWhole :: Eq n => n -> n -> Bool
