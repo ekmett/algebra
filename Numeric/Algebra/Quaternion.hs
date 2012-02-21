@@ -26,7 +26,6 @@ import Data.Functor.Representable
 import Data.Functor.Representable.Trie
 import Data.Foldable
 import Data.Traversable
-import Data.Monoid
 import Data.Semigroup
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable

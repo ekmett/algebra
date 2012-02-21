@@ -26,7 +26,6 @@ import Data.Functor.Representable
 import Data.Functor.Representable.Trie
 import Data.Foldable
 import Data.Traversable
-import Data.Monoid
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Data.Semigroup
@@ -55,7 +54,7 @@ instance Rig r => Complicated (Quaternion' r) where
 
 instance Rig r => Hamiltonian (Quaternion' r) where
   j = Quaternion' zero zero one zero
-  k = Quaternion' one zero zero one 
+  k = Quaternion' one zero zero one
 
 instance Rig r => Distinguished (QuaternionBasis' :->: r) where
   e = Trie e
@@ -68,13 +67,13 @@ instance Rig r => Hamiltonian (QuaternionBasis' :->: r) where
   k = Trie k
 
 instance Rig r => Distinguished (QuaternionBasis' -> r) where
-  e E' = one 
+  e E' = one
   e _ = zero
 
 instance Rig r => Complicated (QuaternionBasis' -> r) where
   i I' = one
   i _ = zero
-  
+
 instance Rig r => Hamiltonian (QuaternionBasis' -> r) where
   j J' = one
   j _ = zero
@@ -108,17 +107,17 @@ instance Adjustable Quaternion' where
   adjust f K' (Quaternion' a b c d) = Quaternion' a b c (f d)
 
 instance Distributive Quaternion' where
-  distribute = distributeRep 
+  distribute = distributeRep
 
 instance Functor Quaternion' where
   fmap = fmapRep
 
 instance Zip Quaternion' where
-  zipWith f (Quaternion' a1 b1 c1 d1) (Quaternion' a2 b2 c2 d2) = 
+  zipWith f (Quaternion' a1 b1 c1 d1) (Quaternion' a2 b2 c2 d2) =
     Quaternion' (f a1 a2) (f b1 b2) (f c1 c2) (f d1 d2)
 
 instance ZipWithKey Quaternion' where
-  zipWithKey f (Quaternion' a1 b1 c1 d1) (Quaternion' a2 b2 c2 d2) = 
+  zipWithKey f (Quaternion' a1 b1 c1 d1) (Quaternion' a2 b2 c2 d2) =
     Quaternion' (f E' a1 a2) (f I' b1 b2) (f J' c1 c2) (f K' d1 d2)
 
 instance Keyed Quaternion' where
@@ -129,7 +128,7 @@ instance Apply Quaternion' where
 
 instance Applicative Quaternion' where
   pure = pureRep
-  (<*>) = apRep 
+  (<*>) = apRep
 
 instance Bind Quaternion' where
   (>>-) = bindRep
@@ -143,35 +142,35 @@ instance MonadReader QuaternionBasis' Quaternion' where
   local = localRep
 
 instance Foldable Quaternion' where
-  foldMap f (Quaternion' a b c d) = 
+  foldMap f (Quaternion' a b c d) =
     f a `mappend` f b `mappend` f c `mappend` f d
 
 instance FoldableWithKey Quaternion' where
-  foldMapWithKey f (Quaternion' a b c d) = 
+  foldMapWithKey f (Quaternion' a b c d) =
     f E' a `mappend` f I' b `mappend` f J' c `mappend` f K' d
 
 instance Traversable Quaternion' where
-  traverse f (Quaternion' a b c d) = 
+  traverse f (Quaternion' a b c d) =
     Quaternion' <$> f a <*> f b <*> f c <*> f d
 
 instance TraversableWithKey Quaternion' where
-  traverseWithKey f (Quaternion' a b c d) = 
+  traverseWithKey f (Quaternion' a b c d) =
     Quaternion' <$> f E' a <*> f I' b <*> f J' c <*> f K' d
 
 instance Foldable1 Quaternion' where
-  foldMap1 f (Quaternion' a b c d) = 
+  foldMap1 f (Quaternion' a b c d) =
     f a <> f b <> f c <> f d
 
 instance FoldableWithKey1 Quaternion' where
-  foldMapWithKey1 f (Quaternion' a b c d) = 
+  foldMapWithKey1 f (Quaternion' a b c d) =
     f E' a <> f I' b <> f J' c <> f K' d
 
 instance Traversable1 Quaternion' where
-  traverse1 f (Quaternion' a b c d) = 
+  traverse1 f (Quaternion' a b c d) =
     Quaternion' <$> f a <.> f b <.> f c <.> f d
 
 instance TraversableWithKey1 Quaternion' where
-  traverseWithKey1 f (Quaternion' a b c d) = 
+  traverseWithKey1 f (Quaternion' a b c d) =
     Quaternion' <$> f E' a <.> f I' b <.> f J' c <.> f K' d
 
 instance HasTrie QuaternionBasis' where
@@ -180,7 +179,7 @@ instance HasTrie QuaternionBasis' where
   projectKey = id
 
 instance Additive r => Additive (Quaternion' r) where
-  (+) = addRep 
+  (+) = addRep
   sinnum1p = sinnum1pRep
 
 instance LeftModule r s => LeftModule r (Quaternion' s) where
@@ -207,10 +206,10 @@ instance Idempotent r => Idempotent (Quaternion' r)
 
 instance Partitionable r => Partitionable (Quaternion' r) where
   partitionWith f (Quaternion' a b c d) = id =<<
-    partitionWith (\a1 a2 -> id =<< 
-    partitionWith (\b1 b2 -> id =<< 
-    partitionWith (\c1 c2 -> 
-    partitionWith (\d1 d2 -> f (Quaternion' a1 b1 c1 d1) 
+    partitionWith (\a1 a2 -> id =<<
+    partitionWith (\b1 b2 -> id =<<
+    partitionWith (\c1 c2 ->
+    partitionWith (\d1 d2 -> f (Quaternion' a1 b1 c1 d1)
                                (Quaternion' a2 b2 c2 d2)
                   ) d) c) b) a
 
@@ -225,7 +224,7 @@ instance (TriviallyInvolutive r, Semiring r) => Algebra r QuaternionBasis' where
     f' I' = fi
     f' J' = fj
     f' K' = fk
-             
+
 instance (TriviallyInvolutive r, Semiring r) => UnitalAlgebra r QuaternionBasis' where
   unit = const
 
@@ -261,7 +260,7 @@ instance (TriviallyInvolutive r, Rng r) => Coalgebra r QuaternionBasis' where
 instance (TriviallyInvolutive r, Rng r) => CounitalCoalgebra r QuaternionBasis' where
   counit f = f E'
 
-instance (TriviallyInvolutive r, Rng r)  => Bialgebra r QuaternionBasis' 
+instance (TriviallyInvolutive r, Rng r)  => Bialgebra r QuaternionBasis'
 
 instance (TriviallyInvolutive r, InvolutiveSemiring r, Rng r)  => InvolutiveAlgebra r QuaternionBasis' where
   inv f E' = f E'
@@ -287,13 +286,13 @@ instance (TriviallyInvolutive r, Ring r) => Rig (Quaternion' r) where
 instance (TriviallyInvolutive r, Ring r) => Ring (Quaternion' r) where
   fromInteger n = Quaternion' (fromInteger n) zero zero zero
 
-instance ( TriviallyInvolutive r, Rng r) => LeftModule (Quaternion' r) (Quaternion' r) where 
+instance ( TriviallyInvolutive r, Rng r) => LeftModule (Quaternion' r) (Quaternion' r) where
   (.*) = (*)
-instance (TriviallyInvolutive r, Rng r) => RightModule (Quaternion' r) (Quaternion' r) where 
+instance (TriviallyInvolutive r, Rng r) => RightModule (Quaternion' r) (Quaternion' r) where
   (*.) = (*)
 
 instance (TriviallyInvolutive r, Rng r) => InvolutiveMultiplication (Quaternion' r) where
-  -- without trivial involution, multiplication fails associativity, and we'd need to 
+  -- without trivial involution, multiplication fails associativity, and we'd need to
   -- support weaker multiplicative properties like Alternative and PowerAssociative
   adjoint (Quaternion' a b c d) = Quaternion' a (negate b) (negate c) (negate d)
 
