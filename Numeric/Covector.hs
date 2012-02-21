@@ -1,6 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
-module Numeric.Covector 
+module Numeric.Covector
   ( Covector(..)
+  , ($*)
   -- * Covectors as linear functionals
   , counitM
   , unitM
