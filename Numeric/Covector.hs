@@ -22,7 +22,6 @@ import Numeric.Algebra.Idempotent
 import Numeric.Algebra.Involutive
 import Numeric.Algebra.Commutative
 import Numeric.Algebra.Hopf
-import Numeric.Module.Class
 import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Control.Applicative

@@ -33,7 +33,6 @@ import Numeric.Algebra
 import Numeric.Algebra.Distinguished.Class
 import Numeric.Algebra.Complex.Class
 import Numeric.Algebra.Quaternion.Class
-import qualified Numeric.Algebra.Complex as Complex
 import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger)
 
 instance Distinguished QuaternionBasis' where

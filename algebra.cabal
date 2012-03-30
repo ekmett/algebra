@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       2.0.7
+version:       2.1
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -38,7 +38,7 @@ library
     distributive            >= 0.2     && < 0.3,
     transformers            >= 0.2     && < 0.3,
     tagged                  >= 0.2.2.3 && < 0.3,
-    categories              >= 0.59    && < 0.60,
+    categories              >= 1.0     && < 1.1,
     containers              >= 0.3     && < 0.5,
     keys                    >= 2.1.2   && < 2.2,
     mtl                     >= 2       && < 2.1,

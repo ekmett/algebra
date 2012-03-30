@@ -28,7 +28,7 @@ import Control.Monad
 import Control.Monad.Reader.Class
 import Data.Key
 import Data.Functor.Representable
-import Data.Functor.Representable.Trie 
+import Data.Functor.Representable.Trie
 import Data.Functor.Bind
 import Data.Functor.Plus hiding (zero)
 import qualified Data.Functor.Plus as Plus
@@ -44,7 +44,7 @@ import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, p
 --
 --
 -- @Map r b a@ represents a linear mapping from a free module with basis @a@ over @r@ to a free module with basis @b@ over @r@.
--- 
+--
 -- Note well the reversed direction of the arrow, due to the contravariance of change of basis!
 --
 -- This way enables we can employ arbitrary pure functions as linear maps by lifting them using `arr`, or build them
@@ -81,24 +81,18 @@ instance Applicative (Map r b) where
 
 instance Bind (Map r b) where
   Map m >>- f = Map $ \k b -> m (\a -> (f a $# k) b) b
-  
+
 instance Monad (Map r b) where
   return a = Map $ \k _ -> k a
   m >>= f = Map $ \k b -> (m $# \a -> (f a $# k) b) b
 
-instance PFunctor (,) (Map r) (Map r) where
-  first m = Map $ \k (a,c) -> (m $# \b -> k (b,c)) a
-
-instance QFunctor (,) (Map r) (Map r) where
-  second m = Map $ \k (c,a) -> (m $# \b -> k (c,b)) a
-
+instance PFunctor (,) (Map r) (Map r)
+instance QFunctor (,) (Map r) (Map r)
 instance Bifunctor (,) (Map r) (Map r) (Map r) where
   bimap m n = Map $ \k (a,c) -> (m $# \b -> (n $# \d -> k (b,d)) c) a
 
 instance Associative (Map r) (,) where
   associate = arr associate
-
-instance Disassociative (Map r) (,) where
   disassociate = arr disassociate
 
 instance Braided (Map r) (,) where
@@ -106,25 +100,22 @@ instance Braided (Map r) (,) where
 
 instance Symmetric (Map r) (,)
 
-type instance Id (Map r) (,) = ()
-
 instance C.Monoidal (Map r) (,) where
+  type Id (Map r) (,) = ()
   idl = arr C.idl
   idr = arr C.idr
-
-instance C.Comonoidal (Map r) (,) where
   coidl = arr C.coidl
   coidr = arr C.coidr
 
-instance PreCartesian (Map r) where
-  type Product (Map r) = (,) 
+instance Cartesian (Map r) where
+  type Product (Map r) = (,)
   fst = arr fst
   snd = arr snd
   diag = arr diag
   f &&& g = Map $ \k a -> (f $# \b -> (g $# \c -> k (b,c)) a) a
 
 instance CCC (Map r) where
-  type Exp (Map r) = Map r 
+  type Exp (Map r) = Map r
   apply = Map $ \k (f,a) -> (f $# k) a
   curry m = Map $ \k a -> k (Map $ \k' b -> (m $# k') (a, b))
   uncurry m = Map $ \k (a, b) -> (m $# (\m' -> (m' $# k) b)) a
@@ -132,19 +123,13 @@ instance CCC (Map r) where
 instance Distributive (Map r) where
   distribute = Map $ \k (a,p) -> k $ bimap ((,) a) ((,)a) p
 
-instance PFunctor Either (Map r) (Map r) where
-  first m = Map $ \k -> either (m $# k . Left) (k . Right)
-
-instance QFunctor Either (Map r) (Map r) where
-  second m = Map $ \k -> either (k . Left) (m $# k . Right)
-
+instance PFunctor Either (Map r) (Map r)
+instance QFunctor Either (Map r) (Map r)
 instance Bifunctor Either (Map r) (Map r) (Map r) where
   bimap m n = Map $ \k -> either (m $# k . Left) (n $# k . Right)
 
 instance Associative (Map r) Either where
   associate = arr associate
-
-instance Disassociative (Map r) Either where
   disassociate = arr disassociate
 
 instance Braided (Map r) Either where
@@ -152,22 +137,19 @@ instance Braided (Map r) Either where
 
 instance Symmetric (Map r) Either
 
-type instance Id (Map r) Either = Void
-
-instance PreCoCartesian (Map r) where
+instance CoCartesian (Map r) where
   type Sum (Map r) = Either
-  inl = arr inl 
+  inl = arr inl
   inr = arr inr
   codiag = arr codiag
-  m ||| n = Map $ \k -> either (m $# k) (n $# k) 
-
-instance C.Comonoidal (Map r) Either where
-  coidl = arr C.coidl
-  coidr = arr C.coidr
+  m ||| n = Map $ \k -> either (m $# k) (n $# k)
 
 instance C.Monoidal (Map r) Either where
+  type Id (Map r) Either = Void
   idl = arr C.idl
   idr = arr C.idr
+  coidl = arr C.coidl
+  coidr = arr C.coidr
 
 instance Arrow (Map r) where
   arr f = Map (. f)
@@ -190,7 +172,7 @@ instance MonadReader b (Map r b) where
 --  callCC f = Map $ \k -> (f $# \a -> Map $ \_ _ -> k a) k
 
 -- label :: ((a -> r) -> Map r b a) -> Map r b a
--- label f = Map $ \k -> f k $# k 
+-- label f = Map $ \k -> f k $# k
 
 -- break :: (a -> r) -> a -> Map r b a
 
@@ -204,7 +186,7 @@ instance ArrowChoice (Map r) where
   left m = Map $ \k -> either (m $# k . Left) (k . Right)
   right m = Map $ \k -> either (k . Left) (m $# k . Right)
   m +++ n =  Map $ \k -> either (m $# k . Left) (n $# k . Right)
-  m ||| n = Map $ \k -> either (m $# k) (n $# k) 
+  m ||| n = Map $ \k -> either (m $# k) (n $# k)
 
 -- TODO: ArrowLoop?
 
@@ -221,7 +203,7 @@ instance CounitalCoalgebra r m => Unital (Map r b m) where
 
 instance Coalgebra r m => Semiring (Map r b m)
 
-instance Coalgebra r m => LeftModule (Map r b m) (Map r b m) where 
+instance Coalgebra r m => LeftModule (Map r b m) (Map r b m) where
   (.*) = (*)
 
 instance LeftModule r s => LeftModule r (Map s b m) where
@@ -235,7 +217,7 @@ instance Additive r => Alt (Map r b) where
   Map m <!> Map n = Map $ m + n
 
 instance Monoidal r => Plus (Map r b) where
-  zero = Map zero 
+  zero = Map zero
 
 instance Monoidal r => Alternative (Map r b) where
   Map m <|> Map n = Map $ m + n
@@ -299,7 +281,7 @@ invMap = Map coinv
 
 {-
 -- ring homomorphism from r -> r^a
-embedMap :: (Unital m, CounitalCoalgebra r m) => (b -> r) -> Map r b m 
+embedMap :: (Unital m, CounitalCoalgebra r m) => (b -> r) -> Map r b m
 embedMap f = Map $ \k b -> f b * k one
 
 -- if the characteristic of s does not divide the order of a, then s[a] is semisimple
