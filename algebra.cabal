@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       2.1.1.1
+version:       2.1.1.2
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -8,10 +8,12 @@ author:        Edward A. Kmett
 maintainer:    Edward A. Kmett <ekmett@gmail.com>
 stability:     experimental
 homepage:      http://github.com/ekmett/algebra/
+bug-reports:   http://github.com/ekmett/algebra/issues
 copyright:     Copyright (C) 2011 Edward A. Kmett
 synopsis:      Constructive abstract algebra
 description:   Constructive abstract algebra
 build-type:    Simple
+extra-source-files: .travis.yml
 
 source-repository head
   type: git
