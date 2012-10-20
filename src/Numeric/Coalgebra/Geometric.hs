@@ -120,8 +120,8 @@ grade = fromIntegral . count 5 . count 4 . count 3 . count 2 . count 1 . count 0
     p = shiftL 1 c
     mask = (-1) `div` (shiftL 1 p + 1)
 
-m1powTimes :: (Bits n, Group r) => n -> r -> r
-m1powTimes n r 
+m1powTimes :: (Num n, Bits n, Group r) => n -> r -> r
+m1powTimes n r
   | (n .&. 1) == 0 = r
   | otherwise      = negate r
 
