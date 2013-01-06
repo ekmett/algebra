@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       3.0.1.1
+version:       3.0.2
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -13,7 +13,13 @@ copyright:     Copyright (C) 2011 Edward A. Kmett
 synopsis:      Constructive abstract algebra
 description:   Constructive abstract algebra
 build-type:    Simple
-extra-source-files: .travis.yml
+extra-source-files:
+  .ghci
+  .gitignore
+  .vim.custom
+  .travis.yml
+  README.markdown
+  CHANGELOG.markdown
 
 source-repository head
   type: git
@@ -39,18 +45,18 @@ library
   build-depends:
     array                   >= 0.3.0.2 && < 0.5,
     base                    == 4.*,
-    distributive            >= 0.2.2   && < 0.4,
+    distributive            >= 0.2.2,
     transformers            >= 0.2     && < 0.4,
-    tagged                  >= 0.4.2   && < 0.5,
-    categories              >= 1.0     && < 1.1,
+    tagged                  >= 0.4.2,
+    categories              >= 1.0,
     containers              >= 0.3     && < 0.6,
-    keys                    == 3.0.*,
+    keys                    >= 3,
     mtl                     >= 2.0.1   && < 2.2,
-    semigroups              >= 0.8.3.1 && < 0.9,
-    semigroupoids           == 3.0.*,
-    representable-functors  == 3.0.*,
-    representable-tries     == 3.0.*,
-    void                    >= 0.5.5.1 && < 0.6
+    semigroups              >= 0.8.3.1,
+    semigroupoids           >= 3,
+    representable-functors  >= 3,
+    representable-tries     >= 3,
+    void                    >= 0.5.5.1
 
   exposed-modules:
     Numeric.Additive.Class
