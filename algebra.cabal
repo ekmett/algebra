@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       3.0.2
+version:       3.1
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -52,7 +52,8 @@ library
     containers              >= 0.3     && < 0.6,
     keys                    >= 3,
     mtl                     >= 2.0.1   && < 2.2,
-    semigroups              >= 0.8.3.1,
+    nats                    >= 0.1,
+    semigroups              >= 0.9,
     semigroupoids           >= 3,
     representable-functors  >= 3,
     representable-tries     >= 3,
