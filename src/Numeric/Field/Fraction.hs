@@ -3,6 +3,7 @@ module Numeric.Field.Fraction (Fraction, numerator, denominator, Ratio, (%)) whe
 import Numeric.Additive.Class
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
+import Numeric.Algebra.Commutative
 import Numeric.Algebra.Division
 import Numeric.Algebra.Unital
 import Numeric.Decidable.Units
@@ -12,7 +13,7 @@ import Numeric.Natural
 import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Numeric.Semiring.Integral
-import Prelude                   hiding (Integral (..), Num (..), gcd)
+import Prelude                     hiding (Integral (..), Num (..), gcd)
 
 -- | Fraction field @k(D)@ of 'Euclidean' domain @D@.
 data Fraction d = Fraction !d !d
@@ -54,6 +55,7 @@ instance Euclidean d => Division (Fraction d) where
   {-# INLINE recip #-}
   {-# INLINE (/) #-}
 
+instance (Commutative d, Euclidean d) => Commutative (Fraction d)
 
 instance Euclidean d => DecidableZero (Fraction d) where
   isZero (Fraction p _) = isZero p
