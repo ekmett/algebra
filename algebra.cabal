@@ -96,8 +96,11 @@ library
     Numeric.Decidable.Units
     Numeric.Decidable.Zero
     Numeric.Dioid.Class
+    Numeric.Domain.Class
+    Numeric.Domain.Euclidean
     Numeric.Exp
     Numeric.Field.Class
+    Numeric.Field.Fraction
     Numeric.Log
     Numeric.Map
     Numeric.Module.Class
