@@ -1,7 +1,7 @@
 {-# LANGUAGE CPP, ConstraintKinds, FlexibleContexts, FlexibleInstances     #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving, MultiParamTypeClasses, RankNTypes #-}
 {-# LANGUAGE RebindableSyntax, UndecidableInstances                        #-}
-module Numeric.Domain.Euclidean where
+module Numeric.Domain.Euclidean (Euclidean(..), prs, normalize, gcd', leadingUnit) where
 import           Numeric.Additive.Group
 import           Numeric.Algebra.Class
 import           Numeric.Algebra.Unital
@@ -69,6 +69,18 @@ class (Ring r, DecidableZero r, DecidableUnits r, Domain r) => Euclidean r where
 #if (__GLASGOW_HASKELL__ > 708)
   {-# MINIMAL splitUnit, degree, divide #-}
 #endif
+
+prs :: Euclidean r => r -> r -> [(r, r, r)]
+prs f g = step [(g, 0, 1), (f, 1, 0)]
+  where
+    step acc@((r',s',t'):(r,s,t):_)
+      | isZero r' = P.tail acc
+      | otherwise =
+        let q         = r `quot` r'
+            s''       = (s - q * s')
+            t''       = (t - q * t')
+        in step ((r - q * r', s'', t'') : acc)
+    step _ = P.error "cannot happen!"
 
 gcd' :: Euclidean r => [r] -> r
 gcd' []     = one

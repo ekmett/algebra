@@ -1,4 +1,5 @@
 {-# LANGUAGE MultiParamTypeClasses, NoImplicitPrelude, RebindableSyntax #-}
+{-# LANGUAGE ViewPatterns                                               #-}
 module Numeric.Field.Fraction (Fraction, numerator, denominator, Ratio, (%)) where
 import Numeric.Additive.Class
 import Numeric.Additive.Group
@@ -13,13 +14,20 @@ import Numeric.Natural
 import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Numeric.Semiring.Integral
-import Prelude                     hiding (Integral (..), Num (..), gcd)
+import Prelude                     hiding (Integral (..), Num (..), gcd, lcm)
 
 -- | Fraction field @k(D)@ of 'Euclidean' domain @D@.
 data Fraction d = Fraction !d !d
 
+-- Invariants: r == Fraction p q
+--         ==> leadingUnit q == one && q /= 0
+--          && isUnit (gcd p q)
+
 -- | Convenient synonym for 'Fraction'.
 type Ratio = Fraction
+
+lcm :: Euclidean r => r -> r -> r
+lcm p q = p * q `quot` gcd p q
 
 instance (Eq d, Show d, Unital d) => Show (Fraction d) where
   showsPrec d (Fraction p q)
@@ -28,8 +36,11 @@ instance (Eq d, Show d, Unital d) => Show (Fraction d) where
 
 infixl 7 %
 (%) :: Euclidean d => d -> d -> Fraction d
-a % b = let r = gcd a b
-        in Fraction (a `quot` r) (b `quot` r)
+a % b = let (ua, a') = splitUnit a
+            (ub, b') = splitUnit b
+            Just ub' = recipUnit ub
+            r = gcd a' b'
+        in Fraction (ua * ub' * a' `quot` r) (b' `quot` r)
 
 numerator :: Fraction t -> t
 numerator (Fraction q _) = q
@@ -49,8 +60,9 @@ instance (Ord d, Multiplicative d) => Ord (Fraction d)  where
   {-# INLINE compare #-}
 
 instance Euclidean d => Division (Fraction d) where
-  recip (Fraction p q) | isZero q  = error "Ratio has zero denominator!"
-                       | otherwise = Fraction q p
+  recip (Fraction p q) | isZero p  = error "Ratio has zero denominator!"
+                       | otherwise = let (recipUnit -> Just u, p') = splitUnit p
+                                     in Fraction (q * u) p'
   Fraction p q / Fraction s t = (p*t) % (q*s)
   {-# INLINE recip #-}
   {-# INLINE (/) #-}
@@ -89,7 +101,9 @@ instance Euclidean d => RightModule Natural (Fraction d) where
   Fraction p r *. n = (p *. n) % r
   {-# INLINE (*.) #-}
 instance Euclidean d => Additive (Fraction d) where
-  Fraction p q + Fraction s t = (p*t + q*s) % (q*t)
+  Fraction p q + Fraction s t =
+    let u = gcd q t
+    in Fraction (p * t `quot` u + s*q`quot`u) (q*t`quot`u)
   {-# INLINE (+) #-}
 instance Euclidean d => Unital (Fraction d) where
   one = Fraction one one
