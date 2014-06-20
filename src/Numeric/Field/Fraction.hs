@@ -11,7 +11,8 @@ import Numeric.Domain.Euclidean
 import Numeric.Natural
 import Numeric.Rig.Class
 import Numeric.Ring.Class
-import Prelude                  hiding (Integral (..), Num (..), gcd)
+import Numeric.Semiring.Integral
+import Prelude                   hiding (Integral (..), Num (..), gcd)
 
 -- | Fraction field @k(D)@ of 'Euclidean' domain @D@.
 data Fraction d = Fraction !d !d
@@ -37,6 +38,7 @@ denominator :: Fraction t -> t
 denominator (Fraction _ p) = p
 {-# INLINE denominator #-}
 
+instance Euclidean d => IntegralSemiring (Fraction d)
 instance (Eq d, Multiplicative d) => Eq (Fraction d) where
   Fraction p q == Fraction s t = p*t == q*s
   {-# INLINE (==) #-}
