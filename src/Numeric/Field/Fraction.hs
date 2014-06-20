@@ -1,5 +1,5 @@
 {-# LANGUAGE MultiParamTypeClasses, NoImplicitPrelude, RebindableSyntax #-}
-module Numeric.Field.Fraction (Fraction, Ratio, (%)) where
+module Numeric.Field.Fraction (Fraction, numerator, denominator, Ratio, (%)) where
 import Numeric.Additive.Class
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
@@ -28,6 +28,14 @@ infixl 7 %
 (%) :: Euclidean d => d -> d -> Fraction d
 a % b = let r = gcd a b
         in Fraction (a `quot` r) (b `quot` r)
+
+numerator :: Fraction t -> t
+numerator (Fraction q _) = q
+{-# INLINE numerator #-}
+
+denominator :: Fraction t -> t
+denominator (Fraction _ p) = p
+{-# INLINE denominator #-}
 
 instance (Eq d, Multiplicative d) => Eq (Fraction d) where
   Fraction p q == Fraction s t = p*t == q*s
