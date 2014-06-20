@@ -66,7 +66,9 @@ instance Euclidean d => DecidableUnits (Fraction d) where
 instance Euclidean d => Ring (Fraction d)
 instance Euclidean d => Abelian (Fraction d)
 instance Euclidean d => Semiring (Fraction d)
-instance Euclidean d => Group (Fraction d)
+instance Euclidean d => Group (Fraction d) where
+  negate (Fraction p q) = Fraction (negate p) q
+  Fraction p q - Fraction p' q' = (p*q'-p'*q) % (q*q')
 instance Euclidean d => Monoidal (Fraction d) where
   zero = Fraction zero one
   {-# INLINE zero #-}
