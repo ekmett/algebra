@@ -1,6 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses, NoImplicitPrelude, RebindableSyntax #-}
-{-# LANGUAGE ViewPatterns                                               #-}
+{-# LANGUAGE ScopedTypeVariables, ViewPatterns                          #-}
 module Numeric.Field.Fraction (Fraction, numerator, denominator, Ratio, (%)) where
+import Data.Proxy
 import Numeric.Additive.Class
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
@@ -11,6 +12,7 @@ import Numeric.Decidable.Units
 import Numeric.Decidable.Zero
 import Numeric.Domain.Euclidean
 import Numeric.Natural
+import Numeric.Rig.Characteristic
 import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Numeric.Semiring.Integral
@@ -111,3 +113,6 @@ instance Euclidean d => Unital (Fraction d) where
 instance Euclidean d => Multiplicative (Fraction d) where
   Fraction p q * Fraction s t = (p*s) % (q*t)
 instance Euclidean d => Rig (Fraction d)
+
+instance (Characteristic d, Euclidean d) => Characteristic (Fraction d) where
+  char _ = char (Proxy :: Proxy d)
