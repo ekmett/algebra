@@ -1,7 +1,7 @@
 {-# LANGUAGE CPP, ConstraintKinds, FlexibleContexts, FlexibleInstances     #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving, MultiParamTypeClasses, RankNTypes #-}
 {-# LANGUAGE RebindableSyntax, UndecidableInstances                        #-}
-module Numeric.Domain.Euclidean (Euclidean(..), prs, normalize, gcd', leadingUnit) where
+module Numeric.Domain.Euclidean (Euclidean(..), prs, normalize, gcd', leadingUnit, chineseRemainder) where
 import           Numeric.Additive.Group
 import           Numeric.Algebra.Class
 import           Numeric.Algebra.Unital
@@ -104,3 +104,14 @@ instance Euclidean Integer where
 
   divide = P.divMod
   {-# INLINE divide #-}
+
+chineseRemainder :: Euclidean r
+                 => [(r, r)] -- ^ List of @(m_i, v_i)@
+                 -> r        -- ^ @f@ with @f@ = @v_i@ (mod @v_i@)
+chineseRemainder mvs =
+  let (ms, _) = P.unzip mvs
+      m = product ms
+  in sum [((vi*s) `rem` mi)*n | (mi, vi) <- mvs
+                               , let n = m `quot` mi
+                               , let (_, s, _) : _ = euclid n mi
+                               ]
