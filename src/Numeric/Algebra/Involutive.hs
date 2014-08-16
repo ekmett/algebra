@@ -19,9 +19,6 @@ import Numeric.Algebra.Class
 import Numeric.Algebra.Commutative
 import Numeric.Algebra.Unital
 import Data.Int
-import Data.Functor.Representable
-import Data.Functor.Representable.Trie
-import Data.Key
 import Data.Word
 import Numeric.Natural.Internal
 
@@ -80,11 +77,6 @@ instance
 
 instance InvolutiveAlgebra r h => InvolutiveMultiplication (h -> r) where
   adjoint = inv
-
-instance (HasTrie h, InvolutiveAlgebra r h) => InvolutiveMultiplication (h :->: r) where
-  adjoint = tabulate . inv . index
-
-
 
 -- | adjoint (x + y) = adjoint x + adjoint y
 class (Semiring r, InvolutiveMultiplication r) => InvolutiveSemiring r
@@ -173,13 +165,6 @@ instance ( TriviallyInvolutive a
 instance ( TriviallyInvolutive r
          , TriviallyInvolutiveAlgebra r a
          ) => TriviallyInvolutive (a -> r)
-
-instance ( HasTrie a
-         , TriviallyInvolutive r
-         , TriviallyInvolutiveAlgebra r a
-         ) => TriviallyInvolutive (a :->: r)
-
-
 
 -- inv is an associative algebra homomorphism
 class (InvolutiveSemiring r, Algebra r a) => InvolutiveAlgebra r a where

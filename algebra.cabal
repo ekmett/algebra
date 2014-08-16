@@ -1,6 +1,6 @@
 name:          algebra
 category:      Math, Algebra
-version:       3.1
+version:       4.0
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -43,21 +43,18 @@ library
     GeneralizedNewtypeDeriving
 
   build-depends:
-    array                   >= 0.3.0.2 && < 0.5,
+    adjunctions             >= 4       && < 5,
+    array                   >= 0.3.0.2 && < 0.6,
     base                    == 4.*,
-    distributive            >= 0.2.2,
-    transformers            >= 0.2     && < 0.4,
-    tagged                  >= 0.4.2,
-    categories              >= 1.0,
     containers              >= 0.3     && < 0.6,
-    keys                    >= 3,
-    mtl                     >= 2.0.1   && < 2.2,
-    nats                    >= 0.1,
-    semigroups              >= 0.9,
-    semigroupoids           >= 3,
-    representable-functors  >= 3,
-    representable-tries     >= 3,
-    void                    >= 0.5.5.1
+    distributive            >= 0.2.2   && < 1,
+    mtl                     >= 2.0.1   && < 2.3,
+    nats                    >= 0.1     && < 1,
+    semigroups              >= 0.9     && < 1,
+    semigroupoids           >= 4       && < 5,
+    transformers            >= 0.2     && < 0.5,
+    tagged                  >= 0.4.2   && < 1,
+    void                    >= 0.5.5.1 && < 1
 
   exposed-modules:
     Numeric.Additive.Class

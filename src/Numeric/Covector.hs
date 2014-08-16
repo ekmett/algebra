@@ -1,7 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FlexibleContexts #-}
 module Numeric.Covector
   ( Covector(..)
-  , ($*)
   -- * Covectors as linear functionals
   , counitM
   , unitM
@@ -11,7 +10,6 @@ module Numeric.Covector
   , coinvM
   , antipodeM
   , convolveM
-  , memoM
   ) where
 
 import Numeric.Additive.Class
@@ -26,12 +24,9 @@ import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Control.Applicative
 import Control.Monad
-import Data.Key
-import Data.Functor.Representable.Trie
 import Data.Functor.Plus hiding (zero)
 import qualified Data.Functor.Plus as Plus
 import Data.Functor.Bind
-import qualified Prelude
 import Prelude hiding ((+),(-),negate,subtract,replicate,(*))
 
 -- | Linear functionals from elements of an (infinite) free module to a scalar
@@ -39,12 +34,8 @@ import Prelude hiding ((+),(-),negate,subtract,replicate,(*))
 -- f $* (x + y) = (f $* x) + (f $* y)
 -- f $* (a .* x) = a * (f $* x)
 
-newtype Covector r a = Covector ((a -> r) -> r)
-
 infixr 0 $*
-
-($*) :: Indexable m => Covector r (Key m) -> m r -> r
-Covector f $* m = f (index m)
+newtype Covector r a = Covector { ($*) :: (a -> r) -> r }
 
 instance Functor (Covector r) where
   fmap f m = Covector $ \k -> m $* k . f
@@ -127,9 +118,6 @@ coinvM = Covector . flip coinv
 -- | convolveM antipodeM return = convolveM return antipodeM = comultM >=> uncurry joinM
 antipodeM :: HopfAlgebra r h => h -> Covector r h
 antipodeM = Covector . flip antipode
-
-memoM :: HasTrie a => a -> Covector s a
-memoM = Covector . flip memo
 
 -- TODO: we can also build up the augmentation ideal
 

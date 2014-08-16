@@ -4,7 +4,6 @@ module Numeric.Map
   , ($@)
   , multMap
   , unitMap
-  , memoMap
   , comultMap
   , counitMap
   , invMap
@@ -15,27 +14,16 @@ module Numeric.Map
 
 import Control.Applicative
 import Control.Arrow
-import Control.Categorical.Bifunctor
 import Control.Category
-import Control.Category.Associative
-import Control.Category.Braided
-import Control.Category.Cartesian
-import Control.Category.Cartesian.Closed
-import Control.Category.Distributive
-import qualified Control.Category.Monoidal as C
-import Control.Category.Monoidal (Id)
 import Control.Monad
 import Control.Monad.Reader.Class
-import Data.Key
-import Data.Functor.Representable
-import Data.Functor.Representable.Trie
+import Data.Functor.Rep
 import Data.Functor.Bind
 import Data.Functor.Plus hiding (zero)
 import qualified Data.Functor.Plus as Plus
 import Data.Semigroupoid
-import Data.Void
 import Numeric.Algebra
-import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat, (.), id, curry, uncurry, fst, snd)
+import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat, (.), id, fst, snd)
 
 -- | linear maps from elements of a free module to another free module over r
 --
@@ -53,7 +41,7 @@ import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, p
 infixr 0 $#
 newtype Map r b a = Map ((a -> r) -> b -> r)
 
-($#) :: (Indexable v, Representable w) => Map r (Key w) (Key v) -> v r -> w r
+($#) :: (Representable v, Representable w) => Map r (Rep w) (Rep v) -> v r -> w r
 ($#) (Map m) = tabulate . m . index
 
 infixr 0 $@
@@ -85,71 +73,6 @@ instance Bind (Map r b) where
 instance Monad (Map r b) where
   return a = Map $ \k _ -> k a
   m >>= f = Map $ \k b -> (m $# \a -> (f a $# k) b) b
-
-instance PFunctor (,) (Map r) (Map r)
-instance QFunctor (,) (Map r) (Map r)
-instance Bifunctor (,) (Map r) (Map r) (Map r) where
-  bimap m n = Map $ \k (a,c) -> (m $# \b -> (n $# \d -> k (b,d)) c) a
-
-instance Associative (Map r) (,) where
-  associate = arr associate
-  disassociate = arr disassociate
-
-instance Braided (Map r) (,) where
-  braid = arr braid
-
-instance Symmetric (Map r) (,)
-
-instance C.Monoidal (Map r) (,) where
-  type Id (Map r) (,) = ()
-  idl = arr C.idl
-  idr = arr C.idr
-  coidl = arr C.coidl
-  coidr = arr C.coidr
-
-instance Cartesian (Map r) where
-  type Product (Map r) = (,)
-  fst = arr fst
-  snd = arr snd
-  diag = arr diag
-  f &&& g = Map $ \k a -> (f $# \b -> (g $# \c -> k (b,c)) a) a
-
-instance CCC (Map r) where
-  type Exp (Map r) = Map r
-  apply = Map $ \k (f,a) -> (f $# k) a
-  curry m = Map $ \k a -> k (Map $ \k' b -> (m $# k') (a, b))
-  uncurry m = Map $ \k (a, b) -> (m $# (\m' -> (m' $# k) b)) a
-
-instance Distributive (Map r) where
-  distribute = Map $ \k (a,p) -> k $ bimap ((,) a) ((,)a) p
-
-instance PFunctor Either (Map r) (Map r)
-instance QFunctor Either (Map r) (Map r)
-instance Bifunctor Either (Map r) (Map r) (Map r) where
-  bimap m n = Map $ \k -> either (m $# k . Left) (n $# k . Right)
-
-instance Associative (Map r) Either where
-  associate = arr associate
-  disassociate = arr disassociate
-
-instance Braided (Map r) Either where
-  braid = arr braid
-
-instance Symmetric (Map r) Either
-
-instance CoCartesian (Map r) where
-  type Sum (Map r) = Either
-  inl = arr inl
-  inr = arr inr
-  codiag = arr codiag
-  m ||| n = Map $ \k -> either (m $# k) (n $# k)
-
-instance C.Monoidal (Map r) Either where
-  type Id (Map r) Either = Void
-  idl = arr C.idl
-  idr = arr C.idr
-  coidl = arr C.coidl
-  coidr = arr C.coidr
 
 instance Arrow (Map r) where
   arr f = Map (. f)
@@ -248,10 +171,6 @@ instance (Ring r, CounitalCoalgebra r m) => Ring (Map r a m)
 -- | (inefficiently) combine a linear combination of basis vectors to make a map.
 -- arrMap :: (Monoidal r, Semiring r) => (b -> [(r, a)]) -> Map r b a
 -- arrMap f = Map $ \k b -> sum [ r * k a | (r, a) <- f b ]
-
--- | Memoize the results of this linear map
-memoMap :: HasTrie a => Map r a a
-memoMap = Map memo
 
 comultMap :: Algebra r a => Map r a (a,a)
 comultMap = Map $ mult . curry

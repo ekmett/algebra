@@ -19,11 +19,9 @@ import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
 import Data.Functor.Bind
-import Data.Functor.Representable
-import Data.Functor.Representable.Trie
+import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix hiding (index)
-import Data.Key
 import Data.Semigroup
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
@@ -38,10 +36,10 @@ import Prelude hiding ((-),(+),(*),negate,subtract, fromInteger,recip)
 data ComplexBasis = E | I deriving (Eq,Ord,Show,Read,Enum,Ix,Bounded,Data,Typeable)
 data Complex a = Complex a a deriving (Eq,Show,Read,Data,Typeable)
 
-realPart :: (Representable f, Key f ~ ComplexBasis) => f a -> a
+realPart :: (Representable f, Rep f ~ ComplexBasis) => f a -> a
 realPart f = index f E 
 
-imagPart :: (Representable f, Key f ~ ComplexBasis) => f a -> a
+imagPart :: (Representable f, Rep f ~ ComplexBasis) => f a -> a
 imagPart f = index f I
 
 instance Distinguished ComplexBasis where
@@ -64,42 +62,17 @@ instance Rig r => Complicated (ComplexBasis -> r) where
   i I = one
   i _ = zero 
 
-instance Rig r => Distinguished (ComplexBasis :->: r) where
-  e = Trie e
-  
-instance Rig r => Complicated (ComplexBasis :->: r) where
-  i = Trie i
-
-type instance Key Complex = ComplexBasis
-
 instance Representable Complex where
+  type Rep Complex = ComplexBasis
   tabulate f = Complex (f E) (f I)
-
-instance Indexable Complex where
   index (Complex a _ ) E = a
   index (Complex _ b ) I = b
-
-instance Lookup Complex where
-  lookup = lookupDefault
-
-instance Adjustable Complex where
-  adjust f E (Complex a b) = Complex (f a) b
-  adjust f I (Complex a b) = Complex a (f b)
 
 instance Distributive Complex where
   distribute = distributeRep 
 
 instance Functor Complex where
   fmap f (Complex a b) = Complex (f a) (f b)
-
-instance Zip Complex where
-  zipWith f (Complex a1 b1) (Complex a2 b2) = Complex (f a1 a2) (f b1 b2)
-
-instance ZipWithKey Complex where
-  zipWithKey f (Complex a1 b1) (Complex a2 b2) = Complex (f E a1 a2) (f I b1 b2)
-
-instance Keyed Complex where
-  mapWithKey = mapWithKeyRep
 
 instance Apply Complex where
   (<.>) = apRep
@@ -122,31 +95,14 @@ instance MonadReader ComplexBasis Complex where
 instance Foldable Complex where
   foldMap f (Complex a b) = f a `mappend` f b
 
-instance FoldableWithKey Complex where
-  foldMapWithKey f (Complex a b) = f E a `mappend` f I b
-
 instance Traversable Complex where
   traverse f (Complex a b) = Complex <$> f a <*> f b
-
-instance TraversableWithKey Complex where
-  traverseWithKey f (Complex a b) = Complex <$> f E a <*> f I b
 
 instance Foldable1 Complex where
   foldMap1 f (Complex a b) = f a <> f b
 
-instance FoldableWithKey1 Complex where
-  foldMapWithKey1 f (Complex a b) = f E a <> f I b
-
 instance Traversable1 Complex where
   traverse1 f (Complex a b) = Complex <$> f a <.> f b
-
-instance TraversableWithKey1 Complex where
-  traverseWithKey1 f (Complex a b) = Complex <$> f E a <.> f I b
-
-instance HasTrie ComplexBasis where
-  type BaseTrie ComplexBasis = Complex
-  embedKey = id
-  projectKey = id
 
 instance Additive r => Additive (Complex r) where
   (+) = addRep 

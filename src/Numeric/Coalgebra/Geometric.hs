@@ -39,7 +39,6 @@ module Numeric.Coalgebra.Geometric
 
 import Control.Monad (mfilter)
 import Data.Bits
-import Data.Functor.Representable.Trie
 import Data.Word
 import Data.Data
 import Data.Ix
@@ -55,11 +54,6 @@ newtype BasisCoblade m = BasisCoblade { runBasisCoblade :: Word64 } deriving
   , Semiring,Rig
   , DecidableZero,DecidableAssociates,DecidableUnits
   )
-
-instance HasTrie (BasisCoblade m) where
-  type BaseTrie (BasisCoblade m) = BaseTrie Word64
-  embedKey = embedKey . runBasisCoblade
-  projectKey = BasisCoblade . projectKey
 
 -- A metric space over an eigenbasis
 class Eigenbasis m where
@@ -99,11 +93,6 @@ newtype Euclidean = Euclidean Int deriving
   , Multiplicative,TriviallyInvolutive,InvolutiveMultiplication,InvolutiveSemiring,Unital,Commutative
   , Semiring,Rig,Ring
   )
-
-instance HasTrie Euclidean where
-  type BaseTrie Euclidean = BaseTrie Int
-  embedKey (Euclidean i) = embedKey i
-  projectKey = Euclidean . projectKey
 
 instance Eigenbasis Euclidean where
   euclidean _ = True

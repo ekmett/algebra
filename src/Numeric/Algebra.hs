@@ -136,7 +136,6 @@ module Numeric.Algebra
   , coinvM
   , antipodeM
   , convolveM
-  , memoM
   ) where
 
 import Prelude ()

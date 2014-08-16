@@ -19,8 +19,7 @@ module Numeric.Module.Representable
 
 import Control.Applicative
 import Data.Functor
-import Data.Functor.Representable
-import Data.Key
+import Data.Functor.Rep
 import Numeric.Additive.Class
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
@@ -32,8 +31,8 @@ import Control.Category
 import Prelude (($), Integral(..),Integer)
 
 -- | `Additive.(+)` default definition
-addRep :: (Zip m, Additive r) => m r -> m r -> m r
-addRep = zipWith (+)
+addRep :: (Applicative m, Additive r) => m r -> m r -> m r
+addRep = liftA2 (+)
 
 -- | `Additive.sinnum1p` default definition
 sinnum1pRep :: (Whole n, Functor m, Additive r) => n -> m r -> m r
@@ -52,29 +51,29 @@ negateRep :: (Functor m, Group r) => m r -> m r
 negateRep = fmap negate
 
 -- | `Group.(-)` default definition
-minusRep :: (Zip m, Group r) => m r -> m r -> m r
-minusRep = zipWith (-)
+minusRep :: (Applicative m, Group r) => m r -> m r -> m r
+minusRep = liftA2 (-)
 
 -- | `Group.subtract` default definition
-subtractRep :: (Zip m, Group r) => m r -> m r -> m r
-subtractRep = zipWith subtract
+subtractRep :: (Applicative m, Group r) => m r -> m r -> m r
+subtractRep = liftA2 subtract
 
 -- | `Group.times` default definition
 timesRep :: (Integral n, Functor m, Group r) => n -> m r -> m r
 timesRep = fmap . times
 
 -- | `Multiplicative.(*)` default definition
-mulRep :: (Representable m, Algebra r (Key m)) => m r -> m r -> m r
+mulRep :: (Representable m, Algebra r (Rep m)) => m r -> m r -> m r
 mulRep m n = tabulate $ mult (\b1 b2 -> index m b1 * index n b2)
 
 -- | `Unital.one` default definition
-oneRep :: (Representable m, Unital r, UnitalAlgebra r (Key m)) => m r
+oneRep :: (Representable m, Unital r, UnitalAlgebra r (Rep m)) => m r
 oneRep = tabulate $ unit one
 
 -- | `Rig.fromNatural` default definition
-fromNaturalRep :: (UnitalAlgebra r (Key m), Representable m, Rig r) => Natural -> m r
+fromNaturalRep :: (UnitalAlgebra r (Rep m), Representable m, Rig r) => Natural -> m r
 fromNaturalRep n = tabulate $ unit (fromNatural n)
 
 -- | `Ring.fromInteger` default definition
-fromIntegerRep :: (UnitalAlgebra r (Key m), Representable m, Ring r) => Integer -> m r
+fromIntegerRep :: (UnitalAlgebra r (Rep m), Representable m, Ring r) => Integer -> m r
 fromIntegerRep n = tabulate $ unit (fromInteger n)

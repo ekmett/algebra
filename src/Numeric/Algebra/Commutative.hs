@@ -6,7 +6,6 @@ module Numeric.Algebra.Commutative
   , CommutativeBialgebra
   ) where
 
-import Data.Functor.Representable.Trie
 import Data.Int
 import Data.IntSet (IntSet)
 import Data.IntMap (IntMap)
@@ -62,12 +61,6 @@ instance ( Commutative a
          ) => Commutative (a,b,c,d,e)
 
 instance CommutativeAlgebra r a => Commutative (a -> r)
-
-instance ( HasTrie a
-         , CommutativeAlgebra r a
-         ) => Commutative (a :->: r) 
-
-
 
 class Algebra r a => CommutativeAlgebra r a
 
@@ -126,10 +119,6 @@ instance ( Commutative r
 class Coalgebra r c => CocommutativeCoalgebra r c
 
 instance CommutativeAlgebra r m => CocommutativeCoalgebra r (m -> r)
-
-instance ( HasTrie m
-         , CommutativeAlgebra r m
-         ) => CocommutativeCoalgebra r (m :->: r)
 
 instance (Commutative r, Semiring r) => CocommutativeCoalgebra r ()
 

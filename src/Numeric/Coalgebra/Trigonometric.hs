@@ -15,11 +15,9 @@ import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
 import Data.Functor.Bind
-import Data.Functor.Representable
-import Data.Functor.Representable.Trie
+import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix
-import Data.Key
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Data.Semigroup
@@ -67,46 +65,17 @@ instance Rig r => Trigonometric (TrigBasis -> r) where
   sin Sin = one
   sin Cos = zero
 
-instance Rig r => Trigonometric (TrigBasis :->: r) where
-  cos = Trie cos
-  sin = Trie sin
-
-instance Rig r => Distinguished (TrigBasis :->: r) where
-  e = Trie e
-
-instance Rig r => Complicated (TrigBasis :->: r) where
-  i = Trie i
-  
-type instance Key Trig = TrigBasis
-
 instance Representable Trig where
+  type Rep Trig = TrigBasis
   tabulate f = Trig (f Cos) (f Sin)
-
-instance Indexable Trig where
   index (Trig a _ ) Cos = a
   index (Trig _ b ) Sin = b
-
-instance Lookup Trig where
-  lookup = lookupDefault
-
-instance Adjustable Trig where
-  adjust f Cos (Trig a b) = Trig (f a) b
-  adjust f Sin (Trig a b) = Trig a (f b)
 
 instance Distributive Trig where
   distribute = distributeRep 
 
 instance Functor Trig where
   fmap f (Trig a b) = Trig (f a) (f b)
-
-instance Zip Trig where
-  zipWith f (Trig a1 b1) (Trig a2 b2) = Trig (f a1 a2) (f b1 b2)
-
-instance ZipWithKey Trig where
-  zipWithKey f (Trig a1 b1) (Trig a2 b2) = Trig (f Cos a1 a2) (f Sin b1 b2)
-
-instance Keyed Trig where
-  mapWithKey = mapWithKeyRep
 
 instance Apply Trig where
   (<.>) = apRep
@@ -129,31 +98,14 @@ instance MonadReader TrigBasis Trig where
 instance Foldable Trig where
   foldMap f (Trig a b) = f a `mappend` f b
 
-instance FoldableWithKey Trig where
-  foldMapWithKey f (Trig a b) = f Cos a `mappend` f Sin b
-
 instance Traversable Trig where
   traverse f (Trig a b) = Trig <$> f a <*> f b
-
-instance TraversableWithKey Trig where
-  traverseWithKey f (Trig a b) = Trig <$> f Cos a <*> f Sin b
 
 instance Foldable1 Trig where
   foldMap1 f (Trig a b) = f a <> f b
 
-instance FoldableWithKey1 Trig where
-  foldMapWithKey1 f (Trig a b) = f Cos a <> f Sin b
-
 instance Traversable1 Trig where
   traverse1 f (Trig a b) = Trig <$> f a <.> f b
-
-instance TraversableWithKey1 Trig where
-  traverseWithKey1 f (Trig a b) = Trig <$> f Cos a <.> f Sin b
-
-instance HasTrie TrigBasis where
-  type BaseTrie TrigBasis = Trig
-  embedKey = id
-  projectKey = id
 
 instance Additive r => Additive (Trig r) where
   (+) = addRep 

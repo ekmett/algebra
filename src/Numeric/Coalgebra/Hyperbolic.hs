@@ -10,11 +10,9 @@ import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
 import Data.Functor.Bind
-import Data.Functor.Representable
-import Data.Functor.Representable.Trie
+import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix
-import Data.Key
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
 import Data.Semigroup
@@ -41,36 +39,18 @@ instance Rig r => Hyperbolic (HyperBasis -> r) where
   sinh Sinh = one
   sinh Cosh = zero
 
-type instance Key Hyper = HyperBasis
 
 instance Representable Hyper where
+  type Rep Hyper = HyperBasis
   tabulate f = Hyper (f Cosh) (f Sinh)
-
-instance Indexable Hyper where
   index (Hyper a _ ) Cosh = a
   index (Hyper _ b ) Sinh = b
-
-instance Lookup Hyper where
-  lookup = lookupDefault
-
-instance Adjustable Hyper where
-  adjust f Cosh (Hyper a b) = Hyper (f a) b
-  adjust f Sinh (Hyper a b) = Hyper a (f b)
 
 instance Distributive Hyper where
   distribute = distributeRep 
 
 instance Functor Hyper where
   fmap f (Hyper a b) = Hyper (f a) (f b)
-
-instance Zip Hyper where
-  zipWith f (Hyper a1 b1) (Hyper a2 b2) = Hyper (f a1 a2) (f b1 b2)
-
-instance ZipWithKey Hyper where
-  zipWithKey f (Hyper a1 b1) (Hyper a2 b2) = Hyper (f Cosh a1 a2) (f Sinh b1 b2)
-
-instance Keyed Hyper where
-  mapWithKey = mapWithKeyRep
 
 instance Apply Hyper where
   (<.>) = apRep
@@ -93,31 +73,14 @@ instance MonadReader HyperBasis Hyper where
 instance Foldable Hyper where
   foldMap f (Hyper a b) = f a `mappend` f b
 
-instance FoldableWithKey Hyper where
-  foldMapWithKey f (Hyper a b) = f Cosh a `mappend` f Sinh b
-
 instance Traversable Hyper where
   traverse f (Hyper a b) = Hyper <$> f a <*> f b
-
-instance TraversableWithKey Hyper where
-  traverseWithKey f (Hyper a b) = Hyper <$> f Cosh a <*> f Sinh b
 
 instance Foldable1 Hyper where
   foldMap1 f (Hyper a b) = f a <> f b
 
-instance FoldableWithKey1 Hyper where
-  foldMapWithKey1 f (Hyper a b) = f Cosh a <> f Sinh b
-
 instance Traversable1 Hyper where
   traverse1 f (Hyper a b) = Hyper <$> f a <.> f b
-
-instance TraversableWithKey1 Hyper where
-  traverseWithKey1 f (Hyper a b) = Hyper <$> f Cosh a <.> f Sinh b
-
-instance HasTrie HyperBasis where
-  type BaseTrie HyperBasis = Hyper
-  embedKey = id
-  projectKey = id
 
 instance Additive r => Additive (Hyper r) where
   (+) = addRep 

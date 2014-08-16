@@ -21,14 +21,10 @@ module Numeric.Algebra.Class
   , Coalgebra(..)
   ) where
 
-import Control.Applicative
 import Data.Foldable hiding (sum, concat)
-import Data.Functor.Representable
-import Data.Functor.Representable.Trie
 import Data.Int
 import Data.IntMap (IntMap)
 import Data.IntSet (IntSet)
-import Data.Key
 import Data.Map (Map)
 import Data.Monoid (mappend)
 -- import Data.Semigroup.Foldable
@@ -149,8 +145,6 @@ instance (Multiplicative a, Multiplicative b, Multiplicative c, Multiplicative d
 
 instance Algebra r a => Multiplicative (a -> r) where
   f * g = mult $ \a b -> f a * g b
-instance (HasTrie a, Algebra r a) => Multiplicative (a :->: r) where
-  f * g = tabulate $ mult $ \a b -> index f a * index g b
 
 -- | A pair of an additive abelian semigroup, and a multiplicative semigroup, with the distributive laws:
 -- 
@@ -186,7 +180,6 @@ instance (Semiring a, Semiring b, Semiring c) => Semiring (a, b, c)
 instance (Semiring a, Semiring b, Semiring c, Semiring d) => Semiring (a, b, c, d)
 instance (Semiring a, Semiring b, Semiring c, Semiring d, Semiring e) => Semiring (a, b, c, d, e)
 instance Algebra r a => Semiring (a -> r) 
-instance (HasTrie a, Algebra r a) => Semiring (a :->: r) 
 
 -- | An associative algebra built with a free module over a semiring
 class Semiring r => Algebra r a where
@@ -252,9 +245,6 @@ class Semiring r => Coalgebra r c where
 -- The dual argument only relies in the fact that any constructive coalgebra can only inspect a finite number of coefficients, 
 -- which we CAN exploit.
 instance Algebra r m => Coalgebra r (m -> r) where
-  comult k f g = k (f * g)
-
-instance (HasTrie m, Algebra r m) => Coalgebra r (m :->: r) where
   comult k f g = k (f * g)
 
 -- instance Coalgebra () c where comult _ _ _ = ()
@@ -381,9 +371,6 @@ instance Semiring r => LeftModule r () where
 instance LeftModule r m => LeftModule r (e -> m) where 
   (.*) m f e = m .* f e
 
-instance (HasTrie e, LeftModule r m) => LeftModule r (e :->: m) where 
-  (.*) m f = tabulate $ \e -> m .* index f e
-
 instance Additive m => LeftModule () m where 
   _ .* a = a
 
@@ -459,9 +446,6 @@ instance Semiring r => RightModule r () where
 
 instance RightModule r m => RightModule r (e -> m) where 
   (*.) f m e = f e *. m
-
-instance (HasTrie e, RightModule r m) => RightModule r (e :->: m) where 
-  (*.) f m = tabulate $ \e -> index f e *. m
 
 instance Additive m => RightModule () m where 
   (*.) = const
@@ -571,11 +555,6 @@ instance Monoidal r => Monoidal (e -> r) where
   zero = const zero
   sumWith f xs e = sumWith (`f` e) xs
   sinnum n r e = sinnum n (r e)
-
-instance (HasTrie e, Monoidal r) => Monoidal (e :->: r) where
-  zero = pure zero
-  sumWith f xs = tabulate $ \e -> sumWith (\a -> index (f a) e) xs
-  sinnum n r = tabulate $ sinnum n . index r
 
 instance Monoidal () where 
   zero = ()

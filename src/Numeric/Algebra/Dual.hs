@@ -11,11 +11,9 @@ import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
 import Data.Functor.Bind
-import Data.Functor.Representable
-import Data.Functor.Representable.Trie
+import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix
-import Data.Key
 import Data.Semigroup hiding (Dual)
 import Data.Semigroup.Traversable
 import Data.Semigroup.Foldable
@@ -49,36 +47,18 @@ instance Rig r => Infinitesimal (DualBasis -> r) where
   d D = one
   d _       = zero 
 
-type instance Key Dual = DualBasis
 
 instance Representable Dual where
+  type Rep Dual = DualBasis
   tabulate f = Dual (f E) (f D)
-
-instance Indexable Dual where
   index (Dual a _ ) E = a
   index (Dual _ b ) D = b
-
-instance Lookup Dual where
-  lookup = lookupDefault
-
-instance Adjustable Dual where
-  adjust f E (Dual a b) = Dual (f a) b
-  adjust f D (Dual a b) = Dual a (f b)
 
 instance Distributive Dual where
   distribute = distributeRep 
 
 instance Functor Dual where
   fmap f (Dual a b) = Dual (f a) (f b)
-
-instance Zip Dual where
-  zipWith f (Dual a1 b1) (Dual a2 b2) = Dual (f a1 a2) (f b1 b2)
-
-instance ZipWithKey Dual where
-  zipWithKey f (Dual a1 b1) (Dual a2 b2) = Dual (f E a1 a2) (f D b1 b2)
-
-instance Keyed Dual where
-  mapWithKey = mapWithKeyRep
 
 instance Apply Dual where
   (<.>) = apRep
@@ -101,31 +81,14 @@ instance MonadReader DualBasis Dual where
 instance Foldable Dual where
   foldMap f (Dual a b) = f a `mappend` f b
 
-instance FoldableWithKey Dual where
-  foldMapWithKey f (Dual a b) = f E a `mappend` f D b
-
 instance Traversable Dual where
   traverse f (Dual a b) = Dual <$> f a <*> f b
-
-instance TraversableWithKey Dual where
-  traverseWithKey f (Dual a b) = Dual <$> f E a <*> f D b
 
 instance Foldable1 Dual where
   foldMap1 f (Dual a b) = f a <> f b
 
-instance FoldableWithKey1 Dual where
-  foldMapWithKey1 f (Dual a b) = f E a <> f D b
-
 instance Traversable1 Dual where
   traverse1 f (Dual a b) = Dual <$> f a <.> f b
-
-instance TraversableWithKey1 Dual where
-  traverseWithKey1 f (Dual a b) = Dual <$> f E a <.> f D b
-
-instance HasTrie DualBasis where
-  type BaseTrie DualBasis = Dual
-  embedKey = id
-  projectKey = id
 
 instance Additive r => Additive (Dual r) where
   (+) = addRep 
