@@ -1,6 +1,13 @@
 {-# LANGUAGE MultiParamTypeClasses, NoImplicitPrelude, RebindableSyntax #-}
 {-# LANGUAGE ScopedTypeVariables, ViewPatterns                          #-}
-module Numeric.Field.Fraction (Fraction, numerator, denominator, Ratio, (%)) where
+module Numeric.Field.Fraction
+  ( Fraction
+  , numerator
+  , denominator
+  , Ratio
+  , (%)
+  , lcm
+  ) where
 import Data.Proxy
 import Numeric.Additive.Class
 import Numeric.Additive.Group

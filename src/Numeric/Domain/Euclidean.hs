@@ -2,17 +2,17 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving, MultiParamTypeClasses, RankNTypes #-}
 {-# LANGUAGE RebindableSyntax, UndecidableInstances                        #-}
 module Numeric.Domain.Euclidean (Euclidean(..), prs, normalize, gcd', leadingUnit, chineseRemainder) where
-import           Numeric.Additive.Group
-import           Numeric.Algebra.Class
-import           Numeric.Algebra.Unital
-import           Numeric.Decidable.Units
-import           Numeric.Decidable.Zero
-import           Numeric.Domain.Class
-import           Numeric.Natural         (Natural)
-import           Numeric.Ring.Class
-import           Prelude                 (Eq (..), Integer, Maybe (..), abs)
-import           Prelude                 (fst, head, otherwise)
-import           Prelude                 (signum, snd, ($), (.))
+import Numeric.Additive.Group
+import Numeric.Algebra.Class
+import Numeric.Algebra.Unital
+import Numeric.Decidable.Units
+import Numeric.Decidable.Zero
+import Numeric.Domain.Class
+import Numeric.Natural (Natural)
+import Numeric.Ring.Class
+import Prelude (Eq (..), Integer, Maybe (..), abs)
+import Prelude (fst, otherwise)
+import Prelude (signum, snd, ($), (.))
 import qualified Prelude                 as P
 
 infixl 7 `quot`, `rem`
