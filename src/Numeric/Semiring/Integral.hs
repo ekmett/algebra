@@ -3,7 +3,7 @@ module Numeric.Semiring.Integral
   ) where
 
 import Numeric.Algebra.Class
-import Numeric.Natural.Internal
+import Numeric.Natural
 
 -- | An integral semiring has no zero divisors
 --

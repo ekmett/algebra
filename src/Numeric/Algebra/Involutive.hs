@@ -15,14 +15,12 @@ module Numeric.Algebra.Involutive
   , TriviallyInvolutiveBialgebra
   ) where
 
+import Data.Int
+import Data.Word
 import Numeric.Algebra.Class
 import Numeric.Algebra.Commutative
 import Numeric.Algebra.Unital
-import Data.Int
-import Data.Word
-import Numeric.Natural.Internal
-
-
+import Numeric.Natural
 
 -- | An semigroup with involution
 -- 

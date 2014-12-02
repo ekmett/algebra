@@ -6,7 +6,7 @@ module Numeric.Order.Class
 import Data.Int
 import Data.Word
 import Data.Set
-import Numeric.Natural.Internal
+import Numeric.Natural
 
 -- a partial order (a, <=)
 class Order a where

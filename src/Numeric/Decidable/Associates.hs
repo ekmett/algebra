@@ -8,7 +8,7 @@ import Data.Function (on)
 import Data.Int
 import Data.Word
 import Numeric.Algebra.Unital
-import Numeric.Natural.Internal
+import Numeric.Natural
 
 isAssociateIntegral :: (Eq n, Num n) => n -> n -> Bool
 isAssociateIntegral = (==) `on` abs

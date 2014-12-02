@@ -105,7 +105,6 @@ module Numeric.Algebra
 
   -- * Natural numbers
   , Natural
-  , Whole(toNatural)
 
   -- * Representable Additive
   , addRep, sinnum1pRep
@@ -155,7 +154,7 @@ import Numeric.Decidable.Associates
 import Numeric.Decidable.Zero
 import Numeric.Dioid.Class
 import Numeric.Module.Representable
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Numeric.Order.Class
 import Numeric.Order.Additive
 import Numeric.Order.LocallyFinite

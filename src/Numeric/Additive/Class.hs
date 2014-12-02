@@ -17,8 +17,8 @@ import Data.Int
 import Data.Word
 import Data.Foldable hiding (concat)
 import Data.Semigroup.Foldable
-import Numeric.Natural.Internal
-import Prelude ((-),Bool(..),($),id,(>>=),fromIntegral,(*),otherwise,quot,maybe,error,even,Maybe(..),(==),(.),($!),Integer,(||),toInteger)
+import Numeric.Natural
+import Prelude ((-),Bool(..),($),id,(>>=),fromIntegral,(*),otherwise,quot,maybe,error,even,Maybe(..),(==),(.),($!),Integer,(||),pred)
 import qualified Prelude
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
@@ -33,17 +33,17 @@ class Additive r where
   (+) :: r -> r -> r
 
   -- | sinnum1p n r = sinnum (1 + n) r
-  sinnum1p :: Whole n => n -> r -> r
+  sinnum1p :: Natural -> r -> r
   sinnum1p y0 x0 = f x0 (1 Prelude.+ y0)
     where
       f x y
         | even y = f (x + x) (y `quot` 2)
         | y == 1 = x
-        | otherwise = g (x + x) (unsafePred y  `quot` 2) x
+        | otherwise = g (x + x) (pred y  `quot` 2) x
       g x y z
         | even y = g (x + x) (y `quot` 2) z
         | y == 1 = x + z
-        | otherwise = g (x + x) (unsafePred y `quot` 2) (x + z)
+        | otherwise = g (x + x) (pred y `quot` 2) (x + z)
 
   sumWith1 :: Foldable1 f => (a -> r) -> f a -> r
   sumWith1 f = maybe (error "Numeric.Additive.Semigroup.sumWith1: empty structure") id . foldl' mf Nothing
@@ -64,11 +64,11 @@ instance Additive Bool where
 
 instance Additive Natural where
   (+) = (Prelude.+)
-  sinnum1p n r = (1 Prelude.+ toNatural n) * r
+  sinnum1p n r = (1 Prelude.+ fromIntegral n) * r
 
 instance Additive Integer where 
   (+) = (Prelude.+)
-  sinnum1p n r = (1 Prelude.+ toInteger n) * r
+  sinnum1p n r = (1 Prelude.+ fromIntegral n) * r
 
 instance Additive Int where
   (+) = (Prelude.+)

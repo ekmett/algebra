@@ -9,7 +9,7 @@ import Numeric.Additive.Class
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
 import Numeric.Rig.Class
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Prelude hiding ((+),(*))
 
 -- a module with a computable squared norm
@@ -42,40 +42,40 @@ sq :: Multiplicative r => r -> r
 sq r = r * r
 
 instance Rig r => Quadrance r Int where
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Word where
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Natural where
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Integer where 
-  quadrance = fromNatural . Natural . fromInteger . sq
+  quadrance = fromNatural . fromInteger . sq
 
 instance Rig r => Quadrance r Int8 where 
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Int16 where 
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Int32 where
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Int64 where
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Word8 where 
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Word16 where 
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Word32 where
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 instance Rig r => Quadrance r Word64 where
-  quadrance = fromNatural . Natural . sq . toInteger
+  quadrance = fromNatural . fromIntegral . sq . toInteger
 
 {-
 instance InvolutiveSemiring r => Quadrance r (Complex r) where

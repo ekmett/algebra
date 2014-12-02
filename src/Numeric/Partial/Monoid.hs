@@ -5,7 +5,7 @@ module Numeric.Partial.Monoid
 import Numeric.Partial.Semigroup
 import Data.Int
 import Data.Word
-import Numeric.Natural.Internal
+import Numeric.Natural
 
 class PartialSemigroup a => PartialMonoid a where
   pzero :: a

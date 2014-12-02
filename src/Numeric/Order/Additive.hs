@@ -2,7 +2,7 @@ module Numeric.Order.Additive
   ( AdditiveOrder
   ) where
 
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Numeric.Additive.Class
 import Numeric.Order.Class
 

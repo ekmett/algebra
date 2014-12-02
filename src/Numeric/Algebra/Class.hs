@@ -33,7 +33,7 @@ import Data.Semigroup.Foldable
 import Data.Set (Set)
 import Data.Word
 import Numeric.Additive.Class
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Prelude hiding ((*), (+), negate, subtract,(-), recip, (/), foldr, sum, product, replicate, concat)
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
@@ -51,7 +51,7 @@ class Multiplicative r where
 
 -- class Multiplicative r => PowerAssociative r where
   -- pow1p x n = pow x (1 + n)
-  pow1p :: Whole n => r -> n -> r
+  pow1p :: r -> Natural -> r
   pow1p x0 y0 = f x0 (y0 Prelude.+ 1) where
     f x y 
       | even y = f (x * x) (y `quot` 2)
@@ -300,7 +300,7 @@ instance LeftModule Natural Natural where
   (.*) = (*)
 
 instance LeftModule Natural Integer where 
-  Natural n .* m = n * m
+  n .* m = toInteger n * m
 
 instance LeftModule Integer Integer where 
   (.*) = (*) 
@@ -397,7 +397,7 @@ instance RightModule Natural Bool where
 
 instance RightModule Natural Natural where (*.) = (*)
 
-instance RightModule Natural Integer where n *. Natural m = n * m
+instance RightModule Natural Integer where n *. m = n * fromIntegral m
 
 instance RightModule Integer Integer where (*.) = (*) 
 
@@ -475,18 +475,18 @@ instance (LeftModule r m, RightModule r m) => Module r m
 class (LeftModule Natural m, RightModule Natural m) => Monoidal m where
   zero :: m
 
-  sinnum :: Whole n => n -> m -> m
+  sinnum :: Natural -> m -> m
   sinnum 0 _  = zero
   sinnum n x0 = f x0 n
     where
       f x y
         | even y = f (x + x) (y `quot` 2)
         | y == 1 = x
-        | otherwise = g (x + x) (unsafePred y `quot` 2) x
+        | otherwise = g (x + x) (pred y `quot` 2) x
       g x y z
         | even y = g (x + x) (y `quot` 2) z
         | y == 1 = x + z
-        | otherwise = g (x + x) (unsafePred y `quot` 2) (x + z)
+        | otherwise = g (x + x) (pred y `quot` 2) (x + z)
 
   sumWith :: Foldable f => (a -> m) -> f a -> m
   sumWith f = foldl' (\b a -> b + f a) zero
@@ -505,7 +505,7 @@ instance Monoidal Bool where
 
 instance Monoidal Natural where
   zero = 0
-  sinnum n r = toNatural n * r
+  sinnum n r = fromIntegral n * r
 
 instance Monoidal Integer where 
   zero = 0

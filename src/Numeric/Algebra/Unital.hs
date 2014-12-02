@@ -13,7 +13,7 @@ module Numeric.Algebra.Unital
   ) where
 
 import Numeric.Algebra.Class
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
 import Data.Foldable hiding (product)
@@ -25,7 +25,7 @@ infixr 8 `pow`
 
 class Multiplicative r => Unital r where
   one :: r
-  pow :: Whole n => r -> n -> r
+  pow :: r -> Natural -> r
   pow _ 0 = one
   pow x0 y0 = f x0 y0 where
     f x y 

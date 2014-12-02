@@ -5,7 +5,7 @@ module Numeric.Partial.Semigroup
 import Control.Applicative
 import Data.Word
 import Data.Int
-import Numeric.Natural.Internal
+import Numeric.Natural
 
 class PartialSemigroup a where
   padd :: a -> a -> Maybe a

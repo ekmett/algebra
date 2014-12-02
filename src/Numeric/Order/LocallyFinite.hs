@@ -8,7 +8,7 @@ import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
 import Numeric.Order.Class
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Data.Int
@@ -18,6 +18,7 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 import qualified Data.Ix as Ix
 import Prelude hiding ((*),(+),fromIntegral,(<),negate,(-))
+import qualified Prelude
 
 class Order a => LocallyFiniteOrder a where
   range :: a -> a -> [a]
@@ -33,17 +34,17 @@ class Order a => LocallyFiniteOrder a where
 instance LocallyFiniteOrder Natural where
   range = curry Ix.range
   rangeSize a b 
-    | a <= b = Natural (runNatural b - runNatural a + 1)
+    | a <= b = Prelude.fromInteger (toInteger b - toInteger a + 1)
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
-     LT | unsafePred y == x -> negate one 
+     LT | pred y == x -> negate one 
      _ -> zero
 
 instance LocallyFiniteOrder Integer where
   range = curry Ix.range
   rangeSize a b 
-    | a <= b = Natural (b - a + 1)
+    | a <= b = Prelude.fromInteger (b - a + 1)
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -87,7 +88,7 @@ instance LocallyFiniteOrder Bool where
 instance LocallyFiniteOrder Int where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -97,7 +98,7 @@ instance LocallyFiniteOrder Int where
 instance LocallyFiniteOrder Int8 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -107,7 +108,7 @@ instance LocallyFiniteOrder Int8 where
 instance LocallyFiniteOrder Int16 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -117,7 +118,7 @@ instance LocallyFiniteOrder Int16 where
 instance LocallyFiniteOrder Int32 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -127,7 +128,7 @@ instance LocallyFiniteOrder Int32 where
 instance LocallyFiniteOrder Int64 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -137,7 +138,7 @@ instance LocallyFiniteOrder Int64 where
 instance LocallyFiniteOrder Word where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -147,7 +148,7 @@ instance LocallyFiniteOrder Word where
 instance LocallyFiniteOrder Word8 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -157,7 +158,7 @@ instance LocallyFiniteOrder Word8 where
 instance LocallyFiniteOrder Word16 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -167,7 +168,7 @@ instance LocallyFiniteOrder Word16 where
 instance LocallyFiniteOrder Word32 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one
@@ -177,7 +178,7 @@ instance LocallyFiniteOrder Word32 where
 instance LocallyFiniteOrder Word64 where
   range = curry Ix.range
   rangeSize a b
-    | a <= b = Natural $ fromIntegral $ b - a + 1
+    | a <= b = Prelude.fromIntegral $ b - a + 1
     | otherwise = 0
   moebiusInversion x y = case compare x y of
      EQ -> one

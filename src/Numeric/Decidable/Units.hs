@@ -9,7 +9,7 @@ import Data.Int
 import Data.Word
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Control.Applicative
 import Prelude hiding ((*))
 

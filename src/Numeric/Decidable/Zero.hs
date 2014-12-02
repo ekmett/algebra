@@ -5,7 +5,7 @@ module Numeric.Decidable.Zero
 import Numeric.Algebra.Class
 import Data.Int
 import Data.Word
-import Numeric.Natural.Internal
+import Numeric.Natural
 
 class Monoidal r => DecidableZero r where
   isZero :: r -> Bool

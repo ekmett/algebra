@@ -20,10 +20,10 @@ import Data.IntSet (IntSet)
 -- > a * a = a
 class Multiplicative r => Band r
 
-pow1pBand :: Whole n => r -> n -> r
+pow1pBand :: r -> Natural -> r
 pow1pBand r _ = r 
 
-powBand :: (Unital r, Whole n) => r -> n -> r
+powBand :: Unital r => r -> Natural -> r
 powBand _ 0 = one
 powBand r _ = r
 

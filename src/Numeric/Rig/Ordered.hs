@@ -4,7 +4,7 @@ module Numeric.Rig.Ordered
 
 import Numeric.Rig.Class
 import Numeric.Order.Additive
-import Numeric.Natural.Internal
+import Numeric.Natural
 
 -- x <= y ==> x + z <= y + z
 -- 0 <= x && y <= z implies xy <= xz

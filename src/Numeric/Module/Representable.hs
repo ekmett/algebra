@@ -24,7 +24,7 @@ import Numeric.Additive.Class
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Numeric.Rig.Class
 import Numeric.Ring.Class
 import Control.Category
@@ -35,7 +35,7 @@ addRep :: (Applicative m, Additive r) => m r -> m r -> m r
 addRep = liftA2 (+)
 
 -- | `Additive.sinnum1p` default definition
-sinnum1pRep :: (Whole n, Functor m, Additive r) => n -> m r -> m r
+sinnum1pRep :: (Functor m, Additive r) => Natural -> m r -> m r
 sinnum1pRep = fmap . sinnum1p
 
 -- | `Monoidal.zero` default definition
@@ -43,7 +43,7 @@ zeroRep :: (Applicative m, Monoidal r) => m r
 zeroRep = pure zero
 
 -- | `Monoidal.sinnum` default definition
-sinnumRep :: (Whole n, Functor m, Monoidal r) => n -> m r -> m r
+sinnumRep :: (Functor m, Monoidal r) => Natural -> m r -> m r
 sinnumRep = fmap . sinnum
 
 -- | `Group.negate` default definition

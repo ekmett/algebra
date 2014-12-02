@@ -7,7 +7,7 @@ module Numeric.Rig.Characteristic
 import Data.Int
 import Data.Word
 import Numeric.Rig.Class
-import Numeric.Natural.Internal
+import Numeric.Natural
 import Prelude hiding ((^))
 
 data Proxy p = Proxy
@@ -21,8 +21,8 @@ charInt p = 2 * fromIntegral (maxBound `asProxyTypeOf` p) + 2
 asProxyTypeOf :: a -> p a -> a
 asProxyTypeOf = const
 
-charWord :: (Whole s, Bounded s) => proxy s -> Natural
-charWord p = toNatural (maxBound `asProxyTypeOf` p) + 1
+charWord :: (Integral s, Bounded s) => proxy s -> Natural
+charWord p = fromIntegral (maxBound `asProxyTypeOf` p) + 1
 
 -- | NB: we're using the boolean semiring, not the boolean ring
 instance Characteristic Bool where char _ = 0
