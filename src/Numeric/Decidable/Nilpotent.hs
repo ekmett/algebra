@@ -55,7 +55,7 @@ instance (DecidableNilpotent a, DecidableNilpotent b, DecidableNilpotent c, Deci
     isNilpotent (a,b,c,d,e) = isNilpotent a && isNilpotent b && isNilpotent c && isNilpotent d && isNilpotent e
 
 unsignedBitsNilpotent :: (Bits r, Group r, Unital r) => r -> Bool
-unsignedBitsNilpotent b = (b /= one) && b .&. (b - one) == zeroBits
+unsignedBitsNilpotent b = (b /= one) && b .&. (b - one) == zero
 
 signedBitsNilpotent :: (Bits r, Group r, Order r, Bounded r, Unital r) => r -> Bool
 signedBitsNilpotent b | zero <~ b = unsignedBitsNilpotent b
