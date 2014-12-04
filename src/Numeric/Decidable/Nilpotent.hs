@@ -2,7 +2,7 @@
 
 module Numeric.Decidable.Nilpotent (DecidableNilpotent(..)) where
 
-import Data.Bits(Bits(), (.&.), zeroBits)
+import Data.Bits(Bits(..))
 import Data.Int(Int8,Int16,Int32,Int64)
 import Data.Word(Word8,Word16,Word32,Word64)
 import Numeric.Algebra
