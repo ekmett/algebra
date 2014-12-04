@@ -9,7 +9,7 @@ import Numeric.Algebra
 import Numeric.Decidable.Zero
 import Prelude hiding (Num(..), Ord(..))
 
--- | An element `x` is nilpotent if there exists `n` s.t. `pow1p x n` is zero.
+-- | An element @x@ is nilpotent if there exists @n@ s.t. @pow1p x n@ is zero.
 class (Monoidal r, Multiplicative r) => DecidableNilpotent r where
     isNilpotent :: r -> Bool
 
