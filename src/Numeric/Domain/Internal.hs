@@ -4,6 +4,7 @@ module Numeric.Domain.Internal where
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Commutative
+import Numeric.Algebra.Division
 import Numeric.Natural (Natural)
 import Numeric.Semiring.ZeroProduct
 import Numeric.Ring.Class
@@ -72,6 +73,10 @@ class (DecidableUnits d, DecidableZero d, PID d) => Euclidean d where
   divide :: d                   -- ^ elements divided by
          -> d                   -- ^ divisor
          -> (d,d)               -- ^ quotient and remin
+  default divide :: (Division d) => d -> d -> (d,d)
+  -- Be strict in order to make sure division by zero gets caught
+  divide a b = let q = a/b in (q,P.seq q zero)
+
   quot :: d -> d -> d
   quot a b = fst $ a `divide` b
   {-# INLINE quot #-}
