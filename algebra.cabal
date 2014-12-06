@@ -95,6 +95,7 @@ library
     Numeric.Dioid.Class
     Numeric.Domain.Class
     Numeric.Domain.Euclidean
+    Numeric.Domain.Integral
     Numeric.Exp
     Numeric.Field.Class
     Numeric.Field.Fraction
@@ -122,7 +123,7 @@ library
     Numeric.Rng.Zero
     Numeric.Semiring.ZeroProduct
     Numeric.Semiring.Involutive
-  
+
   other-modules: Numeric.Domain.Internal
 
   ghc-options: -Wall

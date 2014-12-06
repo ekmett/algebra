@@ -1,28 +1,44 @@
-{-# LANGUAGE CPP, NoImplicitPrelude, FlexibleInstances, UndecidableInstances #-}
+{-# LANGUAGE CPP, NoImplicitPrelude, FlexibleInstances, UndecidableInstances, DefaultSignatures #-}
 module Numeric.Domain.Internal where
 
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
-import Numeric.Algebra.Unital
+import Numeric.Algebra.Commutative
 import Numeric.Natural (Natural)
 import Numeric.Semiring.ZeroProduct
 import Numeric.Ring.Class
 import Numeric.Decidable.Zero
 import Numeric.Decidable.Units
 
-import Prelude (Eq (..), Integer, Maybe (..), abs)
+import Prelude (Integer, Maybe (..), abs, Bool(..))
 import Prelude (fst, otherwise)
 import Prelude (signum, snd, ($), (.))
 import qualified Prelude                 as P
 
 infixl 7 `quot`, `rem`
-infix  7 `divide`
+infix  7 `divide`, `divides`, `maybeQuot`
 
 -- | (Integral) domain is the integral semiring.
 class (ZeroProductSemiring d, Ring d) => Domain d
 instance (ZeroProductSemiring d, Ring d) => Domain d
 
-class (Ring r, DecidableZero r, DecidableUnits r, Domain r) => Euclidean r where
+-- | An integral domain is a commutative domain in which 1≠0.
+class (Domain d, Commutative d) => IntegralDomain d where
+    divides :: d -> d -> Bool
+    default divides :: (Euclidean d) => d -> d -> Bool
+    m `divides` n 
+        | isZero m = False
+        | otherwise = isZero (n `rem` m)
+    maybeQuot :: d -> d -> Maybe d
+    default maybeQuot :: (Euclidean d) => d -> d -> Maybe d
+    m `maybeQuot` n
+        | isZero n = Nothing
+        | otherwise = let (q,r) = m `divide` n in
+                      if isZero r then Just q else Nothing
+
+instance IntegralDomain Integer
+
+class (DecidableUnits r, DecidableZero r, IntegralDomain r) => Euclidean r where
   -- | @splitUnit r@ calculates its leading unit and normal form.
   --
   -- prop> let (u, n) = splitUnit r in r == u * n && fst (splitUnit n) == one && isUnit u
