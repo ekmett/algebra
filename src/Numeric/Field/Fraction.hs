@@ -6,7 +6,6 @@ module Numeric.Field.Fraction
   , denominator
   , Ratio
   , (%)
-  , lcm
   ) where
 import Data.Proxy
 import Numeric.Additive.Class
@@ -36,9 +35,6 @@ data Fraction d = Fraction !d !d
 
 -- | Convenient synonym for 'Fraction'.
 type Ratio = Fraction
-
-lcm :: Euclidean r => r -> r -> r
-lcm p q = p * q `quot` gcd p q
 
 instance (Eq d, Show d, Unital d) => Show (Fraction d) where
   showsPrec d (Fraction p q)

@@ -51,6 +51,9 @@ class (IntegralDomain d) => GCDDomain d where
         let c = gcd a b in
         (fromJust (a `maybeQuot` c), fromJust (b `maybeQuot` c))
 
+    lcm :: d -> d -> d
+    lcm p q = fromJust $ (p * q) `maybeQuot` (gcd p q)
+
 instance GCDDomain Integer
 
 class (GCDDomain d) => UFD d
