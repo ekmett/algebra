@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP, NoImplicitPrelude, FlexibleInstances, UndecidableInstances, DefaultSignatures #-}
 module Numeric.Domain.Internal where
 
+import Data.Maybe(fromJust)
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Commutative
@@ -44,6 +45,11 @@ class (IntegralDomain d) => GCDDomain d where
     default gcd :: (PID d) => d -> d -> d
     gcd a b = let (r,_,_) = egcd a b in r
     {-# INLINE gcd #-}
+
+    reduceFraction :: d -> d -> (d,d)
+    reduceFraction a b =
+        let c = gcd a b in
+        (fromJust (a `maybeQuot` c), fromJust (b `maybeQuot` c))
 
 instance GCDDomain Integer
 
