@@ -120,7 +120,7 @@ library
     Numeric.Ring.Rng
     Numeric.Rng.Class
     Numeric.Rng.Zero
-    Numeric.Semiring.Integral
+    Numeric.Semiring.ZeroProduct
     Numeric.Semiring.Involutive
 
   ghc-options: -Wall

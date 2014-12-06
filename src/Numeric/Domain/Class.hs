@@ -1,8 +1,8 @@
 {-# LANGUAGE FlexibleInstances, UndecidableInstances #-}
 module Numeric.Domain.Class where
 import Numeric.Ring.Class
-import Numeric.Semiring.Integral
+import Numeric.Semiring.ZeroProduct
 
 -- | (Integral) domain is the integral semiring.
-class (IntegralSemiring d, Ring d) => Domain d
-instance (IntegralSemiring d, Ring d) => Domain d
+class (ZeroProductSemiring d, Ring d) => Domain d
+instance (ZeroProductSemiring d, Ring d) => Domain d

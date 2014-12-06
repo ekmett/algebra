@@ -22,7 +22,7 @@ import Numeric.Natural
 import Numeric.Rig.Characteristic
 import Numeric.Rig.Class
 import Numeric.Ring.Class
-import Numeric.Semiring.Integral
+import Numeric.Semiring.ZeroProduct
 import Prelude                     hiding (Integral (..), Num (..), gcd, lcm)
 
 -- | Fraction field @k(D)@ of 'Euclidean' domain @D@.
@@ -59,7 +59,7 @@ denominator :: Fraction t -> t
 denominator (Fraction _ p) = p
 {-# INLINE denominator #-}
 
-instance Euclidean d => IntegralSemiring (Fraction d)
+instance Euclidean d => ZeroProductSemiring (Fraction d)
 instance (Eq d, Multiplicative d) => Eq (Fraction d) where
   Fraction p q == Fraction s t = p*t == q*s
   {-# INLINE (==) #-}
