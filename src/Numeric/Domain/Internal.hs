@@ -38,30 +38,30 @@ class (Domain d, Commutative d) => IntegralDomain d where
 
 instance IntegralDomain Integer
 
-class (DecidableUnits r, DecidableZero r, IntegralDomain r) => Euclidean r where
+class (DecidableUnits d, DecidableZero d, IntegralDomain d) => Euclidean d where
   -- | @splitUnit r@ calculates its leading unit and normal form.
   --
   -- prop> let (u, n) = splitUnit r in r == u * n && fst (splitUnit n) == one && isUnit u
-  splitUnit :: r -> (r, r)
+  splitUnit :: d -> (d, d)
   -- | Euclidean (degree) function on @r@.
-  degree :: r -> Maybe Natural
+  degree :: d -> Maybe Natural
   -- | Division algorithm. @a `divide` b@ calculates
   --   quotient and reminder of @a@ divided by @b@.
   --
   -- prop> let (q, r) = divide a p in p*q + r == a && degree r < degree q
-  divide :: r                   -- ^ elements divided by
-         -> r                   -- ^ divisor
-         -> (r,r)               -- ^ quotient and remin
-  quot :: r -> r -> r
+  divide :: d                   -- ^ elements divided by
+         -> d                   -- ^ divisor
+         -> (d,d)               -- ^ quotient and remin
+  quot :: d -> d -> d
   quot a b = fst $ a `divide` b
   {-# INLINE quot #-}
 
-  rem :: r -> r -> r
+  rem :: d -> d -> d
   rem a b = snd $ a `divide` b
   {-# INLINE rem #-}
 
   -- | @'gcd' a b@ calculates greatest common divisor of @a@ and @b@.
-  gcd :: r -> r -> r
+  gcd :: d -> d -> d
   gcd a b = let (g,_,_):_ = euclid a b
             in g
   {-# INLINE gcd #-}
@@ -69,7 +69,7 @@ class (DecidableUnits r, DecidableZero r, IntegralDomain r) => Euclidean r where
   -- | Extended euclidean algorithm.
   --
   -- prop> euclid f g == xs ==> all (\(r, s, t) -> r == f * s + g * t) xs
-  euclid :: r -> r -> [(r,r,r)]
+  euclid :: d -> d -> [(d,d,d)]
   euclid f g =
     let (ug, g') = splitUnit g
         Just t'  = recipUnit ug
