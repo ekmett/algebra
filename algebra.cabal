@@ -122,5 +122,7 @@ library
     Numeric.Rng.Zero
     Numeric.Semiring.ZeroProduct
     Numeric.Semiring.Involutive
+  
+  other-modules: Numeric.Domain.Internal
 
   ghc-options: -Wall
