@@ -7,13 +7,13 @@ import Numeric.Algebra.Commutative
 import Numeric.Algebra.Division
 import Numeric.Natural (Natural)
 import Numeric.Semiring.ZeroProduct
+import Numeric.Algebra.Unital.UnitNormalForm
 import Numeric.Ring.Class
 import Numeric.Decidable.Zero
 import Numeric.Decidable.Units
 
-import Prelude (Integer, Maybe (..), abs, Bool(..))
-import Prelude (fst, otherwise)
-import Prelude (signum, snd, ($), (.))
+import Prelude (Integer, Maybe (..), Bool(..),
+                otherwise, fst, snd, ($), (.))
 import qualified Prelude                 as P
 
 infixl 7 `quot`, `rem`
@@ -59,11 +59,7 @@ class (UFD d) => PID d where
 
 instance PID Integer
 
-class (DecidableUnits d, DecidableZero d, PID d) => Euclidean d where
-  -- | @splitUnit r@ calculates its leading unit and normal form.
-  --
-  -- prop> let (u, n) = splitUnit r in r == u * n && fst (splitUnit n) == one && isUnit u
-  splitUnit :: d -> (d, d)
+class (UnitNormalForm d, DecidableZero d, DecidableUnits d, PID d) => Euclidean d where
   -- | Euclidean (degree) function on @r@.
   degree :: d -> Maybe Natural
   -- | Division algorithm. @a `divide` b@ calculates
@@ -111,11 +107,7 @@ class (DecidableUnits d, DecidableZero d, PID d) => Euclidean d where
 #endif
 
 instance Euclidean Integer where
-  splitUnit 0 = (1, 0)
-  splitUnit n = (signum n, abs n)
-  {-# INLINE splitUnit #-}
-
-  degree = Just . P.fromInteger . abs
+  degree = Just . P.fromInteger . P.abs
   {-# INLINE degree #-}
 
   divide = P.divMod

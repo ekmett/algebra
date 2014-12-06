@@ -15,6 +15,7 @@ import Numeric.Algebra.Class
 import Numeric.Algebra.Commutative
 import Numeric.Algebra.Division
 import Numeric.Algebra.Unital
+import Numeric.Algebra.Unital.UnitNormalForm
 import Numeric.Decidable.Units
 import Numeric.Decidable.Zero
 import Numeric.Domain.GCD

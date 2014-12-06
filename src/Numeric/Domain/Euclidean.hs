@@ -1,10 +1,11 @@
 {-# LANGUAGE CPP, ConstraintKinds, FlexibleContexts, FlexibleInstances     #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving, MultiParamTypeClasses, RankNTypes #-}
 {-# LANGUAGE RebindableSyntax, UndecidableInstances                        #-}
-module Numeric.Domain.Euclidean (Euclidean(..), prs, normalize, gcd', leadingUnit, chineseRemainder) where
+module Numeric.Domain.Euclidean (Euclidean(..), prs, gcd', chineseRemainder) where
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
+import Numeric.Algebra.Unital.UnitNormalForm
 import Numeric.Decidable.Zero
 import Numeric.Domain.Internal
 import Numeric.Ring.Class
@@ -28,12 +29,6 @@ gcd' []     = one
 gcd' [x]    = leadingUnit x
 gcd' [x,y]  = gcd x y
 gcd' (x:xs) = gcd x (gcd' xs)
-
-normalize :: Euclidean r => r -> r
-normalize = snd . splitUnit
-
-leadingUnit :: Euclidean r => r -> r
-leadingUnit = fst . splitUnit
 
 chineseRemainder :: Euclidean r
                  => [(r, r)] -- ^ List of @(m_i, v_i)@
