@@ -1,18 +1,14 @@
-{-# LANGUAGE CPP, ConstraintKinds, FlexibleContexts, FlexibleInstances     #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving, MultiParamTypeClasses, RankNTypes #-}
-{-# LANGUAGE RebindableSyntax, UndecidableInstances                        #-}
 module Numeric.Domain.Euclidean (Euclidean(..), prs, chineseRemainder) where
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital
 import Numeric.Decidable.Zero
 import Numeric.Domain.Internal
-import Numeric.Ring.Class
 import Prelude (otherwise)
 import qualified Prelude                 as P
 
 prs :: Euclidean r => r -> r -> [(r, r, r)]
-prs f g = step [(g, 0, 1), (f, 1, 0)]
+prs f g = step [(g, zero, one), (f, one, zero)]
   where
     step acc@((r',s',t'):(r,s,t):_)
       | isZero r' = P.tail acc
