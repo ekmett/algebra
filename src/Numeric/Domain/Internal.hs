@@ -38,7 +38,27 @@ class (Domain d, Commutative d) => IntegralDomain d where
 
 instance IntegralDomain Integer
 
-class (DecidableUnits d, DecidableZero d, IntegralDomain d) => Euclidean d where
+class (IntegralDomain d) => GCDDomain d where
+    gcd :: d -> d -> d
+    default gcd :: (PID d) => d -> d -> d
+    gcd a b = let (r,_,_) = egcd a b in r
+    {-# INLINE gcd #-}
+
+instance GCDDomain Integer
+
+class (GCDDomain d) => UFD d
+
+instance UFD Integer
+
+class (UFD d) => PID d where
+    egcd :: d -> d -> (d,d,d)
+    default egcd :: (Euclidean d) => d -> d -> (d,d,d)
+    egcd a b = P.head (euclid a b)
+    {-# INLINE egcd #-}
+
+instance PID Integer
+
+class (DecidableUnits d, DecidableZero d, PID d) => Euclidean d where
   -- | @splitUnit r@ calculates its leading unit and normal form.
   --
   -- prop> let (u, n) = splitUnit r in r == u * n && fst (splitUnit n) == one && isUnit u
@@ -59,12 +79,6 @@ class (DecidableUnits d, DecidableZero d, IntegralDomain d) => Euclidean d where
   rem :: d -> d -> d
   rem a b = snd $ a `divide` b
   {-# INLINE rem #-}
-
-  -- | @'gcd' a b@ calculates greatest common divisor of @a@ and @b@.
-  gcd :: d -> d -> d
-  gcd a b = let (g,_,_):_ = euclid a b
-            in g
-  {-# INLINE gcd #-}
 
   -- | Extended euclidean algorithm.
   --

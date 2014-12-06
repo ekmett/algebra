@@ -94,8 +94,11 @@ library
     Numeric.Decidable.Zero
     Numeric.Dioid.Class
     Numeric.Domain.Class
+    Numeric.Domain.GCD
     Numeric.Domain.Euclidean
     Numeric.Domain.Integral
+    Numeric.Domain.PID
+    Numeric.Domain.UFD
     Numeric.Exp
     Numeric.Field.Class
     Numeric.Field.Fraction

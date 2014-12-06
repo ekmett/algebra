@@ -17,6 +17,7 @@ import Numeric.Algebra.Division
 import Numeric.Algebra.Unital
 import Numeric.Decidable.Units
 import Numeric.Decidable.Zero
+import Numeric.Domain.GCD
 import Numeric.Domain.Euclidean
 import Numeric.Natural
 import Numeric.Rig.Characteristic
