@@ -47,11 +47,12 @@ instance (Eq d, Show d, Unital d) => Show (Fraction d) where
 
 infixl 7 %
 (%) :: (GCDDomain d) => d -> d -> Fraction d
-a % b = let (ua, a') = splitUnit a
-            (ub, b') = splitUnit b
-            Just ub' = recipUnit ub
-            (a'',b'') = reduceFraction a' b'
-        in Fraction (ua * ub' * a'') (b'')
+a % b | isZero b = error "Divide by zero"
+      | otherwise = let (ua, a') = splitUnit a
+                        (ub, b') = splitUnit b
+                        Just ub' = recipUnit ub
+                        (a'',b'') = reduceFraction a' b' in
+                    Fraction (ua * ub' * a'') (b'')
 
 numerator :: Fraction t -> t
 numerator (Fraction q _) = q
@@ -71,8 +72,10 @@ instance (Ord d, GCDDomain d) => Ord (Fraction d)  where
   {-# INLINE compare #-}
 
 instance (GCDDomain d) => Division (Fraction d) where
-  recip (Fraction p q) = let (recipUnit -> Just u, p') = splitUnit p
-                         in Fraction (q * u) p'
+  recip (Fraction p q)
+      | isZero p = error "Divide by zero"
+      | otherwise = let (recipUnit -> Just u, p') = splitUnit p in
+                    Fraction (q * u) p'
   Fraction p q / Fraction s t = (p*t) % (q*s)
   {-# INLINE recip #-}
   {-# INLINE (/) #-}
