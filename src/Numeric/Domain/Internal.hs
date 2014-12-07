@@ -40,7 +40,7 @@ class (Domain d, Commutative d) => IntegralDomain d where
 
 instance IntegralDomain Integer
 
-class (IntegralDomain d) => GCDDomain d where
+class (IntegralDomain d, UnitNormalForm d, DecidableZero d) => GCDDomain d where
     gcd :: d -> d -> d
     default gcd :: (PID d) => d -> d -> d
     gcd a b = let (r,_,_) = egcd a b in r
@@ -68,7 +68,7 @@ class (UFD d) => PID d where
 
 instance PID Integer
 
-class (UnitNormalForm d, DecidableZero d, DecidableUnits d, PID d) => Euclidean d where
+class (PID d) => Euclidean d where
   -- | Euclidean (degree) function on @r@.
   degree :: d -> Maybe Natural
   -- | Division algorithm. @a `divide` b@ calculates

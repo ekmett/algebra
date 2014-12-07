@@ -56,68 +56,68 @@ denominator :: Fraction t -> t
 denominator (Fraction _ p) = p
 {-# INLINE denominator #-}
 
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => ZeroProductSemiring (Fraction d)
+instance (GCDDomain d) => ZeroProductSemiring (Fraction d)
 instance (Eq d, GCDDomain d, DecidableUnits d, UnitNormalForm d) => Eq (Fraction d) where
   Fraction p q == Fraction s t = p*t == q*s
   {-# INLINE (==) #-}
 
-instance (Ord d, GCDDomain d, DecidableUnits d, UnitNormalForm d) => Ord (Fraction d)  where
+instance (Ord d, GCDDomain d) => Ord (Fraction d)  where
   compare (Fraction p q) (Fraction p' q') = compare (p*q') (p'*q)
   {-# INLINE compare #-}
 
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Division (Fraction d) where
+instance (GCDDomain d) => Division (Fraction d) where
   recip (Fraction p q) = let (recipUnit -> Just u, p') = splitUnit p
                          in Fraction (q * u) p'
   Fraction p q / Fraction s t = (p*t) % (q*s)
   {-# INLINE recip #-}
   {-# INLINE (/) #-}
 
-instance (Commutative d, GCDDomain d, DecidableUnits d, UnitNormalForm d) => Commutative (Fraction d)
+instance (GCDDomain d) => Commutative (Fraction d)
 
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d, DecidableZero d) => DecidableZero (Fraction d) where
+instance (GCDDomain d) => DecidableZero (Fraction d) where
   isZero (Fraction p _) = isZero p
   {-# INLINE isZero #-}
 
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d, DecidableZero d) => DecidableUnits (Fraction d) where
+instance (GCDDomain d) => DecidableUnits (Fraction d) where
   isUnit (Fraction p _) = not $ isZero p
   {-# INLINE isUnit #-}
   recipUnit (Fraction p q) | isZero p  = Nothing
                            | otherwise = Just (Fraction q p)
   {-# INLINE recipUnit #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Ring (Fraction d)
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Abelian (Fraction d)
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Semiring (Fraction d)
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Group (Fraction d) where
+instance (GCDDomain d) => Ring (Fraction d)
+instance (GCDDomain d) => Abelian (Fraction d)
+instance (GCDDomain d) => Semiring (Fraction d)
+instance (GCDDomain d) => Group (Fraction d) where
   negate (Fraction p q) = Fraction (negate p) q
   Fraction p q - Fraction p' q' = (p*q'-p'*q) % (q*q')
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Monoidal (Fraction d) where
+instance (GCDDomain d) => Monoidal (Fraction d) where
   zero = Fraction zero one
   {-# INLINE zero #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => LeftModule Integer (Fraction d) where
+instance (GCDDomain d) => LeftModule Integer (Fraction d) where
   n .* Fraction p r = (n .* p) % r
   {-# INLINE (.*) #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => RightModule Integer (Fraction d) where
+instance (GCDDomain d) => RightModule Integer (Fraction d) where
   Fraction p r *. n = (p *. n) % r
   {-# INLINE (*.) #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => LeftModule Natural (Fraction d) where
+instance (GCDDomain d) => LeftModule Natural (Fraction d) where
   n .* Fraction p r = (n .* p) % r
   {-# INLINE (.*) #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => RightModule Natural (Fraction d) where
+instance (GCDDomain d) => RightModule Natural (Fraction d) where
   Fraction p r *. n = (p *. n) % r
   {-# INLINE (*.) #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Additive (Fraction d) where
+instance (GCDDomain d) => Additive (Fraction d) where
   Fraction p q + Fraction s t =
     let n = p*t + s*q
         d = q*t
         (n',d') = reduceFraction n d
     in Fraction n' d'
   {-# INLINE (+) #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Unital (Fraction d) where
+instance (GCDDomain d) => Unital (Fraction d) where
   one = Fraction one one
   {-# INLINE one #-}
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Multiplicative (Fraction d) where
+instance (GCDDomain d) => Multiplicative (Fraction d) where
   Fraction p q * Fraction s t = (p*s) % (q*t)
-instance (GCDDomain d, DecidableUnits d, UnitNormalForm d) => Rig (Fraction d)
+instance (GCDDomain d) => Rig (Fraction d)
 
-instance (Characteristic d, GCDDomain d, DecidableUnits d, UnitNormalForm d) => Characteristic (Fraction d) where
+instance (Characteristic d, GCDDomain d) => Characteristic (Fraction d) where
   char _ = char (Proxy :: Proxy d)
