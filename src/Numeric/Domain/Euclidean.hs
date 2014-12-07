@@ -1,4 +1,4 @@
-module Numeric.Domain.Euclidean (Euclidean(..), prs, chineseRemainder) where
+module Numeric.Domain.Euclidean (Euclidean(..), euclid, prs, chineseRemainder) where
 import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Unital

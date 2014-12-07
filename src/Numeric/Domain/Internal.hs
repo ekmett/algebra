@@ -90,27 +90,6 @@ class (PID d) => Euclidean d where
   rem a b = snd $ a `divide` b
   {-# INLINE rem #-}
 
-  -- | Extended euclidean algorithm.
-  --
-  -- prop> euclid f g == xs ==> all (\(r, s, t) -> r == f * s + g * t) xs
-  euclid :: d -> d -> [(d,d,d)]
-  euclid f g =
-    let (ug, g') = splitUnit g
-        Just t'  = recipUnit ug
-        (uf, f') = splitUnit f
-        Just s   = recipUnit uf
-    in step [(g', zero, t'), (f', s, zero)]
-    where
-      step acc@((r',s',t'):(r,s,t):_)
-        | isZero r' = P.tail acc
-        | otherwise =
-          let q         = r `quot` r'
-              (ur, r'') = splitUnit $ r - q * r'
-              Just u    = recipUnit ur
-              s''       = (s - q * s') * u
-              t''       = (t - q * t') * u
-          in step ((r'', s'', t'') : acc)
-      step _ = P.error "cannot happen!"
 #if (__GLASGOW_HASKELL__ > 708)
   {-# MINIMAL splitUnit, degree, divide #-}
 #endif
@@ -122,3 +101,25 @@ instance Euclidean Integer where
   divide = P.divMod
   {-# INLINE divide #-}
 
+
+-- | Extended euclidean algorithm.
+--
+-- prop> euclid f g == xs ==> all (\(r, s, t) -> r == f * s + g * t) xs
+euclid :: (Euclidean d) =>  d -> d -> [(d,d,d)]
+euclid f g =
+  let (ug, g') = splitUnit g
+      Just t'  = recipUnit ug
+      (uf, f') = splitUnit f
+      Just s   = recipUnit uf
+  in step [(g', zero, t'), (f', s, zero)]
+  where
+    step acc@((r',s',t'):(r,s,t):_)
+      | isZero r' = P.tail acc
+      | otherwise =
+        let q         = r `quot` r'
+            (ur, r'') = splitUnit $ r - q * r'
+            Just u    = recipUnit ur
+            s''       = (s - q * s') * u
+            t''       = (t - q * t') * u
+        in step ((r'', s'', t'') : acc)
+    step _ = P.error "cannot happen!"
