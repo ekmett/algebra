@@ -1,9 +1,15 @@
+{-# LANGUAGE DefaultSignatures #-}
 module Numeric.Algebra.Unital.UnitNormalForm 
     (UnitNormalForm(..), normalize, leadingUnit) where
 
+import Numeric.Algebra.Class
+import Numeric.Algebra.Division
+import Numeric.Algebra.Unital
 import Numeric.Decidable.Units
 import Numeric.Decidable.Associates
-import Prelude(Integer,signum,abs,fst,snd,(.))
+import Numeric.Decidable.Zero
+import Numeric.Semiring.ZeroProduct
+import Prelude(Integer,signum,abs,fst,snd,(.), otherwise)
 
 class (DecidableUnits r, DecidableAssociates r) => UnitNormalForm r where
     -- prop> let (u,n) = splitUnit r
@@ -13,6 +19,9 @@ class (DecidableUnits r, DecidableAssociates r) => UnitNormalForm r where
     --           (isAssociate r r' ==> n = n') &&
     --           splitUnit (r * r') = (u * u', n * n')
     splitUnit :: r -> (r,r)
+    default splitUnit :: (Division r, ZeroProductSemiring r, DecidableZero r) => r -> (r,r)
+    splitUnit x | isZero x = (one,zero)
+                | otherwise = (x,one)
 
 instance UnitNormalForm Integer where
   splitUnit 0 = (1, 0)

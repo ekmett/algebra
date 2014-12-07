@@ -71,6 +71,9 @@ instance PID Integer
 class (PID d) => Euclidean d where
   -- | Euclidean (degree) function on @r@.
   degree :: d -> Maybe Natural
+  default degree :: (Division d) => d -> Maybe Natural
+  degree a | isZero a = Nothing
+           | otherwise = Just zero
   -- | Division algorithm. @a `divide` b@ calculates
   --   quotient and reminder of @a@ divided by @b@.
   --
