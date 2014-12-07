@@ -1,12 +1,11 @@
+{-# LANGUAGE NoImplicitPrelude #-}
 module Numeric.Domain.GCD (GCDDomain(..), gcd') where
 
+import Data.List.NonEmpty
 import Numeric.Domain.Internal(GCDDomain(..))
-import Numeric.Algebra.Unital
 import Numeric.Algebra.Unital.UnitNormalForm
-import Prelude()
 
-gcd' :: GCDDomain r => [r] -> r
-gcd' []     = one
-gcd' [x]    = normalize x
-gcd' [x,y]  = gcd x y
-gcd' (x:xs) = gcd x (gcd' xs)
+gcd' :: GCDDomain r => NonEmpty r -> r
+gcd' (x :| [])    = normalize x
+gcd' (x :| [y])  = gcd x y
+gcd' (x :| y:ys) = gcd x (gcd' (y:|ys))
