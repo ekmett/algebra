@@ -15,9 +15,14 @@ import Numeric.Algebra.Commutative
 import Numeric.Algebra.Division
 import Numeric.Algebra.Unital
 import Numeric.Algebra.Unital.UnitNormalForm
+import Numeric.Decidable.Associates
 import Numeric.Decidable.Units
 import Numeric.Decidable.Zero
+import Numeric.Domain.Euclidean
 import Numeric.Domain.GCD
+import Numeric.Domain.Integral
+import Numeric.Domain.PID
+import Numeric.Domain.UFD
 import Numeric.Natural
 import Numeric.Rig.Characteristic
 import Numeric.Rig.Class
@@ -41,7 +46,7 @@ instance (Eq d, Show d, Unital d) => Show (Fraction d) where
    | otherwise = showParen (d > 5) $ showsPrec 6 p . showString " / " . showsPrec 6 q
 
 infixl 7 %
-(%) :: (GCDDomain d, DecidableUnits d, UnitNormalForm d) => d -> d -> Fraction d
+(%) :: (GCDDomain d) => d -> d -> Fraction d
 a % b = let (ua, a') = splitUnit a
             (ub, b') = splitUnit b
             Just ub' = recipUnit ub
@@ -57,7 +62,7 @@ denominator (Fraction _ p) = p
 {-# INLINE denominator #-}
 
 instance (GCDDomain d) => ZeroProductSemiring (Fraction d)
-instance (Eq d, GCDDomain d, DecidableUnits d, UnitNormalForm d) => Eq (Fraction d) where
+instance (Eq d, GCDDomain d) => Eq (Fraction d) where
   Fraction p q == Fraction s t = p*t == q*s
   {-# INLINE (==) #-}
 
@@ -84,6 +89,10 @@ instance (GCDDomain d) => DecidableUnits (Fraction d) where
   recipUnit (Fraction p q) | isZero p  = Nothing
                            | otherwise = Just (Fraction q p)
   {-# INLINE recipUnit #-}
+
+instance (GCDDomain d) => DecidableAssociates (Fraction d) where
+    isAssociate a b = not (isZero a || isZero b)
+
 instance (GCDDomain d) => Ring (Fraction d)
 instance (GCDDomain d) => Abelian (Fraction d)
 instance (GCDDomain d) => Semiring (Fraction d)
@@ -121,3 +130,11 @@ instance (GCDDomain d) => Rig (Fraction d)
 
 instance (Characteristic d, GCDDomain d) => Characteristic (Fraction d) where
   char _ = char (Proxy :: Proxy d)
+
+instance (GCDDomain d) => UnitNormalForm (Fraction d)
+instance (GCDDomain d) => IntegralDomain (Fraction d)
+instance (GCDDomain d) => GCDDomain (Fraction d)
+instance (GCDDomain d) => UFD (Fraction d)
+instance (GCDDomain d) => PID (Fraction d)
+instance (GCDDomain d) => Euclidean (Fraction d)
+
