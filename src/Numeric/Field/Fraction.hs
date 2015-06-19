@@ -98,16 +98,16 @@ instance Euclidean d => Monoidal (Fraction d) where
   zero = Fraction zero one
   {-# INLINE zero #-}
 instance Euclidean d => LeftModule Integer (Fraction d) where
-  n .* Fraction p r = (n .* p) % r
+  n .* Fraction p r = (times n p) % r
   {-# INLINE (.*) #-}
 instance Euclidean d => RightModule Integer (Fraction d) where
-  Fraction p r *. n = (p *. n) % r
+  Fraction p r *. n = (times n p) % r
   {-# INLINE (*.) #-}
 instance Euclidean d => LeftModule Natural (Fraction d) where
-  n .* Fraction p r = (n .* p) % r
+  n .* Fraction p r = (times n p) % r
   {-# INLINE (.*) #-}
 instance Euclidean d => RightModule Natural (Fraction d) where
-  Fraction p r *. n = (p *. n) % r
+  Fraction p r *. n = (times n p) % r
   {-# INLINE (*.) #-}
 instance Euclidean d => Additive (Fraction d) where
   Fraction p q + Fraction s t =

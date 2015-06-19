@@ -10,11 +10,12 @@ import Prelude hiding ((*), (+), (-), negate, subtract,zipWith)
 import qualified Prelude
 import Numeric.Additive.Class
 import Numeric.Algebra.Class
+import Data.Map (Map)
 
 infixl 6 - 
 infixl 7 `times`
 
-class (LeftModule Integer r, RightModule Integer r, Monoidal r) => Group r where
+class (Monoidal r) => Group r where
   (-)      :: r -> r -> r
   negate   :: r -> r
   subtract :: r -> r -> r
@@ -139,3 +140,6 @@ instance (Group a, Group b, Group c, Group d, Group e) => Group (a,b,c,d,e) wher
   subtract (a,b,c,d,e) (i,j,k,l,m) = (subtract a i, subtract b j, subtract c k, subtract d l, subtract e m)
   times n (a,b,c,d,e) = (times n a,times n b, times n c, times n d, times n e)
 
+
+instance (Ord k,Group v) => Group (Map k v) where
+  negate = fmap negate
