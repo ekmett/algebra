@@ -1,7 +1,7 @@
 algebra
 ==========
 
-[![Build Status](https://secure.travis-ci.org/ekmett/algebra.png?branch=master)](http://travis-ci.org/ekmett/algebra)
+[![Hackage](https://img.shields.io/hackage/v/algebra.svg)](https://hackage.haskell.org/package/algebra) [![Build Status](https://secure.travis-ci.org/ekmett/algebra.png?branch=master)](http://travis-ci.org/ekmett/algebra
 
 This is a package for exploring constructive abstract algebra in Haskell.
 
