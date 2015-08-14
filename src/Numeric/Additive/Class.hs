@@ -15,10 +15,12 @@ module Numeric.Additive.Class
 
 import Data.Int
 import Data.Word
+import Data.Map (Map)
+import qualified Data.Map
 import Data.Foldable hiding (concat)
 import Data.Semigroup.Foldable
 import Numeric.Natural
-import Prelude ((-),Bool(..),($),id,(>>=),fromIntegral,(*),otherwise,quot,maybe,error,even,Maybe(..),(==),(.),($!),Integer,(||),pred)
+import Prelude (Ord,(-),Bool(..),($),id,(>>=),fromIntegral,(*),otherwise,quot,maybe,error,even,Maybe(..),(==),(.),($!),Integer,(||),pred)
 import qualified Prelude
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
@@ -115,6 +117,9 @@ instance Additive () where
   sinnum1p _ _ = () 
   sumWith1 _ _ = ()
 
+instance (Ord k, Additive v) => Additive (Map k v) where
+  m1 + m2 = Data.Map.unionWith (+) m1 m2
+
 instance (Additive a, Additive b) => Additive (a,b) where
   (a,b) + (i,j) = (a + i, b + j)
   sinnum1p n (a,b) = (sinnum1p n a, sinnum1p n b)
@@ -196,6 +201,7 @@ instance (Abelian a, Abelian b) => Abelian (a,b)
 instance (Abelian a, Abelian b, Abelian c) => Abelian (a,b,c) 
 instance (Abelian a, Abelian b, Abelian c, Abelian d) => Abelian (a,b,c,d) 
 instance (Abelian a, Abelian b, Abelian c, Abelian d, Abelian e) => Abelian (a,b,c,d,e) 
+instance (Ord k,Additive v) => Abelian (Map k v) where
 
 -- | An additive semigroup with idempotent addition.
 --

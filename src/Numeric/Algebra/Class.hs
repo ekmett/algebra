@@ -215,6 +215,15 @@ instance Semiring r => Algebra r IntSet where
        Nothing -> f ls s
        Just (r, rs) -> f ls s + go (IntSet.insert r ls) rs
 
+instance (Ord k,Additive v) => Monoidal (Map k v) where
+  zero = Map.empty
+
+instance (Ord k,LeftModule c v) => LeftModule c (Map k v) where
+  c .* m = fmap (c .*) m
+
+instance (Ord k,RightModule c v) => RightModule c (Map k v) where
+  m *. c = fmap (*. c) m
+
 instance (Semiring r, Monoidal r, Ord a, Partitionable b) => Algebra r (Map a b) -- where
 --  mult f xs = case minViewWithKey xs of
 --    Nothing -> zero 
@@ -371,8 +380,9 @@ instance Semiring r => LeftModule r () where
 instance LeftModule r m => LeftModule r (e -> m) where 
   (.*) m f e = m .* f e
 
-instance Additive m => LeftModule () m where 
-  _ .* a = a
+-- incoheRent
+-- instance  Additive m => LeftModule () m where 
+--   _ .* a = a
 
 instance (LeftModule r a, LeftModule r b) => LeftModule r (a, b) where
   n .* (a, b) = (n .* a, n .* b)
@@ -472,7 +482,7 @@ instance (LeftModule r m, RightModule r m) => Module r m
 -- | An additive monoid
 --
 -- > zero + a = a = a + zero
-class (LeftModule Natural m, RightModule Natural m) => Monoidal m where
+class (Additive m) => Monoidal m where
   zero :: m
 
   sinnum :: Natural -> m -> m
