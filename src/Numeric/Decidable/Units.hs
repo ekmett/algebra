@@ -1,3 +1,4 @@
+{-# LANGUAGE ConstrainedClassMethods #-}
 module Numeric.Decidable.Units 
   ( DecidableUnits(..)
   , recipUnitIntegral

@@ -19,7 +19,7 @@ class Additive r => Quadrance r m where
 instance Quadrance () a where 
   quadrance _ = ()
 
-instance Monoidal r => Quadrance r () where
+instance (Additive r, Monoidal r) => Quadrance r () where
   quadrance _ = zero
 
 instance (Quadrance r a, Quadrance r b) => Quadrance r (a,b) where

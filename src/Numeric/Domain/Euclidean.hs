@@ -11,9 +11,9 @@ import Numeric.Domain.Class
 import Numeric.Natural (Natural)
 import Numeric.Ring.Class
 import Prelude (Eq (..), Integer, Maybe (..), abs)
-import Prelude (fst, otherwise)
+import Prelude (fst, otherwise, fail)
 import Prelude (signum, snd, ($), (.))
-import qualified Prelude                 as P
+import qualified Prelude as P
 
 infixl 7 `quot`, `rem`
 infix  7 `divide`
