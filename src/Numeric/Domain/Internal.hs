@@ -75,12 +75,12 @@ class (PID d) => Euclidean d where
   degree a | isZero a = Nothing
            | otherwise = Just zero
   -- | Division algorithm. @a `divide` b@ calculates
-  --   quotient and reminder of @a@ divided by @b@.
+  --   quotient and remainder of @a@ divided by @b@.
   --
   -- prop> let (q, r) = divide a p in p*q + r == a && degree r < degree q
   divide :: d                   -- ^ elements divided by
          -> d                   -- ^ divisor
-         -> (d,d)               -- ^ quotient and remin
+         -> (d,d)               -- ^ quotient and remainder
   default divide :: (Division d) => d -> d -> (d,d)
   -- Be strict in order to make sure division by zero gets caught
   divide a b = let q = a/b in (q,P.seq q zero)
