@@ -3,8 +3,8 @@ module Numeric.Field.Class
   ( Field
   ) where
 
-import Numeric.Ring.Division
-import Numeric.Algebra.Commutative
+import Numeric.Algebra.Division
+import Numeric.Domain.Euclidean
 
-class (Commutative r, DivisionRing r) => Field r
-instance (Commutative r, DivisionRing r) => Field r
+class (Euclidean d, Division d) => Field d
+instance (Euclidean d, Division d) => Field d

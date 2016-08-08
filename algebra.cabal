@@ -79,6 +79,7 @@ library
     Numeric.Algebra.Quaternion
     Numeric.Algebra.Quaternion.Class
     Numeric.Algebra.Unital
+    Numeric.Algebra.Unital.UnitNormalForm
     Numeric.Band.Class
     Numeric.Band.Rectangular
     Numeric.Coalgebra.Categorical
@@ -96,7 +97,11 @@ library
     Numeric.Decidable.Zero
     Numeric.Dioid.Class
     Numeric.Domain.Class
+    Numeric.Domain.GCD
     Numeric.Domain.Euclidean
+    Numeric.Domain.Integral
+    Numeric.Domain.PID
+    Numeric.Domain.UFD
     Numeric.Exp
     Numeric.Field.Class
     Numeric.Field.Fraction
@@ -122,8 +127,10 @@ library
     Numeric.Ring.Rng
     Numeric.Rng.Class
     Numeric.Rng.Zero
-    Numeric.Semiring.Integral
+    Numeric.Semiring.ZeroProduct
     Numeric.Semiring.Involutive
+
+  other-modules: Numeric.Domain.Internal
 
   ghc-options: -Wall -fno-warn-unused-imports
   if impl(ghc >= 8.0.1)
