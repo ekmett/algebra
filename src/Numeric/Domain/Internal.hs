@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, NoImplicitPrelude, FlexibleInstances, UndecidableInstances, DefaultSignatures #-}
+{-# LANGUAGE NoImplicitPrelude, FlexibleInstances, UndecidableInstances, DefaultSignatures #-}
 module Numeric.Domain.Internal where
 
 import Data.Maybe(fromJust)
@@ -92,10 +92,6 @@ class (PID d) => Euclidean d where
   rem :: d -> d -> d
   rem a b = snd $ a `divide` b
   {-# INLINE rem #-}
-
-#if (__GLASGOW_HASKELL__ > 708)
-  {-# MINIMAL degree, divide #-}
-#endif
 
 instance Euclidean Integer where
   degree = Just . P.fromInteger . P.abs
