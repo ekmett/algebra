@@ -93,6 +93,7 @@ library
     Numeric.Coalgebra.Trigonometric.Class
     Numeric.Covector
     Numeric.Decidable.Associates
+    Numeric.Decidable.Nilpotent
     Numeric.Decidable.Units
     Numeric.Decidable.Zero
     Numeric.Dioid.Class
