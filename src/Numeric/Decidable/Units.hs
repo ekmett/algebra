@@ -1,3 +1,4 @@
+{-# LANGUAGE ConstrainedClassMethods #-}
 module Numeric.Decidable.Units 
   ( DecidableUnits(..)
   , recipUnitIntegral
@@ -16,7 +17,7 @@ import Prelude hiding ((*))
 class Unital r => DecidableUnits r where
   recipUnit :: r -> Maybe r
 
-  isUnit :: DecidableUnits r => r -> Bool
+  isUnit :: r -> Bool
   isUnit = isJust . recipUnit
 
   (^?) :: Integral n => r -> n -> Maybe r
