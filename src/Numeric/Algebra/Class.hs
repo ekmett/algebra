@@ -215,11 +215,11 @@ instance Semiring r => Algebra r IntSet where
        Nothing -> f ls s
        Just (r, rs) -> f ls s + go (IntSet.insert r ls) rs
 
-instance (Semiring r, Monoidal r, Ord a, Partitionable b) => Algebra r (Map a b) -- where
+-- instance (Semiring r, Monoidal r, Ord a, Partitionable b) => Algebra r (Map a b) -- where
 --  mult f xs = case minViewWithKey xs of
 --    Nothing -> zero 
 --    Just ((k, r), rs) -> ...
-instance (Semiring r, Monoidal r, Partitionable a) => Algebra r (IntMap a)
+-- instance (Semiring r, Monoidal r, Partitionable a) => Algebra r (IntMap a)
 
 instance (Algebra r a, Algebra r b) => Algebra r (a,b) where
   mult f (a,b) = mult (\a1 a2 -> mult (\b1 b2 -> f (a1,b1) (a2,b2)) b) a

@@ -99,20 +99,20 @@ instance (Commutative r
          , Semiring r
          ) => CommutativeAlgebra r IntSet
 
-instance (Commutative r
-         , Monoidal r
-         , Semiring r
-         , Ord a
-         , Abelian b
-         , Partitionable b
-         ) => CommutativeAlgebra r (Map a b)
+-- instance (Commutative r
+--          , Monoidal r
+--          , Semiring r
+--          , Ord a
+--          , Abelian b
+--          , Partitionable b
+--          ) => CommutativeAlgebra r (Map a b)
 
-instance ( Commutative r
-         , Monoidal r
-         , Semiring r
-         , Abelian b
-         , Partitionable b
-         ) => CommutativeAlgebra r (IntMap b)
+-- instance ( Commutative r
+--          , Monoidal r
+--          , Semiring r
+--          , Abelian b
+--          , Partitionable b
+--          ) => CommutativeAlgebra r (IntMap b)
 
 
 
