@@ -3,6 +3,7 @@
 * Compatibility with GHC 8.0.x
 * Dropped incomplete instance for `Algebra r (Map a b)` instance
 * Restructured Ring hierarchy (Thanks @dfoxfranke!)
+* Added DecidableNilpotence class (Thanks @dfoxfranke!)
 
 4.2
 ---
