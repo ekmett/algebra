@@ -94,7 +94,7 @@ class (PID d) => Euclidean d where
   {-# INLINE rem #-}
 
 #if (__GLASGOW_HASKELL__ > 708)
-  {-# MINIMAL splitUnit, degree, divide #-}
+  {-# MINIMAL degree, divide #-}
 #endif
 
 instance Euclidean Integer where
