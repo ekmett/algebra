@@ -13,6 +13,8 @@ copyright:     Copyright (C) 2011 Edward A. Kmett
 synopsis:      Constructive abstract algebra
 description:   Constructive abstract algebra
 build-type:    Simple
+tested-with:   GHC == 7.4.2, GHC == 7.6.3, GHC == 7.8.4,
+               GHC == 7.10.3, GHC == 8.0.1
 extra-source-files:
   .ghci
   .gitignore
