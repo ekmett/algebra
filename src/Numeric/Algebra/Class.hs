@@ -183,6 +183,8 @@ instance Algebra r a => Semiring (a -> r)
 
 -- | An associative algebra built with a free module over a semiring
 class Semiring r => Algebra r a where
+  -- | @mult f k = sum [ f i j * cijk | i <- basis, j <- basis ]@ where @cijk@
+  -- are the structure constants for basis vectors @i@, @j@ and @k@.
   mult :: (a -> a -> r) -> a -> r
 
 instance Algebra () a where
