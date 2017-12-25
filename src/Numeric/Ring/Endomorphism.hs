@@ -10,11 +10,14 @@ import Data.Monoid
 import Numeric.Algebra
 import Prelude hiding ((*),(+),(-),negate,subtract)
 import Data.Proxy
+import Data.Semigroup (Semigroup((<>)))
 
 -- | The endomorphism ring of an abelian group or the endomorphism semiring of an abelian monoid
 -- 
 -- http://en.wikipedia.org/wiki/Endomorphism_ring
 newtype End a = End { appEnd :: a -> a }
+instance Semigroup (End r) where
+  (End a) <> (End b) = End (a . b)
 instance Monoid (End r) where
   mappend (End a) (End b) = End (a . b)
   mempty = End id
