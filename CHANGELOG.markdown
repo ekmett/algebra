@@ -1,3 +1,7 @@
+4.3.1
+-----
+* Compatibility with GHC 8.4.x: added `Semigroup (End r)` instance.
+
 4.3
 ---
 * Compatibility with GHC 8.0.x
