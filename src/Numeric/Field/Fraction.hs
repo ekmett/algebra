@@ -13,6 +13,7 @@ import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Commutative
 import Numeric.Algebra.Division
+import Numeric.Algebra.Involutive
 import Numeric.Algebra.Unital
 import Numeric.Algebra.Unital.UnitNormalForm
 import Numeric.Decidable.Associates
