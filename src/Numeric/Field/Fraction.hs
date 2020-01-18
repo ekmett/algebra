@@ -71,6 +71,9 @@ instance (Ord d, GCDDomain d) => Ord (Fraction d)  where
   compare (Fraction p q) (Fraction p' q') = compare (p*q') (p'*q)
   {-# INLINE compare #-}
 
+instance Functor Fraction where
+  fmap f (Fraction p q) = Fraction (f p) (f q)
+
 instance (GCDDomain d) => Division (Fraction d) where
   recip (Fraction p q)
       | isZero p = error "Divide by zero"
@@ -141,3 +144,7 @@ instance (GCDDomain d) => UFD (Fraction d)
 instance (GCDDomain d) => PID (Fraction d)
 instance (GCDDomain d) => Euclidean (Fraction d)
 
+instance (GCDDomain d, InvolutiveMultiplication d) => InvolutiveMultiplication (Fraction d) where
+  adjoint = fmap adjoint
+instance (GCDDomain d, TriviallyInvolutive d) => TriviallyInvolutive (Fraction d)
+instance (GCDDomain d, TriviallyInvolutive d) => InvolutiveSemiring (Fraction d)
