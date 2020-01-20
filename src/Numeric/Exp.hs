@@ -7,7 +7,7 @@ import Numeric.Algebra
 
 import Prelude hiding ((+),(-),negate,replicate,subtract)
 
-newtype Exp r = Exp { runExp :: r } 
+newtype Exp r = Exp { runExp :: r } deriving (Eq, Show)
 
 instance Additive r => Multiplicative (Exp r) where
   Exp a * Exp b = Exp (a + b)
