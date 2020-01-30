@@ -52,6 +52,7 @@ matrix:
       addons: {apt: {packages: [ghc-ppa-tools,cabal-install-head,ghc-head], sources: [hvr-ghc]}}
 
   allow_failures:
+    - compiler: "ghc-8.2.1"
     - compiler: "ghc-8.4.1"
     - compiler: "ghc-head"
 
@@ -97,7 +98,7 @@ install:
 script:
   # test that source-distributions can be generated
   - (cd "." && cabal sdist)
-  - mv "."/dist/algebra-*.tar.gz ${DISTDIR}/
+  - mv dist-newstyle/sdist/*.tar.gz ${DISTDIR}/
   - cd ${DISTDIR} || false
   - find . -maxdepth 1 -name '*.tar.gz' -exec tar -xvf '{}' \;
   - "printf 'packages: algebra-*/*.cabal\\n' > cabal.project"
