@@ -184,8 +184,10 @@ instance (Commutative r, Ring r) => Rig (Complex r) where
 instance (Commutative r, Ring r) => Ring (Complex r) where
   fromInteger n = Complex (fromInteger n) zero
 
-instance (Commutative r, Rng r) => LeftModule (Complex r) (Complex r) where (.*) = (*)
-instance (Commutative r, Rng r) => RightModule (Complex r) (Complex r) where (*.) = (*)
+instance {-# OVERLAPPING #-} (Commutative r, Rng r) => LeftModule (Complex r) (Complex r) where
+  (.*) = (*)
+instance {-# OVERLAPPING #-} (Commutative r, Rng r) => RightModule (Complex r) (Complex r) where
+  (*.) = (*)
 
 instance (Commutative r, Rng r, InvolutiveMultiplication r) => InvolutiveMultiplication (Complex r) where
   adjoint (Complex a b) = Complex (adjoint a) (negate b)
