@@ -196,7 +196,7 @@ instance (Commutative r, Rng r, InvolutiveSemiring r) => Quadrance r (Complex r)
   quadrance n = realPart $ adjoint n * n
 
 instance (Commutative r, InvolutiveSemiring r, DivisionRing r) => Division (Complex r) where
-  recip q@(Complex a b) = Complex (qq \\ a) (qq \\ b)
+  recip q@(Complex a b) = adjoint $ Complex (qq \\ a) (qq \\ b)
     where qq = quadrance q
 
 -- | half of the Cayley-Dickson quaternion isomorphism 
