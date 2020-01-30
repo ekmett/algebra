@@ -13,6 +13,7 @@ import Numeric.Additive.Group
 import Numeric.Algebra.Class
 import Numeric.Algebra.Commutative
 import Numeric.Algebra.Division
+import Numeric.Algebra.Involutive
 import Numeric.Algebra.Unital
 import Numeric.Algebra.Unital.UnitNormalForm
 import Numeric.Decidable.Associates
@@ -70,6 +71,9 @@ instance (Eq d, GCDDomain d) => Eq (Fraction d) where
 instance (Ord d, GCDDomain d) => Ord (Fraction d)  where
   compare (Fraction p q) (Fraction p' q') = compare (p*q') (p'*q)
   {-# INLINE compare #-}
+
+instance Functor Fraction where
+  fmap f (Fraction p q) = Fraction (f p) (f q)
 
 instance (GCDDomain d) => Division (Fraction d) where
   recip (Fraction p q)
@@ -141,3 +145,7 @@ instance (GCDDomain d) => UFD (Fraction d)
 instance (GCDDomain d) => PID (Fraction d)
 instance (GCDDomain d) => Euclidean (Fraction d)
 
+instance (GCDDomain d, InvolutiveMultiplication d) => InvolutiveMultiplication (Fraction d) where
+  adjoint = fmap adjoint
+instance (GCDDomain d, TriviallyInvolutive d) => TriviallyInvolutive (Fraction d)
+instance (GCDDomain d, TriviallyInvolutive d) => InvolutiveSemiring (Fraction d)
